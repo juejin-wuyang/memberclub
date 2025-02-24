@@ -9,19 +9,18 @@ package com.memberclub.infrastructure.usertag.impl;
 import com.google.common.collect.Lists;
 import com.memberclub.common.retry.Retryable;
 import com.memberclub.common.util.CollectionUtilEx;
-import com.memberclub.domain.context.usertag.UserTagDO;
-import com.memberclub.domain.context.usertag.UserTagOpCmd;
-import com.memberclub.domain.context.usertag.UserTagOpDO;
-import com.memberclub.domain.context.usertag.UserTagOpResponse;
-import com.memberclub.domain.context.usertag.UserTagOpTypeEnum;
+import com.memberclub.common.util.FileUtils;
+import com.memberclub.domain.context.usertag.*;
 import com.memberclub.infrastructure.cache.RedisLuaUtil;
 import com.memberclub.infrastructure.usertag.UserTagService;
-import jodd.io.FileUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
@@ -51,8 +50,14 @@ public class RedisUserTagService implements UserTagService {
 
     static {
         try {
-            userTagAddLua = FileUtil.readString(RedisUserTagService.class.getClassLoader().getResource("lua/user_tag_add.lua").getFile());
-            userTagDelLua = FileUtil.readString(RedisUserTagService.class.getClassLoader().getResource("lua/user_tag_del.lua").getFile());
+            ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+            Resource[] resources = resolver.getResources("lua/user_tag_add.lua");
+            Resource resource = resources[0];
+            userTagAddLua = FileUtils.readFile("lua/user_tag_add.lua");
+
+            resources = resolver.getResources("lua/user_tag_del.lua");
+            resource = resources[0];
+            userTagDelLua = FileUtils.readFile("lua/user_tag_del.lua");
 
             LOG.info("提前加载 Lua 脚本 user_tag_add.lua:{}", userTagAddLua);
             LOG.info("提前加载 Lua 脚本 user_tag_del.lua:{}", userTagDelLua);

@@ -6,7 +6,6 @@
  */
 package com.memberclub.sdk.sku.service.impl;
 
-import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.dataobject.sku.SkuInfoDO;
 import com.memberclub.infrastructure.sku.SkuBizService;
 import com.memberclub.sdk.sku.service.SkuDomainService;
@@ -25,7 +24,7 @@ public class AccessDbMemberSkuBizServiceImpl implements SkuBizService {
     private SkuDomainService skuDomainService;
 
     @Override
-    public SkuInfoDO querySku(BizTypeEnum bizType, long skuId) {
+    public SkuInfoDO querySku(long skuId) {
         return skuDomainService.queryById(skuId);
     }
 }

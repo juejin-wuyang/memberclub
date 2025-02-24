@@ -8,7 +8,6 @@ package com.memberclub.sdk.sku.service.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.dataobject.sku.SkuInfoDO;
 import com.memberclub.domain.entity.inventory.Inventory;
 import com.memberclub.infrastructure.mybatis.mappers.sku.InventoryDao;
@@ -74,7 +73,7 @@ public class MockSkuBizService implements SkuBizService {
     }
 
     @Override
-    public SkuInfoDO querySku(BizTypeEnum bizType, long skuId) {
+    public SkuInfoDO querySku( long skuId) {
         return map.get(skuId);
     }
 }

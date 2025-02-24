@@ -6,7 +6,6 @@
  */
 package com.memberclub.infrastructure.sku;
 
-import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.dataobject.sku.SkuInfoDO;
 
 /**
@@ -14,5 +13,5 @@ import com.memberclub.domain.dataobject.sku.SkuInfoDO;
  */
 public interface SkuBizService {
 
-    public SkuInfoDO querySku(BizTypeEnum bizType, long skuId);
+    public SkuInfoDO querySku(long skuId);
 }

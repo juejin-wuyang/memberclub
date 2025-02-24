@@ -35,11 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * author: 掘金五阳
@@ -66,7 +62,7 @@ public class InventoryDomainService {
     public void querySkuInventoryInfos(InventoryOpContext context) {
         Map<Long, SkuInventoryInfo> skuId2Inventorys = Maps.newHashMap();
         for (InventorySkuOpDO sku : context.getCmd().getSkus()) {
-            SkuInfoDO skuInfoDO = skuBizService.querySku(context.getCmd().getBizType(), sku.getSkuId());
+            SkuInfoDO skuInfoDO = skuBizService.querySku(sku.getSkuId());
             skuId2Inventorys.put(sku.getSkuId(), skuInfoDO.getInventoryInfo());
         }
         context.setSkuId2InventoryInfo(skuId2Inventorys);

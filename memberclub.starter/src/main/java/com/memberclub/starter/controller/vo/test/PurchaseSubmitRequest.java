@@ -12,9 +12,11 @@ import lombok.Data;
  * author: 掘金五阳
  */
 @Data
-public class PurchaseTestRequest {
+public class PurchaseSubmitRequest {
 
     private long skuId;
 
     private int buyCount = 1;
+
+    private String previewToken;
 }

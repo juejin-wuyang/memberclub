@@ -17,22 +17,11 @@ import com.memberclub.domain.context.purchase.cancel.PurchaseCancelContext;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.purchase.extension.PurchaseExtension;
-import com.memberclub.sdk.purchase.flow.CommonOrderSubmitFlow;
-import com.memberclub.sdk.purchase.flow.MemberOrderSubmitFlow;
-import com.memberclub.sdk.purchase.flow.PurchaseMarkNewMemberFlow;
-import com.memberclub.sdk.purchase.flow.PurchaseOperateInventoryFlow;
-import com.memberclub.sdk.purchase.flow.PurchaseSubmitLockFlow;
-import com.memberclub.sdk.purchase.flow.PurchaseUserQuotaFlow;
-import com.memberclub.sdk.purchase.flow.PurchaseValidateInventoryFlow;
-import com.memberclub.sdk.purchase.flow.SkuInfoInitalSubmitFlow;
+import com.memberclub.sdk.purchase.flow.*;
 import com.memberclub.sdk.purchase.flow.aftersale.PurchaseReverseInventoryFlow;
 import com.memberclub.sdk.purchase.flow.aftersale.PurchaseReverseMemberQuotaFlow;
 import com.memberclub.sdk.purchase.flow.aftersale.PurchaseReverseNewMemberFlow;
-import com.memberclub.sdk.purchase.flow.cancel.PurchaseCancelInventoryFlow;
-import com.memberclub.sdk.purchase.flow.cancel.PurchaseCancelLockFlow;
-import com.memberclub.sdk.purchase.flow.cancel.PurchaseCancelNewMemberFlow;
-import com.memberclub.sdk.purchase.flow.cancel.PurchaseCancelOrderFlow;
-import com.memberclub.sdk.purchase.flow.cancel.PurchaseCancelQuotaFlow;
+import com.memberclub.sdk.purchase.flow.cancel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -59,6 +48,7 @@ public class DemoMemberPurchaseExtension implements PurchaseExtension {
         submitChain = FlowChain.newChain(PurchaseSubmitContext.class)
                 .addNode(PurchaseSubmitLockFlow.class)
                 .addNode(SkuInfoInitalSubmitFlow.class)
+                .addNode(PurchaseSubmitCmdValidateFlow.class)
                 .addNode(PurchaseUserQuotaFlow.class)//检查限额
                 .addNode(PurchaseValidateInventoryFlow.class)//检查库存
                 .addNode(MemberOrderSubmitFlow.class)// 会员提单

@@ -26,8 +26,9 @@ import com.memberclub.sdk.sku.service.SkuDomainService;
 import com.memberclub.starter.controller.convertor.PurchaseConvertor;
 import com.memberclub.starter.controller.vo.PurchaseSubmitVO;
 import com.memberclub.starter.controller.vo.TestPayRequest;
-import com.memberclub.starter.controller.vo.test.PurchaseTestRequest;
+import com.memberclub.starter.controller.vo.test.PurchaseSubmitRequest;
 import com.memberclub.starter.job.OnceTaskTriggerBizService;
+import com.memberclub.starter.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -36,19 +37,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 测试使用
+ * 测试使用，特殊环境使用，线上生产环境应该使用其他更加安全的接口
  * author: 掘金五阳
  */
 @Profile({"ut", "standalone", "test"})
-@RestController("/manage")
+@RestController()
+@RequestMapping("/manage")
 @Api(value = "管理接口", tags = {"商品列表"})
 public class ManageController {
 
@@ -68,9 +68,8 @@ public class ManageController {
         return skuDomainService.queryAllSkus();
     }
 
-
     @PostMapping("/purchase/submit")
-    public PurchaseSubmitResponse submit(@RequestBody PurchaseTestRequest request) {
+    public PurchaseSubmitResponse submit(HttpServletRequest servletRequest, @RequestBody PurchaseSubmitRequest request) {
         try {
             PurchaseSubmitVO param = new PurchaseSubmitVO();
             ClientInfo clientInfo = new ClientInfo();
@@ -81,7 +80,7 @@ public class ManageController {
             userInfo.setIp("127.0.0.1");
             SkuInfoDO skuInfo = skuDomainService.queryById(request.getSkuId());
 
-            param.setBizType(skuInfo.getBizType());
+            param.setBizId(skuInfo.getBizType());
             param.setUserInfo(userInfo);
             param.setSubmitSource(PurchaseSourceEnum.HOMEPAGE.getCode());
             PurchaseSubmitCmd cmd = PurchaseConvertor.toSubmitCmd(param);
@@ -119,29 +118,34 @@ public class ManageController {
 
     @ResponseBody
     @PostMapping("/purchase/pay")
-    public PerformResp pay(@RequestBody TestPayRequest request) {
+    public PerformResp pay(HttpServletRequest servletRequest, @RequestBody TestPayRequest request) {
         PerformCmd cmd = new PerformCmd();
-        cmd.setUserId(request.getUserId());
-        cmd.setTradeId(request.getTradeId());
-        MemberOrderDO order = memberOrderDomainService.getMemberOrderDO(request.getUserId(),
-                request.getTradeId());
-        if (order == null) {
-            throw new RuntimeException("输入错误订单 id");
+
+        try {
+            SecurityUtil.securitySet(servletRequest);
+            cmd.setUserId(SecurityUtil.getUserId());
+            cmd.setTradeId(request.getTradeId());
+            MemberOrderDO order = memberOrderDomainService.getMemberOrderDO(cmd.getUserId(), cmd.getTradeId());
+            if (order == null) {
+                throw new RuntimeException("输入错误订单 id");
+            }
+            cmd.setBizType(order.getBizType());
+            cmd.setOrderSystemType(order.getOrderInfo().getOrderSystemType());
+            cmd.setOrderId(order.getOrderInfo().getOrderId());
+
+            return performBizService.perform(cmd);
+        } finally {
+            SecurityUtil.clear();
         }
-        cmd.setBizType(order.getBizType());
-        cmd.setOrderSystemType(order.getOrderInfo().getOrderSystemType());
-        cmd.setOrderId(order.getOrderInfo().getOrderId());
-        return performBizService.perform(cmd);
     }
 
     @PostMapping("/purchase/submitAndPay")
-    public PerformResp submitAndPay(@RequestBody PurchaseTestRequest request) {
-        PurchaseSubmitResponse response = submit(request);
+    public PerformResp submitAndPay(HttpServletRequest servletRequest, @RequestBody PurchaseSubmitRequest request) {
+        PurchaseSubmitResponse response = submit(servletRequest, request);
         if (response.isSuccess()) {
             TestPayRequest payRequest = new TestPayRequest();
-            payRequest.setUserId(response.getMemberOrderDO().getUserId());
             payRequest.setTradeId(response.getMemberOrderDO().getTradeId());
-            return pay(payRequest);
+            return pay(servletRequest, payRequest);
         }
         throw new RuntimeException("提单失败");
     }

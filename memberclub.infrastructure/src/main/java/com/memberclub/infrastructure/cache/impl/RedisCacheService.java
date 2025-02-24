@@ -8,6 +8,7 @@ package com.memberclub.infrastructure.cache.impl;
 
 import com.memberclub.common.log.CommonLog;
 import com.memberclub.common.retry.RetryUtil;
+import com.memberclub.common.util.FileUtils;
 import com.memberclub.common.util.TimeUtil;
 import com.memberclub.domain.dataobject.inventory.InventoryCacheDO;
 import com.memberclub.domain.dataobject.membership.MemberShipUnionDO;
@@ -15,11 +16,13 @@ import com.memberclub.infrastructure.cache.CacheEnum;
 import com.memberclub.infrastructure.cache.CacheService;
 import com.memberclub.infrastructure.cache.RedisLuaUtil;
 import com.memberclub.infrastructure.cache.VersionCacheCmd;
-import jodd.io.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -52,7 +55,10 @@ public class RedisCacheService implements CacheService {
 
     static {
         try {
-            inventoryUpdateLua = FileUtil.readString(RedisCacheService.class.getClassLoader().getResource("lua/inventory_update.lua").getFile());
+            ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+            Resource[] resources = resolver.getResources("lua/inventory_update.lua");
+            Resource resource = resources[0];
+            inventoryUpdateLua = FileUtils.readFile("lua/inventory_update.lua");
 
             LOG.info("提前加载 Lua 脚本 inventory_update.lua:{}", inventoryUpdateLua);
         } catch (Exception e) {

@@ -13,8 +13,6 @@ import lombok.Data;
  */
 @Data
 public class TestPayRequest {
-
-    private long userId;
-
+    
     private String tradeId;
 }

@@ -10,6 +10,7 @@ import com.memberclub.common.util.JsonUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
@@ -29,7 +30,17 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     }
 
     @Override
-    protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+    protected void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**") // 所有接口
+                .allowCredentials(true) // 是否发送 Cookie
+                .allowedOriginPatterns("*") // 支持域
+                .allowedMethods("GET", "POST", "PUT", "DELETE") // 支持方法
+                .allowedHeaders("*")
+                .exposedHeaders("*");
+    }
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         super.configureMessageConverters(converters);
         converters.add(mappingJackson2HttpMessageConverter());
     }

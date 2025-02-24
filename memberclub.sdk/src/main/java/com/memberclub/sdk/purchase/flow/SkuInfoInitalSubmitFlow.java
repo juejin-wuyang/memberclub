@@ -30,7 +30,7 @@ public class SkuInfoInitalSubmitFlow extends FlowNode<PurchaseSubmitContext> {
     public void process(PurchaseSubmitContext context) {
         List<SkuInfoDO> skuInfos = Lists.newArrayList();
         for (PurchaseSkuSubmitCmd sku : context.getSubmitCmd().getSkus()) {
-            SkuInfoDO skuInfoDO = skuBizService.querySku(context.getBizType(), sku.getSkuId());
+            SkuInfoDO skuInfoDO = skuBizService.querySku(sku.getSkuId());
             skuInfoDO.setBuyCount(sku.getBuyCount());
             skuInfos.add(skuInfoDO);
         }
