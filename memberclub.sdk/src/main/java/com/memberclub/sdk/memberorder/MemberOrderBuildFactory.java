@@ -130,6 +130,7 @@ public class MemberOrderBuildFactory {
             subOrder.setSubTradeId(idGenerator.generateId(IdTypeEnum.PURCHASE_SUB_TRADE));
             subOrder.setOriginPriceFen(skuInfo.getSaleInfo().getOriginPriceFen() * skuInfo.getBuyCount());
             subOrder.setSalePriceFen(skuInfo.getSaleInfo().getSalePriceFen() * skuInfo.getBuyCount());
+            subOrder.setActPriceFen(subOrder.getActPriceFen());
 
             extensionManager.getExtension(context.toDefaultBizScene(),
                     PurchaseOrderBuildExtension.class).buildSubOrder(order, subOrder, context, skuInfo);

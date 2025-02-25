@@ -12,7 +12,7 @@ import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.context.purchase.PurchaseSubmitCmd;
 import com.memberclub.domain.context.purchase.common.PurchaseSourceEnum;
 import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
-import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
+import com.memberclub.sdk.memberorder.biz.MemberOrderAftersalePreviewDO;
 import com.memberclub.sdk.util.PriceUtils;
 import com.memberclub.starter.controller.vo.PurchaseSubmitVO;
 import com.memberclub.starter.controller.vo.purchase.BuyRecordVO;
@@ -40,21 +40,26 @@ public class PurchaseConvertor {
         return cmd;
     }
 
-    public static List<BuyRecordVO> toBuyRecordVOS(List<MemberOrderDO> orders) {
-        return CollectionUtilEx.mapToList(orders, o -> toBuyRecordVOS(o));
+    public static List<BuyRecordVO> toBuyRecordVOS(List<MemberOrderAftersalePreviewDO> previewDOList) {
+        return CollectionUtilEx.mapToList(previewDOList, o -> toBuyRecordVOS(o));
     }
 
-    public static BuyRecordVO toBuyRecordVOS(MemberOrderDO order) {
+    public static BuyRecordVO toBuyRecordVOS(MemberOrderAftersalePreviewDO order) {
         BuyRecordVO record = new BuyRecordVO();
-        record.setTradeId(order.getTradeId());
+        record.setTradeId(order.getMemberOrderDO().getTradeId());
+        record.setBizType(order.getMemberOrderDO().getBizType().getCode());
+        //record.setPreviewResponse(order.getPreviewResponse());
+        record.setStatus(order.getMemberOrderDO().getStatus().toString());
         List<BuySubOrderVO> subOrderVOS = new ArrayList<>();
-        for (MemberSubOrderDO subOrder : order.getSubOrders()) {
+        for (MemberSubOrderDO subOrder : order.getMemberOrderDO().getSubOrders()) {
             BuySubOrderVO subOrderVO = new BuySubOrderVO();
             subOrderVO.setBuyCount(subOrder.getBuyCount());
             subOrderVO.setTitle(subOrder.getExtra().getViewInfo().getDisplayName());
             subOrderVO.setSubTradeId(String.valueOf(subOrder.getSubTradeId()));
-            subOrderVO.setPayPrice(PriceUtils.change2Yuan(subOrder.getExtra().getSaleInfo().getSalePriceFen()));
+            subOrderVO.setPayPrice(PriceUtils.change2Yuan(subOrder.getActPriceFen()));
             subOrderVO.setBuyTime(TimeUtil.format(subOrder.getCtime()));
+            subOrderVO.setImage(subOrder.getExtra().getViewInfo().getDisplayImage());
+            subOrderVO.setStatus(subOrder.getStatus().toString());
             subOrderVO.setEffectiveTime(
                     String.format("%s - %s", TimeUtil.formatDay(subOrder.getStime()), TimeUtil.formatDay(subOrder.getEtime()))
             );

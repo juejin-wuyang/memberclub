@@ -12,7 +12,7 @@ public class FileUtils {
         String line;
         String result = "";
         while ((line = reader.readLine()) != null) {
-            result += line;
+            result += line + "\n";
         }
         return result;
     }

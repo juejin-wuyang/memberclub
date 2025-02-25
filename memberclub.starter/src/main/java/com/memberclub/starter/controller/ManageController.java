@@ -7,6 +7,7 @@
 package com.memberclub.starter.controller;
 
 import com.google.common.collect.Lists;
+import com.memberclub.common.util.CollectionUtilEx;
 import com.memberclub.domain.context.oncetask.trigger.OnceTaskTriggerCmd;
 import com.memberclub.domain.context.perform.PerformCmd;
 import com.memberclub.domain.context.perform.PerformResp;
@@ -23,9 +24,11 @@ import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.perform.service.PerformBizService;
 import com.memberclub.sdk.purchase.service.biz.PurchaseBizService;
 import com.memberclub.sdk.sku.service.SkuDomainService;
+import com.memberclub.starter.controller.convertor.ManageConvertor;
 import com.memberclub.starter.controller.convertor.PurchaseConvertor;
 import com.memberclub.starter.controller.vo.PurchaseSubmitVO;
 import com.memberclub.starter.controller.vo.TestPayRequest;
+import com.memberclub.starter.controller.vo.sku.SkuPreviewVO;
 import com.memberclub.starter.controller.vo.test.PurchaseSubmitRequest;
 import com.memberclub.starter.job.OnceTaskTriggerBizService;
 import com.memberclub.starter.util.SecurityUtil;
@@ -66,6 +69,31 @@ public class ManageController {
     @ResponseBody
     public List<SkuInfoDO> listSkus() {
         return skuDomainService.queryAllSkus();
+    }
+
+    @ApiOperation("查询商品列表")
+    @PostMapping("/sku/preview/list")
+    @ResponseBody
+    public List<SkuPreviewVO> getSkus() {
+        List<SkuPreviewVO> skuPreviewVOS = Lists.newArrayList();
+        skuPreviewVOS.addAll(buildDisplaySkusForMallMember());
+        return skuPreviewVOS;
+    }
+
+
+    public List<SkuPreviewVO> buildDisplaySkusForMallMember() {
+        List<Long> skuIds = Lists.newArrayList();
+        skuIds.add(200401L);//京西会员季卡
+        skuIds.add(200402L);//京西会员季卡
+        List<SkuInfoDO> skus = skuDomainService.queryByIds(skuIds);
+        List<SkuPreviewVO> previewVOs = CollectionUtilEx.mapToList(skus, ManageConvertor::toSkuPreviewVO);
+        for (SkuPreviewVO previewVO : previewVOs) {
+            previewVO.setFirmName("电子商务");
+            previewVO.setAttr_val("电商会员");
+            previewVO.setSingleBuy(true);
+            previewVO.setStock(0L);
+        }
+        return previewVOs;
     }
 
     @PostMapping("/purchase/submit")

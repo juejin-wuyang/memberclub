@@ -9,6 +9,8 @@ package com.memberclub.sdk.sku.service;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Lists;
+import com.memberclub.common.log.CommonLog;
+import com.memberclub.common.util.CollectionUtilEx;
 import com.memberclub.domain.dataobject.sku.SkuInfoDO;
 import com.memberclub.domain.entity.sku.MemberSku;
 import com.memberclub.infrastructure.mybatis.mappers.sku.MemberSkuDao;
@@ -41,6 +43,9 @@ public class SkuDomainService {
     public void createMemberSku(SkuInfoDO sku) {
         MemberSku memberSku = memberSkuDataObjectFactory.toSku(sku);
         int cnt = memberSkuDao.insertIgnoreBatch(Lists.newArrayList(memberSku));
+        if (cnt <= 0) {
+            CommonLog.warn("创建商品失败 sku:{}", sku);
+        }
     }
 
 
@@ -51,9 +56,18 @@ public class SkuDomainService {
         return memberSkuDataObjectFactory.toSkuInfoDO(memberSku);
     }
 
+    public List<SkuInfoDO> queryByIds(List<Long> ids) {
+        LambdaQueryWrapper<MemberSku> wrapper = new LambdaQueryWrapper<>();
+        wrapper.in(MemberSku::getId, ids);
+        List<MemberSku> memberSkus = memberSkuDao.selectList(wrapper);
+        return CollectionUtilEx.mapToList(memberSkus, (sku) -> memberSkuDataObjectFactory.toSkuInfoDO(sku));
+    }
+
     public List<SkuInfoDO> queryAllSkus() {
         LambdaQueryWrapper<MemberSku> wrapper = new LambdaQueryWrapper<>();
         List<MemberSku> skus = memberSkuDao.selectList(wrapper);
         return skus.stream().map(memberSkuDataObjectFactory::toSkuInfoDO).collect(Collectors.toList());
     }
+
+
 }

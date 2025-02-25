@@ -7,12 +7,13 @@
 package com.memberclub.starter.controller;
 
 import com.memberclub.common.log.CommonLog;
+import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
 import com.memberclub.domain.context.purchase.PurchaseSubmitCmd;
 import com.memberclub.domain.context.purchase.PurchaseSubmitResponse;
-import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.exception.MemberException;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.sku.SkuBizService;
+import com.memberclub.sdk.memberorder.biz.MemberOrderAftersalePreviewDO;
 import com.memberclub.sdk.memberorder.biz.MemberOrderBizService;
 import com.memberclub.sdk.purchase.service.biz.PurchaseBizService;
 import com.memberclub.starter.controller.convertor.PurchaseConvertor;
@@ -82,10 +83,12 @@ public class PurchaseController {
         DataResponse<List<BuyRecordVO>> response = new DataResponse<>();
         try {
             SecurityUtil.securitySet(servletRequest);
-            List<MemberOrderDO> orders = memberOrderBizService.queryPayedOrders(SecurityUtil.getUserId());
+            List<MemberOrderAftersalePreviewDO> previews = memberOrderBizService.queryPayedOrders(SecurityUtil.getUserId(), AftersaleSourceEnum.User);
+
             response.setSucc(true);
-            response.setData(PurchaseConvertor.toBuyRecordVOS(orders));
+            response.setData(PurchaseConvertor.toBuyRecordVOS(previews));
         } catch (Exception e) {
+            CommonLog.warn("异常 ", e);
             response.setSucc(false);
         } finally {
             SecurityUtil.clear();

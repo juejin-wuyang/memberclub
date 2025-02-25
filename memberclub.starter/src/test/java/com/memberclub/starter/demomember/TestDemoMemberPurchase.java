@@ -21,17 +21,7 @@ import com.memberclub.domain.dataobject.CommonUserInfo;
 import com.memberclub.domain.dataobject.aftersale.ClientInfo;
 import com.memberclub.domain.dataobject.inventory.InventoryCacheDO;
 import com.memberclub.domain.dataobject.order.LocationInfo;
-import com.memberclub.domain.dataobject.sku.InventoryTypeEnum;
-import com.memberclub.domain.dataobject.sku.SkuExtra;
-import com.memberclub.domain.dataobject.sku.SkuFinanceInfo;
-import com.memberclub.domain.dataobject.sku.SkuInfoDO;
-import com.memberclub.domain.dataobject.sku.SkuInventoryInfo;
-import com.memberclub.domain.dataobject.sku.SkuNewMemberInfo;
-import com.memberclub.domain.dataobject.sku.SkuPerformConfigDO;
-import com.memberclub.domain.dataobject.sku.SkuPerformItemConfigDO;
-import com.memberclub.domain.dataobject.sku.SkuSaleInfo;
-import com.memberclub.domain.dataobject.sku.SkuViewInfo;
-import com.memberclub.domain.dataobject.sku.UserTypeEnum;
+import com.memberclub.domain.dataobject.sku.*;
 import com.memberclub.domain.dataobject.sku.restrict.RestrictItemType;
 import com.memberclub.domain.dataobject.sku.restrict.RestrictPeriodType;
 import com.memberclub.domain.dataobject.sku.restrict.SkuRestrictInfo;
@@ -87,25 +77,7 @@ public class TestDemoMemberPurchase extends MockBaseTest {
 
     private static boolean init = false;
 
-    @Before
-    public void init() {
-        if (init) {
-            return;
-        }
-        init = true;
-        doubleRightsSku = buildDoubleRightsSku(1);
-        mockSkuBizService.addSku(doubleRightsSku.getSkuId(), doubleRightsSku);
-
-        cycle3Sku = buildDoubleRightsSku(3);
-        mockSkuBizService.addSku(cycle3Sku.getSkuId(), cycle3Sku);
-
-
-        inventoryEnabledSku = buildInventorySku();
-        mockSkuBizService.addSkuAndCreateInventory(inventoryEnabledSku.getSkuId(), inventoryEnabledSku);
-
-        membershipSku = buildMemberShipSku();
-        mockSkuBizService.addSku(membershipSku.getSkuId(), membershipSku);
-    }
+    public static AtomicLong skuIdGenerator = new AtomicLong(200300);
 
     private SkuInfoDO buildMemberShipSku() {
         membershipSku = buildDoubleRightsSku(1);
@@ -318,8 +290,27 @@ public class TestDemoMemberPurchase extends MockBaseTest {
     @Autowired
     private CacheService cacheService;
 
+    @Before
+    public void init() {
+        if (init) {
+            return;
+        }
+        init = true;
+        doubleRightsSku = buildDoubleRightsSku(1);
+        mockSkuBizService.addSku(doubleRightsSku.getSkuId(), doubleRightsSku);
 
-    private static AtomicLong skuIdGenerator = new AtomicLong(200300);
+        cycle3Sku = buildDoubleRightsSku(3);
+        mockSkuBizService.addSku(cycle3Sku.getSkuId(), cycle3Sku);
+
+
+        inventoryEnabledSku = buildInventorySku();
+        mockSkuBizService.addSkuAndCreateInventory(inventoryEnabledSku.getSkuId(), inventoryEnabledSku);
+
+        membershipSku = buildMemberShipSku();
+        mockSkuBizService.addSku(membershipSku.getSkuId(), membershipSku);
+
+
+    }
 
     public static SkuInfoDO buildDoubleRightsSku(int cycle) {
         SkuInfoDO skuInfoDO = new SkuInfoDO();

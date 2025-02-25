@@ -34,8 +34,14 @@ import java.util.Map;
 /**
  * author: 掘金五阳
  */
-@ExtensionProvider(desc = "券类型默认发放扩展点实现", bizScenes =
-        {@Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = {SceneEnum.RIGHT_TYPE_SCENE_COUPON, SceneEnum.RIGHT_TYPE_SCENE_DISCOUNT_COUPON})})
+@ExtensionProvider(desc = "券类型默认发放扩展点实现", bizScenes = {
+        @Route(bizType = BizTypeEnum.DEMO_MEMBER,
+                scenes = {
+                        SceneEnum.RIGHT_TYPE_SCENE_COUPON,
+                        SceneEnum.RIGHT_TYPE_SCENE_DISCOUNT_COUPON,
+                        SceneEnum.RIGHT_TYPE_SCENE_FREE_FREIGHT_COUPON
+                })
+})
 public class DefaultCouponAssetsGrantExtension implements AssetsGrantExtension {
 
     //@Qualifier("couponGrantFacade")

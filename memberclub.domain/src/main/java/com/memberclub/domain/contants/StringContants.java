@@ -24,4 +24,8 @@ public interface StringContants {
 
     Integer MEMBERSHIP_RIGHT_TYPE = 3;
 
+    Integer FREE_FREIGHT_COUPON = 4;
+
+    Integer MEMBER_DISCOUNT_PRICE = 5;
+
 }

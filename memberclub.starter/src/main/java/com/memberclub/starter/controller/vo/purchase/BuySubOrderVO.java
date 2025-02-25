@@ -15,4 +15,8 @@ public class BuySubOrderVO {
     private String payPrice;
 
     private Integer buyCount;
+
+    private String image;
+
+    private String status;
 }

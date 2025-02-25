@@ -62,6 +62,12 @@ public enum AftersaleUnableCode {
         return e;
     }
 
+    public AfterSaleUnableException newException(String msg) {
+        msg = StringUtils.isEmpty(msg) ? this.toString() : msg;
+        AfterSaleUnableException e = new AfterSaleUnableException(this, msg, null);
+        return e;
+    }
+
     public AfterSaleUnableException newException() {
         AfterSaleUnableException e = new AfterSaleUnableException(this, this.toString(), null);
         return e;

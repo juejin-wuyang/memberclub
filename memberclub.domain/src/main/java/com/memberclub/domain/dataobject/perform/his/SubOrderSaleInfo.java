@@ -13,6 +13,8 @@ import lombok.Data;
  */
 @Data
 public class SubOrderSaleInfo {
+    public Integer actPriceFen;
+
     public Integer originPriceFen;
 
     public Integer salePriceFen;

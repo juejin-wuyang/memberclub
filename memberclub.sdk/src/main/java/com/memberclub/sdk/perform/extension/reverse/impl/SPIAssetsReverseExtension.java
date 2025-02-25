@@ -30,7 +30,11 @@ import java.util.stream.Collectors;
  * author: 掘金五阳
  */
 @ExtensionProvider(desc = "SPI 接口逆向履约项资产", bizScenes = {
-        @Route(bizType = BizTypeEnum.DEFAULT, scenes = {SceneEnum.DEFAULT_SCENE})
+        @Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = {
+                SceneEnum.RIGHT_TYPE_SCENE_COUPON,
+                SceneEnum.RIGHT_TYPE_SCENE_DISCOUNT_COUPON,
+                SceneEnum.RIGHT_TYPE_SCENE_FREE_FREIGHT_COUPON
+        })
 })
 public class SPIAssetsReverseExtension implements AssetsReverseExtension {
 

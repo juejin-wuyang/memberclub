@@ -13,7 +13,9 @@ import lombok.Data;
  */
 @Data
 public class SkuViewInfo {
-    
+
+    private String displayImage;
+
     private String displayName;
 
     private String displayDesc;

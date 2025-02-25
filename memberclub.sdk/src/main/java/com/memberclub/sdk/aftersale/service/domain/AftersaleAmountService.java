@@ -76,6 +76,9 @@ public class AftersaleAmountService {
         BigDecimal unuse = new BigDecimal(unusePriceFen);
         BigDecimal total = new BigDecimal(totalPriceFen);
         BigDecimal pay = new BigDecimal(payPriceFen);
+        if (total.equals(new BigDecimal(0))) {
+            throw AftersaleUnableCode.INTERNAL_ERROR.newException("获取售后金额异常");
+        }
 
         int recommendRefundPrice = unuse.divide(total).multiply(pay).intValue();
         return recommendRefundPrice;

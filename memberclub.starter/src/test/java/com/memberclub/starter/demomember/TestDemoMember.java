@@ -10,12 +10,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.memberclub.common.log.CommonLog;
-import com.memberclub.common.util.ApplicationContextUtils;
-import com.memberclub.common.util.EncrptUtils;
-import com.memberclub.common.util.JsonUtils;
-import com.memberclub.common.util.PeriodUtils;
-import com.memberclub.common.util.TimeRange;
-import com.memberclub.common.util.TimeUtil;
+import com.memberclub.common.util.*;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.OrderSystemTypeEnum;
 import com.memberclub.domain.context.aftersale.apply.AftersaleApplyCmd;
@@ -45,12 +40,7 @@ import com.memberclub.domain.dataobject.sku.SkuInfoDO;
 import com.memberclub.domain.dataobject.task.OnceTaskDO;
 import com.memberclub.domain.dataobject.task.TaskContentDO;
 import com.memberclub.domain.dataobject.task.perform.PerformTaskContentDO;
-import com.memberclub.domain.entity.trade.AftersaleOrder;
-import com.memberclub.domain.entity.trade.MemberOrder;
-import com.memberclub.domain.entity.trade.MemberPerformItem;
-import com.memberclub.domain.entity.trade.MemberShip;
-import com.memberclub.domain.entity.trade.MemberSubOrder;
-import com.memberclub.domain.entity.trade.OnceTask;
+import com.memberclub.domain.entity.trade.*;
 import com.memberclub.domain.facade.AssetDO;
 import com.memberclub.domain.facade.AssetStatusEnum;
 import com.memberclub.infrastructure.dynamic_config.DynamicConfig;
@@ -61,12 +51,7 @@ import com.memberclub.infrastructure.mapstruct.PerformCustomConvertor;
 import com.memberclub.infrastructure.mq.MQTopicEnum;
 import com.memberclub.infrastructure.mq.MessageQuenePublishFacade;
 import com.memberclub.infrastructure.mq.MessageQueueDebugFacade;
-import com.memberclub.infrastructure.mybatis.mappers.trade.AftersaleOrderDao;
-import com.memberclub.infrastructure.mybatis.mappers.trade.MemberOrderDao;
-import com.memberclub.infrastructure.mybatis.mappers.trade.MemberPerformItemDao;
-import com.memberclub.infrastructure.mybatis.mappers.trade.MemberShipDao;
-import com.memberclub.infrastructure.mybatis.mappers.trade.MemberSubOrderDao;
-import com.memberclub.infrastructure.mybatis.mappers.trade.OnceTaskDao;
+import com.memberclub.infrastructure.mybatis.mappers.trade.*;
 import com.memberclub.sdk.aftersale.service.AftersaleBizService;
 import com.memberclub.sdk.perform.service.PerformBizService;
 import com.memberclub.starter.job.OnceTaskTriggerBizService;
@@ -411,8 +396,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         previewCmd.setTradeId(cmd.getTradeId());
         previewCmd.setSource(AftersaleSourceEnum.User);
         previewCmd.setOperator(String.valueOf(cmd.getUserId()));
-        previewCmd.setOrderId(cmd.getOrderId());
-        previewCmd.setOrderSystemTypeEnum(cmd.getOrderSystemType());
 
 
         AfterSalePreviewResponse respose = aftersaleBizService.preview(previewCmd);
@@ -528,8 +511,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         previewCmd.setTradeId(cmd.getTradeId());
         previewCmd.setSource(AftersaleSourceEnum.User);
         previewCmd.setOperator(String.valueOf(cmd.getUserId()));
-        previewCmd.setOrderId(cmd.getOrderId());
-        previewCmd.setOrderSystemTypeEnum(cmd.getOrderSystemType());
 
         AfterSalePreviewResponse response = aftersaleBizService.preview(previewCmd);
 
@@ -570,8 +551,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         previewCmd.setTradeId(cmd.getTradeId());
         previewCmd.setSource(AftersaleSourceEnum.User);
         previewCmd.setOperator(String.valueOf(cmd.getUserId()));
-        previewCmd.setOrderId(cmd.getOrderId());
-        previewCmd.setOrderSystemTypeEnum(cmd.getOrderSystemType());
 
         AfterSalePreviewResponse response = aftersaleBizService.preview(previewCmd);
 
@@ -660,8 +639,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         previewCmd.setTradeId(cmd.getTradeId());
         previewCmd.setSource(AftersaleSourceEnum.User);
         previewCmd.setOperator(String.valueOf(cmd.getUserId()));
-        previewCmd.setOrderId(cmd.getOrderId());
-        previewCmd.setOrderSystemTypeEnum(cmd.getOrderSystemType());
 
         AfterSalePreviewResponse response = aftersaleBizService.preview(previewCmd);
 
@@ -702,8 +679,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         previewCmd.setTradeId(cmd.getTradeId());
         previewCmd.setSource(AftersaleSourceEnum.User);
         previewCmd.setOperator(String.valueOf(cmd.getUserId()));
-        previewCmd.setOrderId(cmd.getOrderId());
-        previewCmd.setOrderSystemTypeEnum(cmd.getOrderSystemType());
 
 
         AfterSalePreviewResponse respose = aftersaleBizService.preview(previewCmd);

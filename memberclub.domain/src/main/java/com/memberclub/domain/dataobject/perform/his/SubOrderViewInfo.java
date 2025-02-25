@@ -14,6 +14,8 @@ import lombok.Data;
 @Data
 public class SubOrderViewInfo {
 
+    private String displayImage;
+
     private String displayName;
 
     private String displayDesc;

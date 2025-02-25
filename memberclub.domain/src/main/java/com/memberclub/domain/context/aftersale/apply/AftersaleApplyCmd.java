@@ -7,7 +7,6 @@
 package com.memberclub.domain.context.aftersale.apply;
 
 import com.memberclub.domain.common.BizTypeEnum;
-import com.memberclub.domain.common.OrderSystemTypeEnum;
 import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
 import com.memberclub.domain.dataobject.aftersale.ApplySkuInfoDO;
 import lombok.Data;
@@ -24,10 +23,6 @@ public class AftersaleApplyCmd {
     private BizTypeEnum bizType;
 
     private long userId;
-
-    private OrderSystemTypeEnum orderSystemTypeEnum;
-
-    private String orderId;
 
     private String tradeId;
 

@@ -7,7 +7,6 @@
 package com.memberclub.domain.context.aftersale.preview;
 
 import com.memberclub.domain.common.BizTypeEnum;
-import com.memberclub.domain.common.OrderSystemTypeEnum;
 import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
 import lombok.Data;
 
@@ -21,10 +20,6 @@ public class AfterSalePreviewCmd {
 
     private long userId;
 
-    private OrderSystemTypeEnum orderSystemTypeEnum;
-
-    private String orderId;
-
     private String tradeId;
 
     private AftersaleSourceEnum source;
@@ -32,6 +27,4 @@ public class AfterSalePreviewCmd {
     private String operator;
 
     private Integer digestVersion;
-
-    private boolean previewBeforeApply;
 }
