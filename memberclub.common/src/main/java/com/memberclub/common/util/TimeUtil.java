@@ -18,12 +18,20 @@ public class TimeUtil {
 
     private static final String FORMAT = "yy-MM-dd HH:mm:ss";
 
+    private static final String FORMAT_DAY = "yy.MM.dd";
+
     public static long now() {
         return System.currentTimeMillis();
     }
 
     public static String format(long time) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT);
+        return dateFormat.format(new Date(time));
+    }
+
+
+    public static String formatDay(long time) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT_DAY);
         return dateFormat.format(new Date(time));
     }
 

@@ -7,15 +7,18 @@
 package com.memberclub.sdk.memberorder.domain;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.google.common.collect.Lists;
 import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.log.CommonLog;
 import com.memberclub.common.retry.Retryable;
+import com.memberclub.common.util.CollectionUtilEx;
 import com.memberclub.common.util.JsonUtils;
 import com.memberclub.common.util.TimeUtil;
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.context.perform.PerformContext;
+import com.memberclub.domain.context.perform.common.MemberOrderPerformStatusEnum;
 import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
 import com.memberclub.domain.context.purchase.cancel.PurchaseCancelContext;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
@@ -34,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.memberclub.domain.common.MemberTradeEvent.MEMBER_ORDER_START_PERFORM;
@@ -181,6 +185,34 @@ public class MemberOrderDomainService {
         MemberOrderDO memberOrderDO = memberOrderDataObjectBuildFactory.buildMemberOrderDO(order, subOrders);
 
         return memberOrderDO;
+    }
+
+    public List<MemberOrderDO> queryPayedOrders(long userId) {
+        LambdaQueryWrapper<MemberOrder> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(MemberOrder::getUserId, userId);
+        wrapper.gt(MemberOrder::getPerformStatus, MemberOrderPerformStatusEnum.INIT.getCode());
+        wrapper.orderByDesc(MemberOrder::getCtime);
+
+        List<MemberOrder> orders = memberOrderDao.selectList(wrapper);
+        if (CollectionUtils.isEmpty(orders)) {
+            return Lists.newArrayList();
+        }
+
+        List<String> tradeIds = CollectionUtilEx.mapToList(orders, MemberOrder::getTradeId);
+
+        LambdaQueryWrapper<MemberSubOrder> subOrderWrapper = new LambdaQueryWrapper<>();
+        subOrderWrapper.eq(MemberSubOrder::getUserId, userId);
+        subOrderWrapper.in(MemberSubOrder::getTradeId, tradeIds);
+
+        List<MemberSubOrder> subOrders = memberSubOrderDao.selectList(subOrderWrapper);
+        Map<String, List<MemberSubOrder>> tradeId2SubOrders = CollectionUtilEx.groupingBy(subOrders, MemberSubOrder::getTradeId);
+        List<MemberOrderDO> memberOrderDOS = Lists.newArrayList();
+        for (MemberOrder order : orders) {
+            List<MemberSubOrder> subOrderList = tradeId2SubOrders.get(order.getTradeId());
+            MemberOrderDO memberOrderDO = memberOrderDataObjectBuildFactory.buildMemberOrderDO(order, subOrderList);
+            memberOrderDOS.add(memberOrderDO);
+        }
+        return memberOrderDOS;
     }
 
     public MemberOrderDO getMemberOrderDO(long userId, String tradeId, Long subTradeId) {
