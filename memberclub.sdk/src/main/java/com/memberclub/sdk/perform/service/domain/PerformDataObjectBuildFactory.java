@@ -8,6 +8,10 @@ package com.memberclub.sdk.perform.service.domain;
 
 import com.memberclub.common.log.CommonLog;
 import com.memberclub.common.util.JsonUtils;
+import com.memberclub.common.util.TimeUtil;
+import com.memberclub.domain.context.oncetask.common.OnceTaskStatusEnum;
+import com.memberclub.domain.context.oncetask.common.TaskTypeEnum;
+import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.perform.common.GrantTypeEnum;
 import com.memberclub.domain.context.perform.common.PerformItemStatusEnum;
 import com.memberclub.domain.context.perform.common.PeriodTypeEnum;
@@ -33,6 +37,25 @@ import java.util.stream.Collectors;
  */
 @Service
 public class PerformDataObjectBuildFactory {
+
+    public OnceTaskDO buildExpireRefundOnceTaskOnPerformSuccess(PerformContext context) {
+        OnceTaskDO onceTaskDO = new OnceTaskDO();
+        onceTaskDO.setStatus(OnceTaskStatusEnum.INIT);
+        TaskContentDO taskContentDO = new TaskContentDO();
+        onceTaskDO.setContent(taskContentDO);
+        onceTaskDO.setStime(context.getStime());
+        onceTaskDO.setEtime(context.getEtime());
+        onceTaskDO.setCtime(TimeUtil.now());
+        onceTaskDO.setTaskGroupId(context.getTradeId());
+        onceTaskDO.setBizType(context.getBizType());
+        onceTaskDO.setTaskContentClassName(TaskContentDO.class.getName());
+        onceTaskDO.setTaskType(TaskTypeEnum.AFTERSALE_EXPIRE_REFUND);
+        onceTaskDO.setTradeId(context.getTradeId());
+        onceTaskDO.setUserId(context.getUserId());
+        onceTaskDO.setUtime(TimeUtil.now());
+        onceTaskDO.setTaskToken(context.getTradeId());
+        return onceTaskDO;
+    }
 
     public PeriodPerformContext buildPeriodPerformContext(OnceTaskDO taskDO) {
         PeriodPerformContext context = PerformConvertor.INSTANCE.toPeriodPerformContextForTask(taskDO);
@@ -75,6 +98,8 @@ public class PerformDataObjectBuildFactory {
             taskDO.setTradeId(((PerformTaskContentDO) contentDO).getTradeId());
         } else if (contentDO instanceof FinanceTaskContent) {
             taskDO.setTradeId(((FinanceTaskContent) contentDO).getTradeId());
+        } else if (contentDO instanceof TaskContentDO) {
+            taskDO.setTradeId(task.getTaskGroupId());
         } else {
             CommonLog.error("未知的任务类型:{}, className:{}, content:{}", task.getTaskType(), task.getTaskContentClassName(), contentDO);
         }

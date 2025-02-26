@@ -20,6 +20,7 @@ import com.memberclub.domain.dataobject.aftersale.ClientInfo;
 import com.memberclub.domain.dataobject.order.LocationInfo;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.dataobject.sku.SkuInfoDO;
+import com.memberclub.sdk.aftersale.service.AftersaleBizService;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.perform.service.PerformBizService;
 import com.memberclub.sdk.purchase.service.biz.PurchaseBizService;
@@ -69,6 +70,8 @@ public class ManageController {
     private PerformBizService performBizService;
     @Autowired
     private OnceTaskTriggerBizService onceTaskTriggerBizService;
+    @Autowired
+    private AftersaleBizService aftersaleBizService;
 
     @ApiOperation("查询商品列表")
     @PostMapping("/sku/list")
@@ -198,4 +201,8 @@ public class ManageController {
         onceTaskTriggerBizService.triggerPeriodPerform(cmd);
     }
 
+    @PostMapping("/task/expire_refund/trigger")
+    public void expireRefund(@RequestBody OnceTaskTriggerCmd cmd) {
+        aftersaleBizService.triggerRefund(cmd);
+    }
 }

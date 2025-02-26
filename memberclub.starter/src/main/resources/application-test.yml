@@ -29,30 +29,30 @@ spring:
         jdbc-url: jdbc:mysql://localhost:3306/member_sku?useUnicode=true&characterEncoding=UTF-8
         username: root
         password: 1234567890
-    rules:  ## 分库分表规则配置
+    rules: ## 分库分表规则配置
       sharding:
         tables:
-          member_order:  ## 数据库表名前缀
+          member_order: ## 数据库表名前缀
             actual-data-nodes: trade0.member_order_$->{0..1}  ## 实际表名
-            table-strategy:  ## 分表策略
+            table-strategy: ## 分表策略
               standard:
                 sharding-column: user_id  ## 按照分表的列
                 sharding-algorithm-name: member-order-inline  ## 分表算法名称(使用 yml 配置不能包含下划线,否则不生效)
-          member_sub_order:  ## 数据库表名前缀
+          member_sub_order: ## 数据库表名前缀
             actual-data-nodes: trade0.member_sub_order_$->{0..1}  ## 实际表名
-            table-strategy:  ## 分表策略
+            table-strategy: ## 分表策略
               standard:
                 sharding-column: user_id  ## 按照分表的列
                 sharding-algorithm-name: member-sub-order-inline  ## 分表算法名称(使用 yml 配置不能包含下划线,否则不生效)
-          member_perform_item:  ## 数据库表名前缀
+          member_perform_item: ## 数据库表名前缀
             actual-data-nodes: trade0.member_perform_item_$->{0..1}  ## 实际表名
-            table-strategy:  ## 分表策略
+            table-strategy: ## 分表策略
               standard:
                 sharding-column: user_id  ## 按照分表的列
                 sharding-algorithm-name: member-perform-item-inline  ## 分表算法名称(使用 yml 配置不能包含下划线,否则不生效)
-          once_task:  ## 数据库表名前缀
+          once_task: ## 数据库表名前缀
             actual-data-nodes: trade0.once_task_$->{0..1}  ## 实际表名
-            table-strategy:  ## 分表策略
+            table-strategy: ## 分表策略
               standard:
                 sharding-column: user_id  ## 按照分表的列
                 sharding-algorithm-name: once-task-inline  ## 分表算法名称(使用 yml 配置不能包含下划线,否则不生效)
@@ -61,34 +61,34 @@ spring:
             table-strategy:
               hint:
                 shardingAlgorithmName: hint-inline
-          member_ship:  ## 数据库表名前缀
+          member_ship: ## 数据库表名前缀
             actual-data-nodes: trade0.member_ship_$->{0..1}  ## 实际表名
-            table-strategy:  ## 分表策略
+            table-strategy: ## 分表策略
               standard:
                 sharding-column: user_id  ## 按照分表的列
                 sharding-algorithm-name: member-ship-inline  ## 分表算法名称(使用 yml 配置不能包含下划线,否则不生效)
-          aftersale_order:  ## 数据库表名前缀
+          aftersale_order: ## 数据库表名前缀
             actual-data-nodes: trade0.aftersale_order_$->{0..1}  ## 实际表名
-            table-strategy:  ## 分表策略
+            table-strategy: ## 分表策略
               standard:
                 sharding-column: user_id  ## 按照分表的列
                 sharding-algorithm-name: aftersale-order-inline  ## 分表算法名称(使用 yml 配置不能包含下划线,否则不生效)
 
-          member_sku:  ## 数据库表名前缀
+          member_sku: ## 数据库表名前缀
             actual-data-nodes: sku0.member_sku_$->{0..0}  ## 实际表名
-            table-strategy:  ## 分表策略
+            table-strategy: ## 分表策略
               standard:
                 sharding-column: id  ## 按照分表的列
                 sharding-algorithm-name: member-sku-inline  ## 分表算法名称(使用 yml 配置不能包含下划线,否则不生效)
-          inventory:  ## 数据库表名前缀
+          inventory: ## 数据库表名前缀
             actual-data-nodes: sku0.inventory_$->{0..1}  ## 实际表名
-            table-strategy:  ## 分表策略
+            table-strategy: ## 分表策略
               standard:
                 sharding-column: target_id  ## 按照分表的列
                 sharding-algorithm-name: inventory-inline  ## 分表算法名称(使用 yml 配置不能包含下划线,否则不生效)
-          inventory_record:  ## 数据库表名前缀
+          inventory_record: ## 数据库表名前缀
             actual-data-nodes: sku0.inventory_record_$->{0..1}  ## 实际表名
-            table-strategy:  ## 分表策略
+            table-strategy: ## 分表策略
               standard:
                 sharding-column: target_id  ## 按照分表的列
                 sharding-algorithm-name: inventory-record-inline  ## 分表算法名称(使用 yml 配置不能包含下划线,否则不生效)
@@ -204,5 +204,6 @@ apollo:
 ### 业务自定义配置项 Start
 junit_test_poll_config: false
 once_task_scan_period_perform_pre_days_1: 70
+once_task_scan_aftersale_expire_refund_pre_days_2: 16
 ### 业务自定义配置项 END
 

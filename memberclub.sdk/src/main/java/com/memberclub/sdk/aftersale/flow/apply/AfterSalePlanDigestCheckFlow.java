@@ -9,6 +9,7 @@ package com.memberclub.sdk.aftersale.flow.apply;
 import com.memberclub.common.flow.FlowNode;
 import com.memberclub.common.log.CommonLog;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
+import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
 import com.memberclub.domain.context.aftersale.contant.AftersaleUnableCode;
 import com.memberclub.sdk.common.SwitchEnum;
 import org.apache.commons.lang.StringUtils;
@@ -28,6 +29,13 @@ public class AfterSalePlanDigestCheckFlow extends FlowNode<AfterSaleApplyContext
                     context.getCmd().getDigests());
             return;
         }
+        if (context.getCmd().getSource() == AftersaleSourceEnum.System_Expire) {
+            CommonLog.info("售后过期退，售后摘要跳过校验 preview:{}, apply:{}",
+                    context.getPreviewContext().getDigests(),
+                    context.getCmd().getDigests());
+            return;
+        }
+
 
         if (!StringUtils.equals(context.getPreviewContext().getDigests(), context.getCmd().getDigests())) {
             CommonLog.error("售后摘要发生变化,不能发起售后 preview:{}, apply:{}",

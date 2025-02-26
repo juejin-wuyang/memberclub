@@ -6,11 +6,13 @@
  */
 package com.memberclub.sdk.aftersale.service;
 
+import com.google.common.collect.Lists;
 import com.memberclub.common.extension.BizSceneBuildExtension;
 import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.log.CommonLog;
 import com.memberclub.common.log.LogDomainEnum;
 import com.memberclub.common.log.UserLog;
+import com.memberclub.common.util.TimeUtil;
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.context.aftersale.apply.AftersaleApplyCmd;
@@ -19,12 +21,23 @@ import com.memberclub.domain.context.aftersale.contant.AftersaleUnableCode;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewCmd;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewResponse;
 import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.oncetask.common.OnceTaskStatusEnum;
+import com.memberclub.domain.context.oncetask.common.TaskTypeEnum;
+import com.memberclub.domain.context.oncetask.trigger.OnceTaskTriggerCmd;
+import com.memberclub.domain.context.oncetask.trigger.OnceTaskTriggerContext;
 import com.memberclub.domain.exception.AfterSaleUnableException;
 import com.memberclub.sdk.aftersale.extension.apply.AfterSaleApplyExtension;
 import com.memberclub.sdk.aftersale.extension.preview.AftersaleCollectDataExtension;
 import com.memberclub.sdk.aftersale.extension.preview.AftersalePreviewExtension;
+import com.memberclub.sdk.common.SwitchEnum;
+import com.memberclub.sdk.oncetask.trigger.extension.OnceTaskTriggerExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static com.memberclub.sdk.common.SwitchEnum.ONCE_TASK_SCAN_AFTERSALE_EXPIRE_REFUND_ELASPED_DAYS;
 
 /**
  * author: 掘金五阳
@@ -124,5 +137,40 @@ public class AftersaleBizService {
             }
         }
         return response;
+    }
+
+
+    public void triggerRefund(OnceTaskTriggerCmd cmd) {
+        cmd.setTaskType(TaskTypeEnum.AFTERSALE_EXPIRE_REFUND);
+
+        long minStime =
+                TimeUtil.now() - TimeUnit.DAYS.toMillis(ONCE_TASK_SCAN_AFTERSALE_EXPIRE_REFUND_ELASPED_DAYS.getInt(cmd.getBizType().getCode()));
+
+        long maxStime = TimeUtil.now() +
+                TimeUnit.DAYS.toMillis(SwitchEnum.ONCE_TASK_SCAN_PERIOD_PERFORM_PRE_DAYS.getInt(cmd.getBizType().getCode()));
+
+        cmd.setStatus(Lists.newArrayList(OnceTaskStatusEnum.FAIL, OnceTaskStatusEnum.INIT, OnceTaskStatusEnum.PROCESSING));
+        cmd.setMinTriggerStime(minStime);
+        cmd.setMaxTriggerStime(maxStime);
+
+        trigger(cmd);
+    }
+    
+    public void trigger(OnceTaskTriggerCmd cmd) {
+        OnceTaskTriggerContext context = new OnceTaskTriggerContext();
+        context.setBizType(cmd.getBizType());
+        context.setUserIds(cmd.getUserIds());
+        context.setTaskGroupIds(cmd.getTaskGroupIds());
+        context.setStatus(cmd.getStatus());
+        context.setTaskType(cmd.getTaskType());
+        context.setNow(TimeUtil.now());
+        context.setMinTriggerStime(cmd.getMinTriggerStime());
+        context.setMaxTriggerStime(cmd.getMaxTriggerStime());
+        context.setSuccessCount(new AtomicLong(0));
+        context.setFailCount(new AtomicLong(0));
+        context.setTotalCount(new AtomicLong(0));
+
+        extensionManager.getExtension(BizScene.of(cmd.getBizType(), cmd.getTaskType().getCode() + ""),
+                OnceTaskTriggerExtension.class).trigger(context);
     }
 }

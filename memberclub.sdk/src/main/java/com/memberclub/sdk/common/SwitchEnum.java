@@ -47,10 +47,21 @@ public enum SwitchEnum {
      */
     ONCE_TASK_SCAN_PERIOD_PERFORM_ELASPED_DAYS("once_task_scan_period_perform_elasped_days", 35),
 
+
+    /**
+     * 任务扫描 持续的最大天数, 如每个任务的 Stime+ 35天内均需要触发(如未执行成功)
+     */
+    ONCE_TASK_SCAN_AFTERSALE_EXPIRE_REFUND_ELASPED_DAYS("once_task_scan_aftersale_expire_refund_elasped_days", 35),
+
     /**
      * 任务扫描,提前触发的天数, 如某个任务的 now < stime but (stime-1days) < now ,则可以被扫描到
      */
     ONCE_TASK_SCAN_PERIOD_PERFORM_PRE_DAYS("once_task_scan_period_perform_pre_days", 1),
+
+    /**
+     * 任务扫描,提前触发的天数, 如某个任务的 now < stime but (stime-1days) < now ,则可以被扫描到
+     */
+    ONCE_TASK_SCAN_AFTERSALE_EXPIRE_REFUND_PRE_DAYS("once_task_scan_aftersale_expire_refund_pre_days", 1),
 
 
     /**

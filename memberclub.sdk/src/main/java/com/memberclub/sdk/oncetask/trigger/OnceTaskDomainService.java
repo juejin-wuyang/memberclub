@@ -16,11 +16,13 @@ import com.memberclub.domain.context.oncetask.common.OnceTaskStatusEnum;
 import com.memberclub.domain.context.oncetask.execute.OnceTaskExecuteContext;
 import com.memberclub.domain.context.oncetask.trigger.OnceTaskTriggerContext;
 import com.memberclub.domain.context.oncetask.trigger.OnceTaskTriggerJobContext;
+import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.dataobject.task.OnceTaskDO;
 import com.memberclub.domain.entity.trade.OnceTask;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.mapstruct.CommonConvertor;
 import com.memberclub.infrastructure.mybatis.mappers.trade.OnceTaskDao;
+import com.memberclub.sdk.oncetask.aftersale.extension.OnceTaskDomainExtension;
 import com.memberclub.sdk.oncetask.trigger.extension.OnceTaskTriggerExtension;
 import com.memberclub.sdk.perform.service.domain.PerformDataObjectBuildFactory;
 import org.apache.commons.collections.CollectionUtils;
@@ -48,6 +50,14 @@ public class OnceTaskDomainService {
 
     @Autowired
     private PerformDataObjectBuildFactory performDataObjectBuildFactory;
+
+    public void onCreatedExpireRefundTask(PerformContext context) {
+        OnceTaskDO onceTaskDO = performDataObjectBuildFactory.buildExpireRefundOnceTaskOnPerformSuccess(context);
+        
+        extensionManager.getExtension(BizScene.of(context.getBizType()),
+                OnceTaskDomainExtension.class).onCreatedExpireRefundTask(context, onceTaskDO);
+    }
+
 
     public void scanTasks(OnceTaskTriggerJobContext context, Consumer<List<OnceTask>> consumer) {
         Long minId = 0L;
