@@ -14,6 +14,7 @@ import com.memberclub.domain.context.perform.PerformResp;
 import com.memberclub.domain.context.purchase.PurchaseSkuSubmitCmd;
 import com.memberclub.domain.context.purchase.PurchaseSubmitCmd;
 import com.memberclub.domain.context.purchase.PurchaseSubmitResponse;
+import com.memberclub.domain.context.purchase.cancel.PurchaseCancelCmd;
 import com.memberclub.domain.context.purchase.common.PurchaseSourceEnum;
 import com.memberclub.domain.dataobject.CommonUserInfo;
 import com.memberclub.domain.dataobject.aftersale.ClientInfo;
@@ -29,6 +30,7 @@ import com.memberclub.starter.controller.convertor.ManageConvertor;
 import com.memberclub.starter.controller.convertor.PurchaseConvertor;
 import com.memberclub.starter.controller.vo.PurchaseSubmitVO;
 import com.memberclub.starter.controller.vo.TestPayRequest;
+import com.memberclub.starter.controller.vo.base.DataResponse;
 import com.memberclub.starter.controller.vo.sku.SkuPreviewVO;
 import com.memberclub.starter.controller.vo.test.PurchaseSubmitRequest;
 import com.memberclub.starter.job.OnceTaskTriggerBizService;
@@ -183,6 +185,32 @@ public class ManageController {
         } finally {
             SecurityUtil.clear();
         }
+    }
+
+    @ResponseBody
+    @PostMapping("/purchase/cancel")
+    public DataResponse<Boolean> cancel(HttpServletRequest servletRequest, @RequestBody TestPayRequest request) {
+        PurchaseCancelCmd cmd = new PurchaseCancelCmd();
+        DataResponse response = new DataResponse();
+        try {
+            SecurityUtil.securitySet(servletRequest);
+            cmd.setUserId(SecurityUtil.getUserId());
+            cmd.setTradeId(request.getTradeId());
+            MemberOrderDO order = memberOrderDomainService.getMemberOrderDO(cmd.getUserId(), cmd.getTradeId());
+            if (order == null) {
+                throw new RuntimeException("输入错误订单 id");
+            }
+            cmd.setBizType(order.getBizType());
+
+            purchaseBizService.cancel(cmd);
+            response.setSucc(true);
+        } catch (Exception e) {
+            response.setSucc(false);
+            response.setErrorMsg(e.getMessage());
+        } finally {
+            SecurityUtil.clear();
+        }
+        return response;
     }
 
     @PostMapping("/purchase/submitAndPay")

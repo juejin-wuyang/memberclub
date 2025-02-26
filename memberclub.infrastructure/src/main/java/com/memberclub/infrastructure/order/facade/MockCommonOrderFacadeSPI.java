@@ -40,7 +40,7 @@ public class MockCommonOrderFacadeSPI implements CommonOrderFacadeSPI {
 
         for (SkuBuyInfoDTO sku : request.getSkus()) {
             SkuBuyResultDO skuBuyResultDO = new SkuBuyResultDO();
-            skuBuyResultDO.setActPriceFen((sku.getSalePrice() - 100) * sku.getBuyCount());
+            skuBuyResultDO.setActPriceFen((sku.getSalePrice()) * sku.getBuyCount());
             skuBuyResultDO.setSkuId(sku.getSkuId());
             skuBuyResultDO.setBuyCount(sku.getBuyCount());
             results.add(skuBuyResultDO);

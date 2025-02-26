@@ -82,7 +82,7 @@ public class InitSkuData extends MockBaseTest {
             skuInfoDO.setFinanceInfo(settleInfo);
 
             SkuViewInfo viewInfo = new SkuViewInfo();
-            viewInfo.setDisplayDesc("无门槛组合券15元");
+            viewInfo.setDisplayDesc("无门槛组合券15元;有效期14天;过期退;有效期内限购4次");
             viewInfo.setDisplayName("15元混合券包");
             viewInfo.setInternalDesc("无门槛组合券15元");
             viewInfo.setInternalName("15元混合券包");
@@ -179,7 +179,7 @@ public class InitSkuData extends MockBaseTest {
             skuInfoDO.setFinanceInfo(settleInfo);
 
             SkuViewInfo viewInfo = new SkuViewInfo();
-            viewInfo.setDisplayDesc("无门槛立减券10元");
+            viewInfo.setDisplayDesc("无门槛立减券10元;有效期14天;过期退;有效期内限购4次");
             viewInfo.setDisplayName("10元立减券");
             viewInfo.setInternalDesc("无门槛立减券10元");
             viewInfo.setInternalName("10元立减券");
@@ -247,7 +247,7 @@ public class InitSkuData extends MockBaseTest {
             skuInfoDO.setFinanceInfo(settleInfo);
 
             SkuViewInfo viewInfo = new SkuViewInfo();
-            viewInfo.setDisplayDesc("电商会员季卡，有效期3个月，每月6张免运费券");
+            viewInfo.setDisplayDesc("有效期3个月;每月6张免运费券;Plus会员专属价");
             viewInfo.setDisplayName("京西Plus会员季卡");
             viewInfo.setInternalDesc("电商会员季卡");
             viewInfo.setInternalName("电商会员季卡");
@@ -353,7 +353,7 @@ public class InitSkuData extends MockBaseTest {
             skuInfoDO.setFinanceInfo(settleInfo);
 
             SkuViewInfo viewInfo = new SkuViewInfo();
-            viewInfo.setDisplayDesc("电商会员月卡，有效期31天，共6张免运费券");
+            viewInfo.setDisplayDesc("有效期31天;6张免运费券;Plus会员专属价");
             viewInfo.setDisplayName("京西Plus会员月卡");
             viewInfo.setInternalDesc("电商会员月卡");
             viewInfo.setInternalName("电商会员月卡");

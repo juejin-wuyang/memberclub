@@ -11,7 +11,11 @@ public class SkuPreviewVO {
 
     private String title;
 
+    private String desc;
+
     private String attr_val;
+
+    private String originPrice;
 
     private String price;
 

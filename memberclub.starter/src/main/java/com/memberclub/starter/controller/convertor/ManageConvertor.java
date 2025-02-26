@@ -10,9 +10,11 @@ public class ManageConvertor {
         SkuPreviewVO vo = new SkuPreviewVO();
         vo.setId(skuInfoDO.getSkuId());
         vo.setImage(skuInfoDO.getViewInfo().getDisplayImage());
+        vo.setOriginPrice(PriceUtils.change2Yuan(skuInfoDO.getSaleInfo().getOriginPriceFen()));
         vo.setPrice(PriceUtils.change2Yuan(skuInfoDO.getSaleInfo().getSalePriceFen()));
         vo.setFirmId(skuInfoDO.getBizType());
         vo.setBizId(skuInfoDO.getBizType());
+        vo.setDesc(skuInfoDO.getViewInfo().getDisplayDesc());
         vo.setTitle(skuInfoDO.getViewInfo().getDisplayName());
         return vo;
     }
