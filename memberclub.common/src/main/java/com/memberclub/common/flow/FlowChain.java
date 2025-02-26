@@ -20,6 +20,8 @@ public class FlowChain<T> {
 
     public List<FlowNode<T>> nodes = Lists.newArrayList();
 
+    public List<Class<? extends FlowNode<T>>> clazzs = Lists.newArrayList();
+
     public FlowChainService flowChainService;
 
     private Class<T> contextClass;
@@ -46,6 +48,7 @@ public class FlowChain<T> {
 
 
     public FlowChain<T> addNode(Class<? extends FlowNode<T>> clazz) {
+        clazzs.add(clazz);
         FlowNode<T> bean = (FlowNode<T>) flowChainService.getApplicationContext().getBean(clazz);
         nodes.add(bean);
         return this;
@@ -64,4 +67,13 @@ public class FlowChain<T> {
         nodes.add(bean);
         return this;
     }
+
+    public <S> FlowChain<T> addNodeWithSubNodes(Class<? extends SubFlowNode<T, S>> clazz,
+                                                FlowChain<S> subChain) {
+        SubFlowNode<T, S> bean = (SubFlowNode<T, S>) flowChainService.getApplicationContext().getBean(clazz);
+        bean.setSubChain(subChain);
+        nodes.add(bean);
+        return this;
+    }
+
 }

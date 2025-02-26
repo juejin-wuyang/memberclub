@@ -40,6 +40,10 @@ import java.util.Map;
                         SceneEnum.RIGHT_TYPE_SCENE_COUPON,
                         SceneEnum.RIGHT_TYPE_SCENE_DISCOUNT_COUPON,
                         SceneEnum.RIGHT_TYPE_SCENE_FREE_FREIGHT_COUPON
+                }),
+        @Route(bizType = BizTypeEnum.DOUYIN_COUPON_PACKAGE,
+                scenes = {
+                        SceneEnum.RIGHT_TYPE_SCENE_COUPON,
                 })
 })
 public class DefaultCouponAssetsGrantExtension implements AssetsGrantExtension {
@@ -47,6 +51,12 @@ public class DefaultCouponAssetsGrantExtension implements AssetsGrantExtension {
     //@Qualifier("couponGrantFacade")
     @Resource()
     private AssetsFacadeSPI assetsFacadeSPI;
+
+    public static void monitor(PerformItemContext context, Object msg) {
+        Monitor.PERFORM_EXECUTE.counter(context.getBizType(),
+                "grant_result", msg,
+                "period_perform", context.isPeriodPerform());
+    }
 
     @Override
     public ItemGroupGrantResult grant(PerformItemContext context, List<MemberPerformItemDO> items) {
@@ -111,12 +121,5 @@ public class DefaultCouponAssetsGrantExtension implements AssetsGrantExtension {
         ItemGroupGrantResult result = new ItemGroupGrantResult();
         result.setGrantMap(grantMap);
         return result;
-    }
-
-
-    public static void monitor(PerformItemContext context, Object msg) {
-        Monitor.PERFORM_EXECUTE.counter(context.getBizType(),
-                "grant_result", msg,
-                "period_perform", context.isPeriodPerform());
     }
 }

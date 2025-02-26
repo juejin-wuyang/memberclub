@@ -14,11 +14,7 @@ import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.sdk.perform.extension.build.PerformSeparateOrderExtension;
-import com.memberclub.sdk.perform.flow.build.CalculateImmediatePerformItemPeriodFlow;
-import com.memberclub.sdk.perform.flow.build.CalculateOrderPeriodFlow;
-import com.memberclub.sdk.perform.flow.build.InitialSkuPerformContextsFlow;
-import com.memberclub.sdk.perform.flow.build.MutilBuyCountClonePerformItemFlow;
-import com.memberclub.sdk.perform.flow.build.PerformContextExtraInfoBuildFlow;
+import com.memberclub.sdk.perform.flow.build.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -26,8 +22,9 @@ import javax.annotation.PostConstruct;
 /**
  * author: 掘金五阳
  */
-@ExtensionProvider(desc = "DemoMember 履约上下文构建", bizScenes = {
-        @Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = {SceneEnum.SCENE_MONTH_CARD})
+@ExtensionProvider(desc = "默认 履约上下文构建", bizScenes = {
+        @Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = {SceneEnum.SCENE_MONTH_CARD}),
+        @Route(bizType = BizTypeEnum.DOUYIN_COUPON_PACKAGE, scenes = {SceneEnum.SCENE_MONTH_CARD}),
 })
 public class DemoMemberPerformSeparateOrderExtension implements PerformSeparateOrderExtension {
 

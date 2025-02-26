@@ -27,12 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -44,20 +39,62 @@ import java.util.jar.JarFile;
 @ConfigurationProperties(prefix = "memberclub.extension")
 public class ExtensionBootChecker {
 
+    public static final Logger LOG = LoggerFactory.getLogger(ExtensionBootChecker.class);
+    private static volatile boolean run = false;
+    private final Set<Class<?>> classSet;
+    private final Map<String, ProtocolHandler> handlerMap;
     @Setter
     @Getter
     private boolean bootcheck;
-
-    public static final Logger LOG = LoggerFactory.getLogger(ExtensionBootChecker.class);
-
-
-    private List<BizTypeEnum> checkBizs = Lists.newArrayList(BizTypeEnum.DEMO_MEMBER
-            /*, BizTypeEnum.DEMO_COUPON_PACKAGE*/);
-
+    private List<BizTypeEnum> checkBizs = Lists.newArrayList(
+            BizTypeEnum.DEMO_MEMBER,
+            BizTypeEnum.DOUYIN_COUPON_PACKAGE
+    );
     @Autowired
     private ExtensionManager extensionManager;
 
-    private static volatile boolean run = false;
+
+    public ExtensionBootChecker() {
+        classSet = new HashSet<>();
+        handlerMap = new HashMap<>();
+        //注册一个文件扫描器
+        FileProtocolHandler fileProtocolHandler = new FileProtocolHandler();
+        //注册一个jar包扫描器
+        JarProtocolHandler jarProtocolHandler = new JarProtocolHandler();
+        handlerMap.put(fileProtocolHandler.handleProtocol(), fileProtocolHandler);
+        handlerMap.put(jarProtocolHandler.handleProtocol(), jarProtocolHandler);
+    }
+
+    public static List<Class<?>> scanPackage(String basePackage) {
+        ClassPathScanningCandidateComponentProvider provider =
+                new ClassPathScanningCandidateComponentProvider(false);
+
+
+        // 添加一个过滤器来查找带有特定注解的类
+        provider.addIncludeFilter(new AnnotationTypeFilter(ExtensionConfig.class, false, true));
+
+        // 设置扫描的基础包
+        //provider.setResourceLoader(null);
+        //provider.setResourcePattern("**/*.class");
+
+        List<Class<?>> list = Lists.newArrayList();
+
+
+        // 扫描指定的包
+        provider.findCandidateComponents(basePackage).forEach(beanDefinition -> {
+            // 获取类的全限定名
+            String className = beanDefinition.getBeanClassName();
+            try {
+                // 使用反射加载类
+                Class<?> clazz = Class.forName(className);
+                // 处理类，例如: 打印类名
+                list.add(clazz);
+            } catch (Exception e) {
+                LOG.error("扫描包异常:{} className:{}", basePackage, className, e);
+            }
+        });
+        return list;
+    }
 
     @PostConstruct
     public void init() {
@@ -102,52 +139,6 @@ public class ExtensionBootChecker {
             }
             throw new RuntimeException(String.format("缺少扩展点实现"));
         }
-    }
-
-    public static List<Class<?>> scanPackage(String basePackage) {
-        ClassPathScanningCandidateComponentProvider provider =
-                new ClassPathScanningCandidateComponentProvider(false);
-
-
-        // 添加一个过滤器来查找带有特定注解的类
-        provider.addIncludeFilter(new AnnotationTypeFilter(ExtensionConfig.class, false, true));
-
-        // 设置扫描的基础包
-        //provider.setResourceLoader(null);
-        //provider.setResourcePattern("**/*.class");
-
-        List<Class<?>> list = Lists.newArrayList();
-
-
-        // 扫描指定的包
-        provider.findCandidateComponents(basePackage).forEach(beanDefinition -> {
-            // 获取类的全限定名
-            String className = beanDefinition.getBeanClassName();
-            try {
-                // 使用反射加载类
-                Class<?> clazz = Class.forName(className);
-                // 处理类，例如: 打印类名
-                list.add(clazz);
-            } catch (Exception e) {
-                LOG.error("扫描包异常:{} className:{}", basePackage, className, e);
-            }
-        });
-        return list;
-    }
-
-
-    private final Set<Class<?>> classSet;
-    private final Map<String, ProtocolHandler> handlerMap;
-
-    public ExtensionBootChecker() {
-        classSet = new HashSet<>();
-        handlerMap = new HashMap<>();
-        //注册一个文件扫描器
-        FileProtocolHandler fileProtocolHandler = new FileProtocolHandler();
-        //注册一个jar包扫描器
-        JarProtocolHandler jarProtocolHandler = new JarProtocolHandler();
-        handlerMap.put(fileProtocolHandler.handleProtocol(), fileProtocolHandler);
-        handlerMap.put(jarProtocolHandler.handleProtocol(), jarProtocolHandler);
     }
 
     public Set<Class<?>> scan(String... basePackages) {

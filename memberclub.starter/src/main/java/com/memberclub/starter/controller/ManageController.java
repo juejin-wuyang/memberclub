@@ -63,6 +63,12 @@ public class ManageController {
 
     @Autowired
     private SkuDomainService skuDomainService;
+    @Autowired
+    private MemberOrderDomainService memberOrderDomainService;
+    @Autowired
+    private PerformBizService performBizService;
+    @Autowired
+    private OnceTaskTriggerBizService onceTaskTriggerBizService;
 
     @ApiOperation("查询商品列表")
     @PostMapping("/sku/list")
@@ -77,9 +83,9 @@ public class ManageController {
     public List<SkuPreviewVO> getSkus() {
         List<SkuPreviewVO> skuPreviewVOS = Lists.newArrayList();
         skuPreviewVOS.addAll(buildDisplaySkusForMallMember());
+        skuPreviewVOS.addAll(buildDisplaySkusForDouyinCouponPackage());
         return skuPreviewVOS;
     }
-
 
     public List<SkuPreviewVO> buildDisplaySkusForMallMember() {
         List<Long> skuIds = Lists.newArrayList();
@@ -92,6 +98,21 @@ public class ManageController {
             previewVO.setAttr_val("电商会员");
             previewVO.setSingleBuy(true);
             previewVO.setStock(0L);
+        }
+        return previewVOs;
+    }
+
+    public List<SkuPreviewVO> buildDisplaySkusForDouyinCouponPackage() {
+        List<Long> skuIds = Lists.newArrayList();
+        skuIds.add(200403L);//抖音单权益券包
+        skuIds.add(200404L);//抖音双权益券包
+        List<SkuInfoDO> skus = skuDomainService.queryByIds(skuIds);
+        List<SkuPreviewVO> previewVOs = CollectionUtilEx.mapToList(skus, ManageConvertor::toSkuPreviewVO);
+        for (SkuPreviewVO previewVO : previewVOs) {
+            previewVO.setFirmName("优惠券包");
+            previewVO.setAttr_val("券包");
+            previewVO.setSingleBuy(false);
+            previewVO.setStock(2L);
         }
         return previewVOs;
     }
@@ -138,12 +159,6 @@ public class ManageController {
         }
     }
 
-    @Autowired
-    private MemberOrderDomainService memberOrderDomainService;
-
-    @Autowired
-    private PerformBizService performBizService;
-
     @ResponseBody
     @PostMapping("/purchase/pay")
     public PerformResp pay(HttpServletRequest servletRequest, @RequestBody TestPayRequest request) {
@@ -177,9 +192,6 @@ public class ManageController {
         }
         throw new RuntimeException("提单失败");
     }
-
-    @Autowired
-    private OnceTaskTriggerBizService onceTaskTriggerBizService;
 
     @PostMapping("/task/trigger")
     public void periodPerform(@RequestBody OnceTaskTriggerCmd cmd) {

@@ -26,11 +26,13 @@ import org.springframework.boot.ApplicationRunner;
 /**
  * author: 掘金五阳
  */
-@ExtensionProvider(desc = "DemoMember 履约上下文前置构建", bizScenes = {@Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = SceneEnum.DEFAULT_SCENE)})
+@ExtensionProvider(desc = "DemoMember 履约上下文前置构建", bizScenes = {
+        @Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = SceneEnum.DEFAULT_SCENE),
+        @Route(bizType = BizTypeEnum.DOUYIN_COUPON_PACKAGE, scenes = SceneEnum.DEFAULT_SCENE),
+})
 public class DemoMemberPerformAcceptOrderExtension implements PerformAcceptOrderExtension, ApplicationRunner {
 
     FlowChain<PerformContext> performAcceptOrderChain = null;
-
 
     @Autowired
     private FlowChainService flowChainService;

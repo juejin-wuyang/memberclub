@@ -1,10 +1,4 @@
-/**
- * @(#)DemoMemberPerformExecuteExtension.java, 十二月 29, 2024.
- * <p>
- * Copyright 2024 memberclub.com. All rights reserved.
- * memberclub.COM PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
-package com.memberclub.plugin.demomember.extension.perform;
+package com.memberclub.plugin.douyinpkg.extension.perform;
 
 import com.google.common.collect.ImmutableList;
 import com.memberclub.common.annotation.Route;
@@ -15,13 +9,9 @@ import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.perform.PerformItemContext;
-import com.memberclub.domain.context.perform.delay.DelayItemContext;
 import com.memberclub.sdk.perform.extension.execute.PerformExecuteExtension;
 import com.memberclub.sdk.perform.flow.complete.MemberPerformMessageFlow;
 import com.memberclub.sdk.perform.flow.execute.*;
-import com.memberclub.sdk.perform.flow.execute.delay.BuildDelayPerformOnceTaskFlow;
-import com.memberclub.sdk.perform.flow.execute.delay.CreateDelayPerformOnceTaskFlow;
-import com.memberclub.sdk.perform.flow.execute.delay.DelayPerformFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -30,28 +20,28 @@ import javax.annotation.PostConstruct;
  * author: 掘金五阳
  */
 @ExtensionProvider(desc = "DemoMember 执行履约扩展点", bizScenes = {
-        @Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = {SceneEnum.SCENE_MONTH_CARD}),//Demo会员月卡,多份数,
+        @Route(bizType = BizTypeEnum.DOUYIN_COUPON_PACKAGE, scenes = {SceneEnum.SCENE_MONTH_CARD})//抖音券包月卡,多份数, 多商品
 })
-public class DemoMemberPerformExecuteExtension implements PerformExecuteExtension {
+public class DouyinPkgPerformExecuteExtension implements PerformExecuteExtension {
     private FlowChain<PerformContext> flowChain;
 
+    private FlowChain<PerformContext> subFlowChain;
     @Autowired
     private FlowChainService flowChainService;
 
     @PostConstruct
     public void init() {
+        subFlowChain = FlowChain.newChain(flowChainService, PerformContext.class)
+                .addNode(SingleSubOrderPerformFlow.class)
+                .addNodeWithSubNodes(ImmediatePerformFlow.class, PerformItemContext.class,
+                        // 构建 MemberPerformItem, 发放权益
+                        ImmutableList.of(MemberPerformItemFlow.class, PerformItemGrantFlow.class));
+
         flowChain = FlowChain.newChain(flowChainService, PerformContext.class)
                 .addNode(MemberResourcesLockFlow.class)
                 .addNode(MemberOrderOnPerformSuccessFlow.class)
                 .addNode(MemberPerformMessageFlow.class)
-                .addNode(SingleSubOrderPerformFlow.class)
-                .addNodeWithSubNodes(ImmediatePerformFlow.class, PerformItemContext.class,
-                        // 构建 MemberPerformItem, 发放权益
-                        ImmutableList.of(MemberPerformItemFlow.class, PerformItemGrantFlow.class))
-                .addNodeWithSubNodes(DelayPerformFlow.class, DelayItemContext.class,
-                        // 构建 任务, 存储任务
-                        ImmutableList.of(BuildDelayPerformOnceTaskFlow.class, CreateDelayPerformOnceTaskFlow.class))
-
+                .addNodeWithSubNodes(MutilSubOrderPerformFlow.class, subFlowChain)
         ;
     }
 

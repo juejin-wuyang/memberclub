@@ -13,12 +13,7 @@ import com.memberclub.common.util.CollectionUtilEx;
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.context.purchase.PurchaseSubmitContext;
-import com.memberclub.domain.context.usertag.UserTagDO;
-import com.memberclub.domain.context.usertag.UserTagOpCmd;
-import com.memberclub.domain.context.usertag.UserTagOpDO;
-import com.memberclub.domain.context.usertag.UserTagOpResponse;
-import com.memberclub.domain.context.usertag.UserTagOpTypeEnum;
-import com.memberclub.domain.context.usertag.UserTagTypeEnum;
+import com.memberclub.domain.context.usertag.*;
 import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.dataobject.sku.SkuInfoDO;
@@ -34,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * author: 掘金五阳
@@ -80,7 +76,14 @@ public class QuotaDomainService {
         }
         cmd.setTags(usertagOps);
 
-        Map<String, UserTagOpDO> key2UserTagOp = CollectionUtilEx.toMap(usertagOps, UserTagOpDO::getKey);
+        Map<String, List<UserTagOpDO>> key2UserTagOpList = CollectionUtilEx.groupingBy(usertagOps, UserTagOpDO::getKey);
+
+        Map<String, UserTagOpDO> key2UserTagOp = CollectionUtilEx.convertMapValue(key2UserTagOpList, (key, list) -> {
+            UserTagOpDO userTagOpDO = list.get(0);
+            int opCount = list.stream().collect(Collectors.summingInt(UserTagOpDO::getOpCount));
+            userTagOpDO.setOpCount(opCount);
+            return userTagOpDO;
+        });
 
         UserTagOpResponse response = null;
         try {

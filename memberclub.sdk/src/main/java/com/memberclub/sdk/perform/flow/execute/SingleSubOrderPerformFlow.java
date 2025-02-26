@@ -24,8 +24,10 @@ public class SingleSubOrderPerformFlow extends FlowNode<PerformContext> {
 
     @Override
     public void process(PerformContext context) {
-        SubOrderPerformContext subOrderPerformContext = context.getSubOrderPerformContexts().get(0);
-        context.setCurrentSubOrderPerformContext(subOrderPerformContext);
+        if (context.getCurrentSubOrderPerformContext() == null) {
+            SubOrderPerformContext subOrderPerformContext = context.getSubOrderPerformContexts().get(0);
+            context.setCurrentSubOrderPerformContext(subOrderPerformContext);
+        }
 
         memberSubOrderDomainService.onStartPerform(context, context.getCurrentSubOrderPerformContext());
     }

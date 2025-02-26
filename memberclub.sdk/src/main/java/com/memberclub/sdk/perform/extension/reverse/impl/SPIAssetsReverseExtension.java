@@ -34,6 +34,9 @@ import java.util.stream.Collectors;
                 SceneEnum.RIGHT_TYPE_SCENE_COUPON,
                 SceneEnum.RIGHT_TYPE_SCENE_DISCOUNT_COUPON,
                 SceneEnum.RIGHT_TYPE_SCENE_FREE_FREIGHT_COUPON
+        }),
+        @Route(bizType = BizTypeEnum.DOUYIN_COUPON_PACKAGE, scenes = {
+                SceneEnum.RIGHT_TYPE_SCENE_COUPON,
         })
 })
 public class SPIAssetsReverseExtension implements AssetsReverseExtension {
