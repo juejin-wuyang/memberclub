@@ -1,6 +1,7 @@
 项目地址：https://gitee.com/juejinwuyang/memberclub
 
 # 简介
+
 网上有很多电子商城系统，功能很全，很完善。但是实际的业务千变万化，很难说一个开源电子商城能满足所有的电商交易场景。所以我一直有一个梦想，就是做一个通用的电商交易系统，它可以作为脚手架，从0到1，快速搭建一个电商交易系统！
 
 没错，memberclub定位是电商类交易系统中台。通过SDK方式对外提供通用的交易能力，能让使用者向搭积木方式构建一个新的电商交易系统！
@@ -341,6 +342,14 @@ memberclub 在standalone模式下无需任何中间件即可启动，在集成�
 ### 独立启动
 
 cd bin && ./starter.sh -e ut
+
+然后 git clone 下载memberclub H5项目，地址在 https://gitee.com/juejinwuyang/memberclub-buy-app
+
+下载完成后，需要下载 HBuilderX IDE 启动H5项目。这样就可以了
+
+#### 效果展示
+
+![img.png](img.png)
 
 ### 集成测试环境下启动
 
