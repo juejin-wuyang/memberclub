@@ -13,10 +13,10 @@ import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.purchase.extension.PurchaseExtension;
 import com.memberclub.sdk.purchase.flow.*;
-import com.memberclub.sdk.purchase.flow.aftersale.PurchaseReverseInventoryFlow;
 import com.memberclub.sdk.purchase.flow.aftersale.PurchaseReverseMemberQuotaFlow;
-import com.memberclub.sdk.purchase.flow.aftersale.PurchaseReverseNewMemberFlow;
-import com.memberclub.sdk.purchase.flow.cancel.*;
+import com.memberclub.sdk.purchase.flow.cancel.PurchaseCancelLockFlow;
+import com.memberclub.sdk.purchase.flow.cancel.PurchaseCancelOrderFlow;
+import com.memberclub.sdk.purchase.flow.cancel.PurchaseCancelQuotaFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -42,16 +42,16 @@ public class DouyinPkgPurchaseExtension implements PurchaseExtension {
                 .addNode(SkuInfoInitalSubmitFlow.class)
                 .addNode(PurchaseSubmitCmdValidateFlow.class)
                 .addNode(PurchaseUserQuotaFlow.class)                       //检查限额
-                .addNode(PurchaseValidateInventoryFlow.class)               //检查库存
+                //.addNode(PurchaseValidateInventoryFlow.class)               //检查库存
                 .addNode(MemberOrderSubmitFlow.class)                       // 会员提单
-                .addNode(PurchaseMarkNewMemberFlow.class)                   //新会员标记
-                .addNode(PurchaseOperateInventoryFlow.class)                //扣减库存
+                //.addNode(PurchaseMarkNewMemberFlow.class)                   //新会员标记
+                //.addNode(PurchaseOperateInventoryFlow.class)                //扣减库存
                 .addNode(CommonOrderSubmitFlow.class)                       //订单系统提单
         ;
 
         purchaseReverseChain = FlowChain.newChain(AfterSaleApplyContext.class)
-                .addNode(PurchaseReverseNewMemberFlow.class)
-                .addNode(PurchaseReverseInventoryFlow.class)
+                //.addNode(PurchaseReverseNewMemberFlow.class)
+                //.addNode(PurchaseReverseInventoryFlow.class)
                 .addNode(PurchaseReverseMemberQuotaFlow.class)
         //
         ;
@@ -59,11 +59,9 @@ public class DouyinPkgPurchaseExtension implements PurchaseExtension {
         purchaseCancelFlowChain = FlowChain.newChain(PurchaseCancelContext.class)
                 .addNode(PurchaseCancelLockFlow.class)
                 .addNode(PurchaseCancelOrderFlow.class)
-                .addNode(PurchaseCancelNewMemberFlow.class)
+                //.addNode(PurchaseCancelNewMemberFlow.class)
                 .addNode(PurchaseCancelQuotaFlow.class)
-                .addNode(PurchaseCancelInventoryFlow.class)
-
-        //
+        //.addNode(PurchaseCancelInventoryFlow.class)
         ;
     }
 

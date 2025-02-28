@@ -46,10 +46,10 @@ public class DouyinPkgAfterSaleApplyExtension implements AfterSaleApplyExtension
         doApplyFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
                 .addNode(AftersaleOrderDomainFlow.class)
                 .addNode(MemberOrderRefundSuccessFlow.class) //售后成功后, 更新主单子单的状态为成功
-                .addNode(AftersaleAsyncRollbackFlow.class)
-                .addNode(AftersaleReversePerformFlow.class)
-                .addNode(AftersaleReversePurchaseFlow.class)
-                .addNode(AftersaleRefundOrderFlow.class)
+                .addNode(AftersaleAsyncRollbackFlow.class)   // 失败异步回滚
+                .addNode(AftersaleReversePerformFlow.class)  //逆向履约
+                .addNode(AftersaleReversePurchaseFlow.class) //逆向取消订单
+                .addNode(AftersaleRefundOrderFlow.class)     //退款
         //.addNode()
         ;
 

@@ -24,6 +24,7 @@ spring:
           password: dean
           driverClassName: org.h2.Driver
           schema: classpath:sql/member_sku.sql
+          data: classpath:sql/init_demo_sku_ut.sql
   h2:
     console:
       enabled: true
@@ -70,5 +71,5 @@ apollo:
 junit_test_poll_config: false
 
 once_task_scan_period_perform_pre_days_1: 70
-once_task_table_num: 1
+once_task_scan_aftersale_expire_refund_pre_days_2: 16
 ### 业务自定义配置项 END
