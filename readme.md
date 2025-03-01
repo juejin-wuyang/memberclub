@@ -347,6 +347,8 @@ cd bin && ./starter.sh -e ut
 
 下载完成后，需要下载 HBuilderX IDE 启动H5项目。这样就可以了
 
+HBuilderX 地址： https://www.dcloud.io/hbuilderx.html
+
 #### 效果展示
 
 ![img.png](img.png)
