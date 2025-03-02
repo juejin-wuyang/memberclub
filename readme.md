@@ -10,7 +10,7 @@
 
 这是五阳花了1天时间，借助于memberclub 提供的交易sdk，搭建了模仿京东plus会员和抖音券包的 交易系统，交易流程如下
 
-<video src="doc/show.mp4"></video>
+![视频演示](doc/show2.gif)
 
 在这个项目中你可以学习到 SpringBoot 集成 以下框架或组件。
 
