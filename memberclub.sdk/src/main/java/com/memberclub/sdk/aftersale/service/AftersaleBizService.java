@@ -31,6 +31,7 @@ import com.memberclub.sdk.aftersale.extension.preview.AftersaleCollectDataExtens
 import com.memberclub.sdk.aftersale.extension.preview.AftersalePreviewExtension;
 import com.memberclub.sdk.common.SwitchEnum;
 import com.memberclub.sdk.oncetask.trigger.extension.OnceTaskTriggerExtension;
+import com.memberclub.sdk.util.PriceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +55,7 @@ public class AftersaleBizService {
         try {
             AftersalePreviewContext context = doPreview(cmd);
             respose.setSuccess(true);
-            respose.setRecommendRefundPriceFen(context.getRecommendRefundPrice());
+            respose.setRecommendRefundPriceYuan(PriceUtils.change2Yuan(context.getRecommendRefundPrice()));
             respose.setRefundType(context.getRefundType());
             respose.setRefundWay(context.getRefundWay());
             respose.setDigests(context.getDigests());
@@ -155,7 +156,7 @@ public class AftersaleBizService {
 
         trigger(cmd);
     }
-    
+
     public void trigger(OnceTaskTriggerCmd cmd) {
         OnceTaskTriggerContext context = new OnceTaskTriggerContext();
         context.setBizType(cmd.getBizType());

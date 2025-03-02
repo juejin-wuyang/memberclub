@@ -6,6 +6,12 @@
 
 没错，memberclub定位是电商类交易系统中台。通过SDK方式对外提供通用的交易能力，能让使用者向搭积木方式构建一个新的电商交易系统！
 
+# 效果展示
+
+这是五阳花了1天时间，借助于memberclub 提供的交易sdk，搭建了模仿京东plus会员和抖音券包的 交易系统，交易流程如下
+
+<video src="doc/show.mp4"></video>
+
 在这个项目中你可以学习到 SpringBoot 集成 以下框架或组件。
 
 1. Mybatis-plus
@@ -322,24 +328,12 @@ memberclub                       # 主项目①pom.xml
 | RabbitMQ | 3.10.5 | http://www.rabbitmq.com/download.html                                                |
 | Apollo   | -      | https://github.com/apolloconfig/apollo-quick-start                                   |
 
-# 如何学习
-
-## 1. 先本地编译
-
-使用mvn命令编译
-
-mvn clean package -P ut
-
-## 2. 调试单元测试学习
-
-1. 推荐 TestDemoMember 单测类
-
-# 如何初始化环境
+# 如何初始化
 
 memberclub 在standalone模式下无需任何中间件即可启动，在集成测试环境默认依赖 mysql/redis/apollo/rabbitmq
 等中间件。所以如果仅学习使用，只需要启动memberclub服务即可！
 
-### 独立启动
+## 独立启动
 
 cd bin && ./starter.sh -e ut
 
@@ -349,11 +343,11 @@ cd bin && ./starter.sh -e ut
 
 HBuilderX 地址： https://www.dcloud.io/hbuilderx.html
 
-#### 效果展示
+### 效果展示
 
 ![img.png](img.png)
 
-### 集成测试环境下启动
+## 集成测试环境下启动
 
 ### 安装 mysql
 
@@ -395,4 +389,16 @@ memberclub项目根目录下
 cd bin && ./starter.sh
 
 也可以使用以下命令执行单元测试。调试单测学习
-mvn clean package -P test 
+mvn clean package -P test
+
+# 调试单元测试
+
+## 1. 先本地编译
+
+使用mvn命令编译
+
+mvn clean package -P ut
+
+## 2. 调试单元测试
+
+1. 推荐 TestDemoMember 单测类

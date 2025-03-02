@@ -9,9 +9,9 @@ package com.memberclub.sdk.perform.flow.build;
 import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.flow.FlowNode;
 import com.memberclub.common.util.TimeRange;
-import com.memberclub.domain.context.perform.common.RightTypeEnum;
 import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.perform.SubOrderPerformContext;
+import com.memberclub.domain.context.perform.common.RightTypeEnum;
 import com.memberclub.domain.dataobject.perform.MemberPerformItemDO;
 import com.memberclub.sdk.perform.extension.build.PerformItemCalculateExtension;
 import com.memberclub.sdk.util.BizUtils;
@@ -36,6 +36,7 @@ public class CalculateDelayPerformItemPeriodFlow extends FlowNode<PerformContext
 
     @Override
     public void process(PerformContext context) {
+        long delayEtime = context.getImmediatePerformEtime();
         for (SubOrderPerformContext subOrderPerformContext : context.getSubOrderPerformContexts()) {
             if (CollectionUtils.isEmpty(subOrderPerformContext.getDelayPerformItems())) {
                 continue;
@@ -56,6 +57,9 @@ public class CalculateDelayPerformItemPeriodFlow extends FlowNode<PerformContext
                             PerformItemCalculateExtension.class).buildDelayPeriod(stime, delayItem);
                     delayItem.setStime(timeRange.getStime());
                     delayItem.setEtime(timeRange.getEtime());
+                    if (delayEtime < delayItem.getEtime()) {
+                        delayEtime = delayItem.getEtime();
+                    }
                     stime = timeRange.getEtime() + 1;
 
                     String itemToken = BizUtils.toItemToken(
@@ -66,5 +70,6 @@ public class CalculateDelayPerformItemPeriodFlow extends FlowNode<PerformContext
                 }
             }
         }
+        context.setDelayPerformEtime(delayEtime);
     }
 }
