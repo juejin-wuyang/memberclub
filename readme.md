@@ -401,7 +401,7 @@ cd bin && ./starter.sh -e ut
 
 ### 效果展示
 
-![img.png](img.png)
+![img.png](doc/img.png)
 
 ![视频演示](doc/show2.gif)
 
