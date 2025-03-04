@@ -71,6 +71,8 @@ MQ、缓存、分布式锁、重试组件、延迟组件、分布式配置组件
 
 # 可以学到什么技术？
 
+![doc/img_3.png](doc/img_3.png)
+
 在这个项目中你可以学习到 SpringBoot 集成 以下框架或组件。
 
 1. Mybatis-plus
