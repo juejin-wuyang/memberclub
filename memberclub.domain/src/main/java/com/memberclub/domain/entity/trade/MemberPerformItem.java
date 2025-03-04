@@ -48,11 +48,15 @@ public class MemberPerformItem {
     private int buyIndex;
 
     /***
-     * 0 发放
-     * 1 激活
+     * 0 发放资产
+     * 1 激活资产
+     * 2 发放资格
      */
     private int grantType;
 
+    /**
+     * 发放状态
+     */
     private int status;
 
     private String extra;
