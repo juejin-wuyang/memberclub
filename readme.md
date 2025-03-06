@@ -490,3 +490,13 @@ mvn clean package -P ut
 ## 2. 调试单元测试
 
 从TestDemoMember 单测类入手，通过断点调试，深入学习。
+
+# 加入社区
+
+我们鼓励用户加入 MemberClub 的开源社区，共同参与到产品的开发和改进中来。无论是提交 Bug 报告、功能请求还是代码贡献，都是我们社区宝贵的一部分。
+
+您可以通过 https://gitee.com/juejinwuyang/memberclub/issues 提交问题或意见。
+
+# 技术博客
+
+https://juejin.cn/user/1732486057428952/posts
