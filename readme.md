@@ -96,7 +96,24 @@ MQ、缓存、分布式锁、重试组件、延迟组件、分布式配置组件
 
 下图展示了，memberclub依赖的组件配置，在业务代码中并不依赖组件的具体实现类，而是接口，如果你需要替换，只需要在配置文件中换成你的组件名即可！业务代码不会受到一丝丝影响！
 
-![img_2.png](doc/img_2.png)
+```yaml
+memberclub:
+  infrastructure:
+    config: apollo
+    lock: redis
+    feign:
+      enabled: false
+    id: redisson
+    retry: redisson
+    mq: rabbitmq
+    order: local
+    asset: local
+    sku: local
+    cache: redis
+    usertag: redis
+  extension:
+    bootcheck: true
+```
 
 # 交易域的领域划分和领域能力
 
