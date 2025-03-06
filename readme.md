@@ -35,7 +35,7 @@ memberclub 就是基于这样的想法而设计的。 它的定位是电商类�
 
 # 项目架构
 
-![doc/img_4.png](doc/img_4.png)
+![doc/img_5.png](doc/img_5.png)
 
 # 可以学到什么技术？
 
