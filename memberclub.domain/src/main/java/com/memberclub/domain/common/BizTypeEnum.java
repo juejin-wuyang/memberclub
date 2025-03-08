@@ -30,11 +30,6 @@ public enum BizTypeEnum {
         this.name = name;
     }
 
-    public boolean isEqual(int bizType) {
-        return this.code == bizType;
-    }
-
-
     public static BizTypeEnum findByCode(int value) throws IllegalArgumentException {
         for (BizTypeEnum item : BizTypeEnum.values()) {
             if (item.code == value) {
@@ -43,6 +38,10 @@ public enum BizTypeEnum {
         }
 
         throw new IllegalArgumentException("Invalid BizTypeEnum code: " + value);
+    }
+
+    public boolean isEqual(int bizType) {
+        return this.code == bizType;
     }
 
     @Override

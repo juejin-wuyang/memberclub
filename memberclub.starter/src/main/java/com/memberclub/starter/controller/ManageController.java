@@ -8,9 +8,12 @@ package com.memberclub.starter.controller;
 
 import com.google.common.collect.Lists;
 import com.memberclub.common.util.CollectionUtilEx;
+import com.memberclub.common.util.TimeUtil;
+import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.context.oncetask.trigger.OnceTaskTriggerCmd;
 import com.memberclub.domain.context.perform.PerformCmd;
 import com.memberclub.domain.context.perform.PerformResp;
+import com.memberclub.domain.context.perform.common.ShipTypeEnum;
 import com.memberclub.domain.context.purchase.PurchaseSkuSubmitCmd;
 import com.memberclub.domain.context.purchase.PurchaseSubmitCmd;
 import com.memberclub.domain.context.purchase.PurchaseSubmitResponse;
@@ -18,11 +21,13 @@ import com.memberclub.domain.context.purchase.cancel.PurchaseCancelCmd;
 import com.memberclub.domain.context.purchase.common.PurchaseSourceEnum;
 import com.memberclub.domain.dataobject.CommonUserInfo;
 import com.memberclub.domain.dataobject.aftersale.ClientInfo;
+import com.memberclub.domain.dataobject.membership.MemberShipUnionDO;
 import com.memberclub.domain.dataobject.order.LocationInfo;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.dataobject.sku.SkuInfoDO;
 import com.memberclub.sdk.aftersale.service.AftersaleBizService;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
+import com.memberclub.sdk.membership.service.MemberShipCacheService;
 import com.memberclub.sdk.perform.service.PerformBizService;
 import com.memberclub.sdk.purchase.service.biz.PurchaseBizService;
 import com.memberclub.sdk.sku.service.SkuDomainService;
@@ -37,6 +42,7 @@ import com.memberclub.starter.job.OnceTaskTriggerBizService;
 import com.memberclub.starter.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
@@ -55,7 +61,7 @@ import java.util.List;
 @Profile({"ut", "standalone", "test"})
 @RestController()
 @RequestMapping("/manage")
-@Api(value = "管理接口", tags = {"商品列表"})
+@Api(value = "管理接口", tags = {"管理接口"})
 public class ManageController {
 
     public static final Logger LOG = LoggerFactory.getLogger(ManageController.class);
@@ -74,6 +80,8 @@ public class ManageController {
     private OnceTaskTriggerBizService onceTaskTriggerBizService;
     @Autowired
     private AftersaleBizService aftersaleBizService;
+    @Autowired
+    private MemberShipCacheService memberShipCacheService;
 
     @ApiOperation("查询商品列表")
     @PostMapping("/sku/list")
@@ -233,4 +241,14 @@ public class ManageController {
     public void expireRefund(@RequestBody OnceTaskTriggerCmd cmd) {
         aftersaleBizService.triggerRefund(cmd);
     }
+
+    @PostMapping("/membership/query")
+    public DataResponse<MemberShipUnionDO> queryMemberShip(@RequestParam int bizType, @RequestParam int shipTypeEnum,
+                                                           @ApiParam(defaultValue = "12345678") @RequestParam long userId) {
+        MemberShipUnionDO unionDO = memberShipCacheService.get(BizTypeEnum.findByCode(bizType),
+                ShipTypeEnum.findByCode(shipTypeEnum), userId, TimeUtil.now());
+
+        return DataResponse.success(unionDO);
+    }
+
 }
