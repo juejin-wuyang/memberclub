@@ -1,6 +1,5 @@
 <a href='https://gitee.com/juejinwuyang/memberclub/stargazers'><img src='https://gitee.com/juejinwuyang/memberclub/badge/star.svg?theme=dark' alt='star'></img></a>
 <a href='https://gitee.com/juejinwuyang/memberclub/members'><img src='https://gitee.com/juejinwuyang/memberclub/badge/fork.svg?theme=dark' alt='fork'></img></a>
-[![MIT Licence](https://badges.frapsoft.com/os/mit/mit-125x28.png?v=103)](https://opensource.org/licenses/mit-license.php)
 
 # 项目地址
 
