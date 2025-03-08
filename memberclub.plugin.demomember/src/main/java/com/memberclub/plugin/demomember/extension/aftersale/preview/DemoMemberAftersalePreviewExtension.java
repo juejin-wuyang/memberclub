@@ -14,14 +14,7 @@ import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
 import com.memberclub.sdk.aftersale.extension.preview.AftersalePreviewExtension;
-import com.memberclub.sdk.aftersale.flow.preview.AftersaleGetAndCheckPeriodFlow;
-import com.memberclub.sdk.aftersale.flow.preview.AftersalePreviewDegradeFlow;
-import com.memberclub.sdk.aftersale.flow.preview.AftersaleStatusCheckFlow;
-import com.memberclub.sdk.aftersale.flow.preview.CalculateRefundWayFlow;
-import com.memberclub.sdk.aftersale.flow.preview.GenerateAftersalePlanDigestFlow;
-import com.memberclub.sdk.aftersale.flow.preview.GetAndCheckAftersaleTimesFlow;
-import com.memberclub.sdk.aftersale.flow.preview.OverallCheckUsageFlow;
-import com.memberclub.sdk.aftersale.flow.preview.RealtimeCalculateUsageAmountFlow;
+import com.memberclub.sdk.aftersale.flow.preview.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -48,6 +41,7 @@ public class DemoMemberAftersalePreviewExtension implements AftersalePreviewExte
                 .addNode(AftersaleStatusCheckFlow.class)
                 .addNode(AftersaleGetAndCheckPeriodFlow.class)
                 .addNode(GetAndCheckAftersaleTimesFlow.class)
+                .addNode(AftersaleValidateLastOrderFlow.class)      //优先退最后一笔订单
                 //.addNode(AftersaleGetUsageFlow.class)               //售后获取使用情况
                 //.addNode(OfflineStatatisticsUsageAmountFlow.class) //离线统计使用金额
                 .addNode(RealtimeCalculateUsageAmountFlow.class)            //实时计算使用类型

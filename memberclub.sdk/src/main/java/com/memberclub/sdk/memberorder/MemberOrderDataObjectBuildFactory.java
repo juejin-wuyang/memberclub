@@ -32,6 +32,9 @@ import java.util.stream.Collectors;
 @Service
 public class MemberOrderDataObjectBuildFactory {
 
+    public List<MemberOrderDO> buildMemberOrderDOS(List<MemberOrder> orders) {
+        return orders.stream().map(order -> buildMemberOrderDO(order)).collect(Collectors.toList());
+    }
 
     public MemberOrderDO buildMemberOrderDO(MemberOrder memberOrder) {
         MemberOrderDO orderDo = new MemberOrderDO();

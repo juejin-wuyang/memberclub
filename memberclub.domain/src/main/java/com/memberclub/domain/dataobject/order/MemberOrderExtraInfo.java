@@ -24,4 +24,6 @@ public class MemberOrderExtraInfo {
     private MemberOrderSaleInfo saleInfo;
 
     private Long lockValue;
+
+    private Long renewStime;
 }

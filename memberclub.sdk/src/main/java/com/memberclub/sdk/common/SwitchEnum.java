@@ -77,7 +77,8 @@ public enum SwitchEnum {
 
     ONCE_TASK_TABLE_NUM("once_task_table_num", 2),
     //
-    ;
+
+    RENEWABLE("renewable", 0);;
 
 
     private String key;
