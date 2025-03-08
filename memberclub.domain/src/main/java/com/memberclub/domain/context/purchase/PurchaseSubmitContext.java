@@ -8,13 +8,9 @@ package com.memberclub.domain.context.purchase;
 
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.common.BizTypeEnum;
-import com.memberclub.domain.context.inventory.InventoryOpCmd;
-import com.memberclub.domain.context.inventory.InventoryOpTypeEnum;
-import com.memberclub.domain.context.inventory.InventorySkuOpDO;
 import com.memberclub.domain.dataobject.CommonUserInfo;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.dataobject.sku.SkuInfoDO;
-import com.memberclub.domain.entity.inventory.InventoryTargetTypeEnum;
 import com.memberclub.domain.exception.MemberException;
 import lombok.Data;
 
@@ -26,31 +22,30 @@ import java.util.List;
 @Data
 public class PurchaseSubmitContext {
 
-    /*********************************************/
-    private long userId;
-
-    //基础入参
-    private CommonUserInfo userInfo;
-
-    private BizTypeEnum bizType;
-
-    private PurchaseSubmitCmd submitCmd;
-
-    private Long lockValue;
-
-    /********************************************/
-    //模型数据
-
-    private MemberOrderDO memberOrder;
-
-    private List<SkuInfoDO> skuInfos;
-
     /********************************************/
     //临时数据
 
     int orderSubmitErrorCode;
-
     String orderSubmitMsg;
+    /*********************************************/
+    private long userId;
+    //基础入参
+    private CommonUserInfo userInfo;
+    private BizTypeEnum bizType;
+    private PurchaseSubmitCmd submitCmd;
+    private Long lockValue;
+    /********************************************/
+    //模型数据
+
+    private MemberOrderDO memberOrder;
+    private List<SkuInfoDO> skuInfos;
+
+    private Long renewStime;
+
+    /***
+     * 待生效或生效中订单
+     */
+    private List<MemberOrderDO> nonExpiredMemberOrderDOS;
 
 
     /********************************************/
@@ -76,7 +71,6 @@ public class PurchaseSubmitContext {
     public void monitorException(MemberException e) {
         // TODO: 2025/1/4 补充监控
     }
-
 
 
 }

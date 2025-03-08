@@ -10,6 +10,7 @@ import com.memberclub.common.extension.BaseExtension;
 import com.memberclub.common.extension.ExtensionConfig;
 import com.memberclub.common.extension.ExtensionType;
 import com.memberclub.domain.context.common.LockMode;
+import com.memberclub.sdk.common.SwitchEnum;
 
 /**
  * author: 掘金五阳
@@ -20,5 +21,9 @@ public interface BizConfigTable extends BaseExtension {
 
     default LockMode getLockMode() {
         return LockMode.LOCK_USER;
+    }
+
+    default int renewableCount(int bizType) {
+        return SwitchEnum.RENEWABLE.getInt(bizType);
     }
 }

@@ -34,14 +34,11 @@ import javax.annotation.PostConstruct;
 })
 public class DemoMemberPurchaseExtension implements PurchaseExtension {
 
+    private static FlowChain<PurchaseSubmitContext> submitChain = null;
+    private static FlowChain<AfterSaleApplyContext> purchaseReverseChain = null;
+    private static FlowChain<PurchaseCancelContext> purchaseCancelFlowChain = null;
     @Autowired
     private MemberOrderDomainService memberOrderDomainService;
-
-    private static FlowChain<PurchaseSubmitContext> submitChain = null;
-
-    private static FlowChain<AfterSaleApplyContext> purchaseReverseChain = null;
-
-    private static FlowChain<PurchaseCancelContext> purchaseCancelFlowChain = null;
 
     @PostConstruct
     public void init() {
@@ -50,6 +47,7 @@ public class DemoMemberPurchaseExtension implements PurchaseExtension {
                 .addNode(SkuInfoInitalSubmitFlow.class)
                 .addNode(PurchaseSubmitCmdValidateFlow.class)
                 .addNode(PurchaseUserQuotaFlow.class)//检查限额
+                .addNode(PurchaseRenewValidateFlow.class)
                 .addNode(PurchaseValidateInventoryFlow.class)//检查库存
                 .addNode(MemberOrderSubmitFlow.class)// 会员提单
                 .addNode(PurchaseMarkNewMemberFlow.class)//新会员标记

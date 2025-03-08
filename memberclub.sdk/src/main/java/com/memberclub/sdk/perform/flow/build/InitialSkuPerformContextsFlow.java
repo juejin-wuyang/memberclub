@@ -54,7 +54,11 @@ public class InitialSkuPerformContextsFlow extends FlowNode<PerformContext> {
         }
         context.setSubOrderPerformContexts(subOrderPerformContexts);
         if (context.getBaseTime() == 0) {
-            context.setBaseTime(TimeUtil.now());
+            if (context.getMemberOrder().getExtra().getRenewStime() != 0) {
+                context.setBaseTime(context.getMemberOrder().getExtra().getRenewStime());
+            } else {
+                context.setBaseTime(TimeUtil.now());
+            }
             context.getCmd().setBaseTime(context.getBaseTime());
         }
     }

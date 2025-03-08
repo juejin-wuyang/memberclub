@@ -37,6 +37,7 @@ public enum ResultCode {
     NEW_MEMBER_ERROR(27, "新会员标记错误", false, false),
     PURCHASE_REVERSE_ERROR(28, "开通逆向失败", false),
     PURCHASE_CANCEL_ERROR(29, "开通取消失败", false),
+    RENEW_EXCEED(30, "不允许再次续费购买", false),
     ;
 
     private int value;

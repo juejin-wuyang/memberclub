@@ -93,6 +93,9 @@ public class MemberOrderBuildFactory {
         order.getExtra().setSettleInfo(order.getSettleInfo());
         order.getExtra().setSaleInfo(order.getSaleInfo());
         order.getExtra().setLockValue(context.getLockValue());
+        if (context.getRenewStime() != null) {
+            order.getExtra().setRenewStime(context.getRenewStime());
+        }
 
         extensionManager.getExtension(context.toDefaultBizScene(),
                 PurchaseOrderBuildExtension.class).buildOrder(order, context);
