@@ -32,7 +32,7 @@ import java.util.function.Predicate;
  * <p>
  * 自己的通用 mapper 如下使用:
  * <pre>
- * int insertIgnoreBatch(List<T> entityList);
+ * int   insertIgnoreBatch(List entityList);
  * </pre>
  * </p>
  *
