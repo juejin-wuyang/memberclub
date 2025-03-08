@@ -1,17 +1,6 @@
-<script src='https://gitee.com/juejinwuyang/memberclub/widget_preview' async defer></script>
-<div id="osc-gitee-widget-tag"></div>
-<style>
-.osc_pro_color {color: #4183c4 !important;}
-.osc_panel_color {background-color: #ffffff !important;}
-.osc_background_color {background-color: #ffffff !important;}
-.osc_border_color {border-color: #e3e9ed !important;}
-.osc_desc_color {color: #666666 !important;}
-.osc_link_color * {color: #9b9b9b !important;}
-</style>
-
-
 <a href='https://gitee.com/juejinwuyang/memberclub/stargazers'><img src='https://gitee.com/juejinwuyang/memberclub/badge/star.svg?theme=dark' alt='star'></img></a>
 <a href='https://gitee.com/juejinwuyang/memberclub/members'><img src='https://gitee.com/juejinwuyang/memberclub/badge/fork.svg?theme=dark' alt='fork'></img></a>
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit-125x28.png?v=103)](https://opensource.org/licenses/mit-license.php)
 
 # 项目地址
 
@@ -46,11 +35,12 @@ GitHub  <https://github.com/juejin-wuyang/memberclub>
 memberclub 就是基于这样的想法而设计的。 它的定位是电商类交易系统工具箱，
 以SDK方式对外提供通用的交易能力，能让开发者像搭积木方式，从0到1，快速构建一个新的电商交易系统！
 
+<a href='https://gitee.com/juejinwuyang/memberclub'><img src='https://gitee.com/juejinwuyang/memberclub/widgets/widget_6.svg' alt='Fork me on Gitee'></img></a>
+
 我认为这很有价值！
 
 # 项目架构
 
-<a href='https://gitee.com/juejinwuyang/memberclub'><img src='https://gitee.com/juejinwuyang/memberclub/widgets/widget_6.svg' alt='Fork me on Gitee'></img></a>
 ![doc/img_5.png](doc/img_5.png)
 
 # 可以学到什么技术？
