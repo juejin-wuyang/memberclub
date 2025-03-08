@@ -11,7 +11,7 @@ import com.memberclub.common.flow.FlowNode;
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.context.perform.reverse.PerformItemReverseInfo;
 import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
-import com.memberclub.sdk.perform.extension.reverse.AssetsReverseExtension;
+import com.memberclub.sdk.perform.extension.reverse.RightsReverseExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class ReverseAssetsFlow extends FlowNode<ReversePerformContext> {
 
 
         String scene = String.valueOf(context.getCurrentSubOrderReversePerformContext().getCurrentRightType());
-        extensionManager.getExtension(BizScene.of(context.getBizType(), scene), AssetsReverseExtension.class)
+        extensionManager.getExtension(BizScene.of(context.getBizType(), scene), RightsReverseExtension.class)
                 .reverse(context, context.getCurrentSubOrderReversePerformContext(), items);
     }
 }

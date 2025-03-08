@@ -16,7 +16,7 @@ import com.memberclub.domain.entity.trade.MemberShip;
 /**
  * author: 掘金五阳
  */
-@ExtensionConfig(desc = "会员身份扩展点", must = false, type = ExtensionType.PERFORM_MAIN)
+@ExtensionConfig(desc = "会员资格扩展点", must = false, type = ExtensionType.PERFORM_MAIN)
 public interface MemberShipDomainExtension extends BaseExtension {
 
     public void onGrant(MemberShipDO memberShipDO, MemberShip memberShip);

@@ -110,7 +110,7 @@ public class PreFinanceDomainService {
         detail.setAssetBatchCode(item.getBatchCode());
         detail.setFinanceAssetType(item.getExtra().getSettleInfo().getFinanceAssetType());
         if (context.getPreFinanceEventEnum() == PreFinanceEventEnum.PERFORM) {
-            detail.setAssetNum(item.getAssetCount());
+            detail.setAssetNum(item.getTotalCount());
             buildFinanceAssets(assets, detail);
         } else if (context.getPreFinanceEventEnum() == PreFinanceEventEnum.EXPIRE) {
             detail.setAssetNum(assets.size());

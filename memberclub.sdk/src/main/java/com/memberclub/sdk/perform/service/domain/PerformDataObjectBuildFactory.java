@@ -69,7 +69,7 @@ public class PerformDataObjectBuildFactory {
 
     public MemberPerformItemDO toMemberPerformItemDO(MemberPerformItem item) {
         MemberPerformItemDO itemDO = new MemberPerformItemDO();
-        itemDO.setAssetCount(item.getAssetCount());
+        itemDO.setTotalCount(item.getTotalCount());
         itemDO.setBatchCode(item.getBatchCode());
         itemDO.setBuyIndex(item.getBuyIndex());
         itemDO.setCycle(item.getCycle());

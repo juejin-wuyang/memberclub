@@ -14,6 +14,7 @@ import com.memberclub.common.util.CollectionUtilEx;
 import com.memberclub.common.util.TimeUtil;
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.common.BizTypeEnum;
+import com.memberclub.domain.context.perform.common.ShipTypeEnum;
 import com.memberclub.domain.dataobject.membership.MemberShipDO;
 import com.memberclub.domain.dataobject.membership.MemberShipItemDO;
 import com.memberclub.domain.dataobject.membership.MemberShipStatusEnum;
@@ -68,7 +69,7 @@ public class MemberShipDomainService {
 
         MemberShipUnionDO memberShipUnionDO = union(memberShipDO);
         if (memberShipUnionDO == null) {
-            throw ResultCode.PERFORM_ITEM_GRANT_ERROR.newException("会员身份同步失败");
+            throw ResultCode.PERFORM_ITEM_GRANT_ERROR.newException("会员资格同步失败");
         }
 
         TransactionHelper.afterCommitExecute(() -> {
@@ -77,9 +78,10 @@ public class MemberShipDomainService {
     }
 
     public MemberShipUnionDO union(MemberShipDO memberShipDO) {
-        List<MemberShip> memberShips = queryActiveMemberShips(memberShipDO.getUserId(), memberShipDO.getBizType());
+        List<MemberShip> memberShips = queryActiveMemberShips(memberShipDO.getUserId(), memberShipDO.getBizType(), memberShipDO.getShipType());
         MemberShipUnionDO memberShipUnionDO = new MemberShipUnionDO();
         memberShipUnionDO.setBizType(memberShipDO.getBizType().getCode());
+        memberShipUnionDO.setShipType(memberShipDO.getShipType().getCode());
         memberShipUnionDO.setUserId(memberShipDO.getUserId());
         memberShipUnionDO.setItems(
                 CollectionUtilEx.mapToList(memberShips, (m) -> {
@@ -87,11 +89,13 @@ public class MemberShipDomainService {
                     itemDO.setEtime(m.getEtime());
                     itemDO.setStime(m.getStime());
                     itemDO.setGrantCode(m.getGrantCode());
+                    itemDO.setUsedCount(m.getUsedCount());
+                    itemDO.setTotalCount(m.getTotalCount());
                     return itemDO;
                 })
         );
         if (CollectionUtils.isEmpty(memberShipUnionDO.getItems())) {
-            CommonLog.error("未找到生效中的会员身份");
+            CommonLog.error("未找到生效中的会员资格");
             return null;
         }
         long minStime = memberShipUnionDO.getItems().
@@ -103,10 +107,11 @@ public class MemberShipDomainService {
         return memberShipUnionDO;
     }
 
-    public List<MemberShip> queryActiveMemberShips(long userId, BizTypeEnum bizType) {
+    public List<MemberShip> queryActiveMemberShips(long userId, BizTypeEnum bizType, ShipTypeEnum shipTypeEnum) {
         LambdaQueryWrapper<MemberShip> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(MemberShip::getUserId, userId);
         wrapper.eq(MemberShip::getBizType, bizType.getCode());
+        wrapper.eq(MemberShip::getShipType, shipTypeEnum.getCode());
         wrapper.eq(MemberShip::getStatus, MemberShipStatusEnum.FINISH.getCode());
         wrapper.ge(MemberShip::getEtime, TimeUtil.now());
 
@@ -117,7 +122,7 @@ public class MemberShipDomainService {
     @Transactional(rollbackFor = Exception.class)
     public void cancel(MemberShipDO memberShipDO) {
         if (memberShipDO.getStatus() == MemberShipStatusEnum.CANCEL) {
-            CommonLog.warn("会员身份发放记录已经取消, 无需再次取消 memberShipDO:{}", memberShipDO);
+            CommonLog.warn("会员资格发放记录已经取消, 无需再次取消 memberShipDO:{}", memberShipDO);
             return;
         }
         memberShipDO.onCancel();
@@ -135,7 +140,7 @@ public class MemberShipDomainService {
 
         TransactionHelper.afterCommitExecute(() -> {
             if (memberShipUnionDO == null) {
-                memberShipCacheService.remove(memberShipDO.getBizType(), memberShipDO.getUserId());
+                memberShipCacheService.remove(memberShipDO.getBizType(), memberShipDO.getShipType(), memberShipDO.getUserId());
             } else {
                 memberShipCacheService.sync(memberShipUnionDO);
             }

@@ -67,17 +67,131 @@ public class TestDemoMemberPurchase extends MockBaseTest {
     public static SkuInfoDO cycle3Sku = null;
 
     public static SkuInfoDO inventoryEnabledSku = null;
-
+    public static AtomicLong skuIdGenerator = new AtomicLong(200300);
+    private static boolean init = false;
     @Autowired
     public PurchaseBizService purchaseBizService;
-
-
     @Autowired
     private SkuDomainService skuDomainService;
+    @SpyBean
+    private MockCommonOrderFacadeSPI mockCommonOrderFacadeSPI;
+    @Autowired
+    private InventoryDomainService inventoryDomainService;
+    @Autowired
+    private CacheService cacheService;
 
-    private static boolean init = false;
+    public static PurchaseSubmitCmd buildPurchaseSubmitCmd(long skuId, int buyCount) {
+        PurchaseSubmitCmd cmd = new PurchaseSubmitCmd();
+        LocationInfo locationInfo = new LocationInfo();
+        ClientInfo clientInfo = new ClientInfo();
+        CommonUserInfo userInfo = new CommonUserInfo();
 
-    public static AtomicLong skuIdGenerator = new AtomicLong(200300);
+        locationInfo.setActualSecondCityId("110100");
+        clientInfo.setClientCode(1);
+        clientInfo.setClientName("ios");
+
+        userInfo.setIp("127.0.0.1");
+
+        cmd.setClientInfo(clientInfo);
+        cmd.setUserInfo(userInfo);
+        cmd.setLocationInfo(locationInfo);
+
+        //cmd.setUserId(userIdGenerator.incrementAndGet());
+        cmd.setUserId(DEFAULT_USER_ID);
+        cmd.setBizType(BizTypeEnum.DEMO_MEMBER);
+
+        PurchaseSkuSubmitCmd sku = new PurchaseSkuSubmitCmd();
+        sku.setSkuId(skuId);
+        sku.setBuyCount(buyCount);
+        cmd.setSkus(Lists.newArrayList(sku));
+
+        cmd.setSource(PurchaseSourceEnum.HOMEPAGE);
+        cmd.setSubmitToken(RandomStringUtils.randomAscii(10));
+        return cmd;
+    }
+
+    public static SkuInfoDO buildDoubleRightsSku(int cycle) {
+        SkuInfoDO skuInfoDO = new SkuInfoDO();
+
+        skuInfoDO.setSkuId(skuIdGenerator.incrementAndGet());
+        skuInfoDO.setBizType(BizTypeEnum.DEMO_MEMBER.getCode());
+        skuInfoDO.setCtime(TimeUtil.now());
+        skuInfoDO.setUtime(TimeUtil.now());
+
+        SkuSaleInfo skuSaleInfo = new SkuSaleInfo();
+        skuSaleInfo.setOriginPriceFen(3000);
+        skuSaleInfo.setSalePriceFen(699);
+
+        skuInfoDO.setSaleInfo(skuSaleInfo);
+
+        SkuFinanceInfo settleInfo = new SkuFinanceInfo();
+        settleInfo.setContractorId("438098434");
+        settleInfo.setSettlePriceFen(300);
+        settleInfo.setFinanceProductType(1);
+        settleInfo.setPeriodCycle(cycle);
+
+        skuInfoDO.setFinanceInfo(settleInfo);
+
+        SkuViewInfo viewInfo = new SkuViewInfo();
+        viewInfo.setDisplayDesc("大额红包");
+        viewInfo.setDisplayName("大额红包");
+        viewInfo.setInternalDesc("大额红包 5 元");
+        viewInfo.setInternalName("大额红包 5 元");
+        skuInfoDO.setViewInfo(viewInfo);
+
+
+        SkuPerformConfigDO skuPerformConfigDO = new SkuPerformConfigDO();
+        skuInfoDO.setPerformConfig(skuPerformConfigDO);
+
+
+        SkuPerformItemConfigDO skuPerformItemConfigDO = new SkuPerformItemConfigDO();
+        skuPerformItemConfigDO.setTotalCount(4);
+        skuPerformItemConfigDO.setBizType(1);
+        skuPerformItemConfigDO.setCycle(cycle);
+        skuPerformItemConfigDO.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());
+        skuPerformItemConfigDO.setRightId(32424);
+        skuPerformItemConfigDO.setPeriodCount(31);
+        skuPerformItemConfigDO.setRightType(1);
+        skuPerformItemConfigDO.setProviderId("1");
+        RightViewInfo rightViewInfo = new RightViewInfo();
+        rightViewInfo.setDisplayName("会员立减券权益");
+
+        skuPerformItemConfigDO.setViewInfo(rightViewInfo);
+
+        RightFinanceInfo rightFinanceInfo = new RightFinanceInfo();
+        rightFinanceInfo.setContractorId("438098434");
+        rightFinanceInfo.setSettlePriceFen(233);
+        rightFinanceInfo.setFinanceable(true);
+        rightFinanceInfo.setFinanceAssetType(1);
+        skuPerformItemConfigDO.setSettleInfo(rightFinanceInfo);
+
+        SkuPerformItemConfigDO skuPerformItemConfigDO2 = new SkuPerformItemConfigDO();
+        skuPerformItemConfigDO2.setTotalCount(4);
+        skuPerformItemConfigDO2.setBizType(1);
+        skuPerformItemConfigDO2.setCycle(cycle);
+        skuPerformItemConfigDO2.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());
+        skuPerformItemConfigDO2.setRightId(32423);
+        skuPerformItemConfigDO2.setPeriodCount(31);
+        skuPerformItemConfigDO2.setRightType(2);
+        skuPerformItemConfigDO2.setProviderId("1");
+        rightViewInfo = new RightViewInfo();
+        rightViewInfo.setDisplayName("会员折扣券权益");
+        skuPerformItemConfigDO2.setViewInfo(rightViewInfo);
+
+
+        RightFinanceInfo rightFinanceInfo2 = new RightFinanceInfo();
+        rightFinanceInfo2.setContractorId("438098434");
+        rightFinanceInfo2.setSettlePriceFen(233);
+        rightFinanceInfo2.setFinanceable(true);
+        rightFinanceInfo2.setFinanceAssetType(2);
+        skuPerformItemConfigDO2.setSettleInfo(rightFinanceInfo2);
+
+        skuPerformConfigDO.setConfigs(Lists.newArrayList(skuPerformItemConfigDO, skuPerformItemConfigDO2));
+        skuInfoDO.setPerformConfig(skuPerformConfigDO);
+
+        skuInfoDO.setExtra(new SkuExtra());
+        return skuInfoDO;
+    }
 
     private SkuInfoDO buildMemberShipSku() {
         membershipSku = buildDoubleRightsSku(1);
@@ -86,7 +200,7 @@ public class TestDemoMemberPurchase extends MockBaseTest {
         membershipSku.getPerformConfig().getConfigs().add(shipConfig);
 
 
-        shipConfig.setAssetCount(0);
+        shipConfig.setTotalCount(Integer.MAX_VALUE);
         shipConfig.setBizType(1);
         shipConfig.setCycle(1);
         shipConfig.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());
@@ -166,7 +280,6 @@ public class TestDemoMemberPurchase extends MockBaseTest {
         waitH2();
     }
 
-
     @Test
     @SneakyThrows
     public void testSubmitInventoryLoss() {
@@ -184,12 +297,6 @@ public class TestDemoMemberPurchase extends MockBaseTest {
             Assert.fail("库存扣减校验失败");
         }
     }
-
-    @SpyBean
-    private MockCommonOrderFacadeSPI mockCommonOrderFacadeSPI;
-
-    @Autowired
-    private InventoryDomainService inventoryDomainService;
 
     @Test
     @SneakyThrows
@@ -256,40 +363,6 @@ public class TestDemoMemberPurchase extends MockBaseTest {
         return response;
     }
 
-
-    public static PurchaseSubmitCmd buildPurchaseSubmitCmd(long skuId, int buyCount) {
-        PurchaseSubmitCmd cmd = new PurchaseSubmitCmd();
-        LocationInfo locationInfo = new LocationInfo();
-        ClientInfo clientInfo = new ClientInfo();
-        CommonUserInfo userInfo = new CommonUserInfo();
-
-        locationInfo.setActualSecondCityId("110100");
-        clientInfo.setClientCode(1);
-        clientInfo.setClientName("ios");
-
-        userInfo.setIp("127.0.0.1");
-
-        cmd.setClientInfo(clientInfo);
-        cmd.setUserInfo(userInfo);
-        cmd.setLocationInfo(locationInfo);
-
-        //cmd.setUserId(userIdGenerator.incrementAndGet());
-        cmd.setUserId(DEFAULT_USER_ID);
-        cmd.setBizType(BizTypeEnum.DEMO_MEMBER);
-
-        PurchaseSkuSubmitCmd sku = new PurchaseSkuSubmitCmd();
-        sku.setSkuId(skuId);
-        sku.setBuyCount(buyCount);
-        cmd.setSkus(Lists.newArrayList(sku));
-
-        cmd.setSource(PurchaseSourceEnum.HOMEPAGE);
-        cmd.setSubmitToken(RandomStringUtils.randomAscii(10));
-        return cmd;
-    }
-
-    @Autowired
-    private CacheService cacheService;
-
     @Before
     public void init() {
         if (init) {
@@ -310,88 +383,5 @@ public class TestDemoMemberPurchase extends MockBaseTest {
         mockSkuBizService.addSku(membershipSku.getSkuId(), membershipSku);
 
 
-    }
-
-    public static SkuInfoDO buildDoubleRightsSku(int cycle) {
-        SkuInfoDO skuInfoDO = new SkuInfoDO();
-
-        skuInfoDO.setSkuId(skuIdGenerator.incrementAndGet());
-        skuInfoDO.setBizType(BizTypeEnum.DEMO_MEMBER.getCode());
-        skuInfoDO.setCtime(TimeUtil.now());
-        skuInfoDO.setUtime(TimeUtil.now());
-
-        SkuSaleInfo skuSaleInfo = new SkuSaleInfo();
-        skuSaleInfo.setOriginPriceFen(3000);
-        skuSaleInfo.setSalePriceFen(699);
-
-        skuInfoDO.setSaleInfo(skuSaleInfo);
-
-        SkuFinanceInfo settleInfo = new SkuFinanceInfo();
-        settleInfo.setContractorId("438098434");
-        settleInfo.setSettlePriceFen(300);
-        settleInfo.setFinanceProductType(1);
-        settleInfo.setPeriodCycle(cycle);
-
-        skuInfoDO.setFinanceInfo(settleInfo);
-
-        SkuViewInfo viewInfo = new SkuViewInfo();
-        viewInfo.setDisplayDesc("大额红包");
-        viewInfo.setDisplayName("大额红包");
-        viewInfo.setInternalDesc("大额红包 5 元");
-        viewInfo.setInternalName("大额红包 5 元");
-        skuInfoDO.setViewInfo(viewInfo);
-
-
-        SkuPerformConfigDO skuPerformConfigDO = new SkuPerformConfigDO();
-        skuInfoDO.setPerformConfig(skuPerformConfigDO);
-
-
-        SkuPerformItemConfigDO skuPerformItemConfigDO = new SkuPerformItemConfigDO();
-        skuPerformItemConfigDO.setAssetCount(4);
-        skuPerformItemConfigDO.setBizType(1);
-        skuPerformItemConfigDO.setCycle(cycle);
-        skuPerformItemConfigDO.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());
-        skuPerformItemConfigDO.setRightId(32424);
-        skuPerformItemConfigDO.setPeriodCount(31);
-        skuPerformItemConfigDO.setRightType(1);
-        skuPerformItemConfigDO.setProviderId("1");
-        RightViewInfo rightViewInfo = new RightViewInfo();
-        rightViewInfo.setDisplayName("会员立减券权益");
-
-        skuPerformItemConfigDO.setViewInfo(rightViewInfo);
-
-        RightFinanceInfo rightFinanceInfo = new RightFinanceInfo();
-        rightFinanceInfo.setContractorId("438098434");
-        rightFinanceInfo.setSettlePriceFen(233);
-        rightFinanceInfo.setFinanceable(true);
-        rightFinanceInfo.setFinanceAssetType(1);
-        skuPerformItemConfigDO.setSettleInfo(rightFinanceInfo);
-
-        SkuPerformItemConfigDO skuPerformItemConfigDO2 = new SkuPerformItemConfigDO();
-        skuPerformItemConfigDO2.setAssetCount(4);
-        skuPerformItemConfigDO2.setBizType(1);
-        skuPerformItemConfigDO2.setCycle(cycle);
-        skuPerformItemConfigDO2.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());
-        skuPerformItemConfigDO2.setRightId(32423);
-        skuPerformItemConfigDO2.setPeriodCount(31);
-        skuPerformItemConfigDO2.setRightType(2);
-        skuPerformItemConfigDO2.setProviderId("1");
-        rightViewInfo = new RightViewInfo();
-        rightViewInfo.setDisplayName("会员折扣券权益");
-        skuPerformItemConfigDO2.setViewInfo(rightViewInfo);
-
-
-        RightFinanceInfo rightFinanceInfo2 = new RightFinanceInfo();
-        rightFinanceInfo2.setContractorId("438098434");
-        rightFinanceInfo2.setSettlePriceFen(233);
-        rightFinanceInfo2.setFinanceable(true);
-        rightFinanceInfo2.setFinanceAssetType(2);
-        skuPerformItemConfigDO2.setSettleInfo(rightFinanceInfo2);
-
-        skuPerformConfigDO.setConfigs(Lists.newArrayList(skuPerformItemConfigDO, skuPerformItemConfigDO2));
-        skuInfoDO.setPerformConfig(skuPerformConfigDO);
-
-        skuInfoDO.setExtra(new SkuExtra());
-        return skuInfoDO;
     }
 }

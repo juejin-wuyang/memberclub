@@ -20,7 +20,7 @@ import java.util.List;
  * author: 掘金五阳
  */
 @ExtensionConfig(desc = "资产逆向冻结扩展点", type = ExtensionType.REVERSE_PERFORM, must = true)
-public interface AssetsReverseExtension extends BaseExtension {
+public interface RightsReverseExtension extends BaseExtension {
 
     public AssetsReverseResponse reverse(ReversePerformContext context,
                                          SubOrderReversePerformContext reverseInfo,

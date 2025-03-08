@@ -18,5 +18,9 @@ public class MemberShipItemDO {
 
     private long etime;
 
+    private long usedCount;
+
+    private long totalCount;
+
     private String grantCode;
 }

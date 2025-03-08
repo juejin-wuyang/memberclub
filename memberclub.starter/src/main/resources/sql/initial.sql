@@ -105,6 +105,7 @@ CREATE TABLE IF NOT EXISTS member_sub_order_1 (
 CREATE TABLE IF NOT EXISTS member_ship_0 (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
     biz_type INT(11)  NOT NULL COMMENT '产品线',
+    ship_type INT(11)  NOT NULL COMMENT '资格类型',
     user_id BIGINT(20)  NOT NULL COMMENT 'userId',
     trade_id VARCHAR(128)  NOT NULL COMMENT '交易 id',
     sub_trade_id VARCHAR(128)  NOT NULL COMMENT '子单交易 id',
@@ -113,6 +114,8 @@ CREATE TABLE IF NOT EXISTS member_ship_0 (
     grant_code VARCHAR(128)  NULL COMMENT '发放批次码',
     status INT(11)  NOT NULL COMMENT '状态',
     extra TEXT NOT NULL COMMENT '扩展属性',
+    used_count INT(11)  NOT NULL COMMENT '已使用数量',
+    total_count INT(11)  NOT NULL COMMENT '最大可使用数量',
     stime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '开始时间',
     etime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '截止时间',
     utime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '更新时间',
@@ -126,12 +129,15 @@ CREATE TABLE IF NOT EXISTS member_ship_0 (
 CREATE TABLE IF NOT EXISTS member_ship_1 (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
     biz_type INT(11)  NOT NULL COMMENT '产品线',
+    ship_type INT(11)  NOT NULL COMMENT '资格类型',
     user_id BIGINT(20)  NOT NULL COMMENT 'userId',
     trade_id VARCHAR(128)  NOT NULL COMMENT '交易 id',
     sub_trade_id VARCHAR(128)  NOT NULL COMMENT '子单交易 id',
     right_id INT(11)  NOT NULL COMMENT '权益Id',
     item_token VARCHAR(128)  NOT NULL COMMENT '履约项凭证',
     grant_code VARCHAR(128)  NULL COMMENT '发放批次码',
+    used_count INT(11)  NOT NULL COMMENT '已使用数量',
+    total_count INT(11)  NOT NULL COMMENT '最大可使用数量',
     status INT(11)  NOT NULL COMMENT '状态',
     extra TEXT NOT NULL COMMENT '扩展属性',
     stime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '开始时间',
@@ -195,7 +201,7 @@ CREATE TABLE IF NOT EXISTS member_perform_item_0 (
     sku_id BIGINT(20)  NOT NULL COMMENT 'skuId',
     right_id INT(11)  NOT NULL COMMENT '权益Id',
     right_type INT(11)  NOT NULL COMMENT '权益类型',
-    asset_count INT(11)  NOT NULL COMMENT '资产数量',
+    total_count INT(11)  NOT NULL COMMENT '资产、资格总数量',
     grant_type INT(11)  NOT NULL COMMENT '发放类型,直发 ,激活',
     item_token VARCHAR(128)  NOT NULL COMMENT '履约项凭证',
     batch_code VARCHAR(128)  NULL COMMENT '发放批次码',
@@ -210,7 +216,7 @@ CREATE TABLE IF NOT EXISTS member_perform_item_0 (
     utime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '更新时间',
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
-    KEY key_perform_item_batch (user_id, trade_id, batch_code),
+    KEY key_perform_item_batch (user_id, batch_code, trade_id),
     UNIQUE KEY uniq_perform_item (user_id, item_token, biz_type)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 
@@ -223,7 +229,7 @@ CREATE TABLE IF NOT EXISTS member_perform_item_1 (
     sku_id BIGINT(20)  NOT NULL COMMENT 'skuId',
     right_id INT(11)  NOT NULL COMMENT '权益Id',
     right_type INT(11)  NOT NULL COMMENT '权益类型',
-    asset_count INT(11)  NOT NULL COMMENT '资产数量',
+    total_count INT(11)  NOT NULL COMMENT '资产、资格总数量',
     grant_type INT(11)  NOT NULL COMMENT '发放类型,直发 ,激活',
     item_token VARCHAR(128)  NOT NULL COMMENT '履约项凭证',
     batch_code VARCHAR(128)  NULL COMMENT '发放批次码',
@@ -238,7 +244,7 @@ CREATE TABLE IF NOT EXISTS member_perform_item_1 (
     utime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '更新时间',
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
-    KEY key_perform_item_batch (user_id, trade_id, batch_code),
+    KEY key_perform_item_batch (user_id, batch_code, trade_id),
     UNIQUE KEY uniq_perform_item (user_id, item_token, biz_type)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 

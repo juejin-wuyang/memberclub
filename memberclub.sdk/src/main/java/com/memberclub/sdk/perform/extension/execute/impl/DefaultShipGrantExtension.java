@@ -18,7 +18,7 @@ import com.memberclub.domain.dataobject.membership.MemberShipDO;
 import com.memberclub.domain.dataobject.perform.MemberPerformItemDO;
 import com.memberclub.sdk.membership.service.MemberShipDataObjectFactory;
 import com.memberclub.sdk.membership.service.MemberShipDomainService;
-import com.memberclub.sdk.perform.extension.execute.AssetsGrantExtension;
+import com.memberclub.sdk.perform.extension.execute.MemberRightsGrantExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -27,13 +27,15 @@ import java.util.Map;
 /**
  * author: 掘金五阳
  */
-@ExtensionProvider(desc = "会员身份类型默认发放扩展点实现", bizScenes =
-        {@Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = {SceneEnum.RIGHT_TYPE_SCENE_MEMBERSHIP})})
-public class DefaultMemberShipGrantExtension implements AssetsGrantExtension {
+@ExtensionProvider(desc = "会员资格类权益发放扩展点 默认实现", bizScenes = {
+        @Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = {
+                SceneEnum.RIGHT_TYPE_SCENE_MEMBERSHIP, SceneEnum.RIGHT_TYPE_SCENE_MEMBER_DISCOUNT_PRICE
+        }),
+})
+public class DefaultShipGrantExtension implements MemberRightsGrantExtension {
 
     @Autowired
     private MemberShipDomainService memberShipDomainService;
-
 
     @Autowired
     private MemberShipDataObjectFactory memberShipDataObjectFactory;

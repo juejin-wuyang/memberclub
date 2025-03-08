@@ -19,7 +19,7 @@ import java.util.List;
  * author: 掘金五阳
  */
 @ExtensionConfig(desc = "MemberPerformItem 发放层 扩展点", type = ExtensionType.PERFORM_MAIN, must = true)
-public interface AssetsGrantExtension extends BaseExtension {
+public interface MemberRightsGrantExtension extends BaseExtension {
 
     public ItemGroupGrantResult grant(PerformItemContext context, List<MemberPerformItemDO> items);
 }

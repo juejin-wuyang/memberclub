@@ -46,6 +46,8 @@ public interface PerformConvertor {
             @Mapping(target = "bizType", ignore = true),
             @Mapping(target = "status", ignore = true),
             @Mapping(target = "extra", ignore = true),
+            @Mapping(target = "shipType", ignore = true),
+
     })
     public MemberShip toMemberShip(MemberShipDO memberShipDO);
 
@@ -53,6 +55,7 @@ public interface PerformConvertor {
             @Mapping(target = "bizType", ignore = true),
             @Mapping(target = "status", ignore = true),
             @Mapping(target = "extra", ignore = true),
+            @Mapping(target = "shipType", ignore = true),
 
     })
     public MemberShipDO toMemberShipDO(MemberShip memberShipDO);

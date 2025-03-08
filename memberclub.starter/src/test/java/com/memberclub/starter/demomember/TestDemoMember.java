@@ -79,26 +79,31 @@ import java.util.stream.Collectors;
  */
 public class TestDemoMember extends TestDemoMemberPurchase {
 
+    public static final Logger LOG = LoggerFactory.getLogger(TestDemoMember.class);
     @Autowired
     private MemberSubOrderDao memberSubOrderDao;
-
     @Autowired
     private AftersaleOrderDao aftersaleOrderDao;
-
     @Autowired
     private AftersaleBizService aftersaleBizService;
-
     @Autowired
     private OnceTaskDao onceTaskDao;
-
     //@SpyBean(name = "localDistributedLock")
     private LocalDistributedLock localDistributedLock;
-
     @Autowired
     private DynamicConfig dynamicConfig;
-
-    public static final Logger LOG = LoggerFactory.getLogger(TestDemoMember.class);
-
+    @Autowired
+    private MessageQuenePublishFacade messageQuenePublishFacade;
+    @Autowired
+    private OnceTaskTriggerBizService onceTaskTriggerBizService;
+    @Autowired
+    private MemberShipDao memberShipDao;
+    @Autowired
+    private MemberPerformItemDao memberPerformItemDao;
+    @Autowired
+    private MemberOrderDao memberOrderDao;
+    @Autowired
+    private PerformBizService performBizService;
 
     @Test
     public void testApollo() throws Exception {
@@ -112,7 +117,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         }
         //}
     }
-
 
     @SneakyThrows
     @Test
@@ -182,9 +186,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         Mockito.reset(localDistributedLock);
     }
 
-    @Autowired
-    private MessageQuenePublishFacade messageQuenePublishFacade;
-
     @SneakyThrows
     @Test
     public void testDefaultMemberAndMutilPeriodCardAndPeriodPerform() {
@@ -223,9 +224,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
 
         //Thread.sleep(1000000);
     }
-
-    @Autowired
-    private OnceTaskTriggerBizService onceTaskTriggerBizService;
 
     @SneakyThrows
     @Test
@@ -351,7 +349,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         }
     }
 
-
     @SneakyThrows
     @Test
     public void testDefaultMemberAndMutilPeriodCard() {
@@ -426,7 +423,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
 
     }
 
-
     @SneakyThrows
     @Test
     public void testDefaultMemberAndBuyCount() {
@@ -463,9 +459,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
 
         //Thread.sleep(1000000);
     }
-
-    @Autowired
-    private MemberShipDao memberShipDao;
 
     @SneakyThrows
     //@Test
@@ -657,7 +650,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         verifyOrderRefund(applyCmd, true);
     }
 
-
     @SneakyThrows
     @Test
     public void testDefaultMemberRefund() {
@@ -719,7 +711,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         //Thread.sleep(10000000);
     }
 
-
     private void verifyData(PerformCmd cmd) {
         verifyData(cmd, 1);
     }
@@ -757,7 +748,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         }
     }
 
-
     @SneakyThrows
     private PerformCmd buildCmd(MemberOrderDO memberOrder) {
         PerformCmd cmd = new PerformCmd();
@@ -769,11 +759,9 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         return cmd;
     }
 
-
     private MemberOrder buildMemberOrder() {
         return buildMemberOrder(1, 1);
     }
-
 
     @SneakyThrows
     private MemberOrder buildMemberOrder(int buyCount, int cycle) {
@@ -821,7 +809,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         //memberOrder.setSkuDetails(JsonUtils.toJson(skuInfoDOS));
         return memberOrder;
     }
-
 
     @Test
     @JustUnitTest
@@ -888,9 +875,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         System.out.println(performHis);
     }
 
-    @Autowired
-    private MemberPerformItemDao memberPerformItemDao;
-
     @Test
     public void testItem() {
         if (!ApplicationContextUtils.isUnitTest()) {
@@ -902,7 +886,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         List<MemberPerformItem> items = Lists.newArrayList();
         for (int i = cnt; i > 0; i--) {
             MemberPerformItem item = new MemberPerformItem();
-            item.setAssetCount(4);
+            item.setTotalCount(4);
             item.setBatchCode("2323");
             item.setBizType(1);
             item.setBuyIndex(1);
@@ -930,12 +914,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         List<MemberPerformItem> itemsDb = memberPerformItemDao.selectByMap(ImmutableMap.of("user_id", 1));
         System.out.println(JsonUtils.toJson(itemsDb));
     }
-
-    @Autowired
-    private MemberOrderDao memberOrderDao;
-
-    @Autowired
-    private PerformBizService performBizService;
 
     /*@SpyBean(name = "couponGrantFacade", value = MockCouponGrantFacade.class)
     private CouponGrantFacade mockCouponGrantFacade;*/

@@ -39,7 +39,7 @@ public class MemberPerformItem {
 
     private String itemToken;
 
-    private int assetCount;
+    private int totalCount;
 
     private int phase;
 

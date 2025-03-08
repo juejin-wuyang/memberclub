@@ -7,6 +7,7 @@
 package com.memberclub.domain.dataobject.membership;
 
 import com.memberclub.domain.common.BizTypeEnum;
+import com.memberclub.domain.context.perform.common.ShipTypeEnum;
 import lombok.Data;
 
 /**
@@ -21,6 +22,8 @@ public class MemberShipDO {
 
     private BizTypeEnum bizType;
 
+    private ShipTypeEnum shipType;
+
     private String tradeId;
 
     private String subTradeId;
@@ -28,6 +31,10 @@ public class MemberShipDO {
     private String itemToken;
 
     private String grantCode;
+
+    private int usedCount;
+
+    private int totalCount;
 
     private MemberShipExtraDO extra;
 

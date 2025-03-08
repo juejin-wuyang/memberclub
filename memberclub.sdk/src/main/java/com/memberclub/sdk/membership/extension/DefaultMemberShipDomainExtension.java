@@ -36,7 +36,7 @@ public class DefaultMemberShipDomainExtension implements MemberShipDomainExtensi
     public void onGrant(MemberShipDO memberShipDO, MemberShip memberShip) {
         int cnt = memberShipDao.insertIgnoreBatch(Lists.newArrayList(memberShip));
         if (cnt > 0) {
-            CommonLog.info("成功写入会员身份:{}", memberShipDO);
+            CommonLog.info("成功写入会员资格:{}", memberShipDO);
             return;
         }
     }
@@ -45,9 +45,9 @@ public class DefaultMemberShipDomainExtension implements MemberShipDomainExtensi
     public void onCancel(MemberShipDO memberShipDO, LambdaUpdateWrapper<MemberShip> wrapper) {
         int cnt = memberShipDao.update(null, wrapper);
         if (cnt <= 0) {
-            CommonLog.error("取消会员身份失败:{}", memberShipDO);
+            CommonLog.error("取消会员资格失败:{}", memberShipDO);
             return;
         }
-        CommonLog.error("取消会员身份成功:{}", memberShipDO);
+        CommonLog.error("取消会员资格成功:{}", memberShipDO);
     }
 }

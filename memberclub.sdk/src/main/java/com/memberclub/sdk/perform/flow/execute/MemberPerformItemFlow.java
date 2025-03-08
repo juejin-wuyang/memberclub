@@ -35,8 +35,6 @@ public class MemberPerformItemFlow extends FlowNode<PerformItemContext> {
         List<MemberPerformItem> items = extension.toMemberPerformItems(context);
 
         memberPerformItemDomainService.createPerformItems(context, items);
-
-
     }
 
     @Override

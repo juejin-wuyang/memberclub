@@ -13,7 +13,7 @@ import com.memberclub.domain.context.perform.PerformItemContext;
 import com.memberclub.domain.context.perform.execute.ItemGrantResult;
 import com.memberclub.domain.context.perform.execute.ItemGroupGrantResult;
 import com.memberclub.domain.dataobject.perform.MemberPerformItemDO;
-import com.memberclub.sdk.perform.extension.execute.AssetsGrantExtension;
+import com.memberclub.sdk.perform.extension.execute.MemberRightsGrantExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +35,9 @@ public class PerformItemGrantFlow extends FlowNode<PerformItemContext> {
         String scene = extensionManager.getSceneExtension(context.toDefaultScene())
                 .buildPerformItemGrantExtensionScene(context);
 
-        AssetsGrantExtension extension =
+        MemberRightsGrantExtension extension =
                 extensionManager.getExtension(BizScene.of(context.getBizType().getCode(), scene),
-                        AssetsGrantExtension.class);
+                        MemberRightsGrantExtension.class);
         ItemGroupGrantResult result = extension.grant(context, context.getItems());
 
         Map<String, MemberPerformItemDO> token2Items =

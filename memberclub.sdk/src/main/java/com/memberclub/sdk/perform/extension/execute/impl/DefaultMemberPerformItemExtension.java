@@ -8,8 +8,8 @@ package com.memberclub.sdk.perform.extension.execute.impl;
 
 import com.google.common.collect.Lists;
 import com.memberclub.common.annotation.Route;
-import com.memberclub.common.extension.ExtensionProvider;
 import com.memberclub.common.extension.ExtensionManager;
+import com.memberclub.common.extension.ExtensionProvider;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.perform.PerformItemContext;
@@ -17,7 +17,6 @@ import com.memberclub.domain.context.perform.SubOrderPerformContext;
 import com.memberclub.domain.dataobject.perform.MemberPerformItemDO;
 import com.memberclub.domain.entity.trade.MemberPerformItem;
 import com.memberclub.infrastructure.mapstruct.PerformCustomConvertor;
-import com.memberclub.sdk.perform.extension.build.PerformItemCalculateExtension;
 import com.memberclub.sdk.perform.extension.execute.MemberPerformItemExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -36,11 +35,6 @@ public class DefaultMemberPerformItemExtension implements MemberPerformItemExten
 
     @Override
     public List<MemberPerformItem> toMemberPerformItems(PerformItemContext performItemContext) {
-        PerformItemCalculateExtension extension =
-                extensionManager.getExtension(
-                        performItemContext.toDefaultScene(), PerformItemCalculateExtension.class);
-
-
         List<MemberPerformItem> items = Lists.newArrayList();
         for (MemberPerformItemDO item : performItemContext.getItems()) {
             MemberPerformItem itemPO = PerformCustomConvertor.toMemberPerformItem(item,

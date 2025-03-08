@@ -18,6 +18,8 @@ public class MemberShipUnionDO {
 
     private Integer bizType;
 
+    private int shipType;
+
     private long userId;
 
     private long stime;

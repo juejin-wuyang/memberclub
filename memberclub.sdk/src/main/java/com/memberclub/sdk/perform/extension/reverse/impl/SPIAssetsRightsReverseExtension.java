@@ -20,7 +20,7 @@ import com.memberclub.domain.facade.AssetReverseRequestDO;
 import com.memberclub.domain.facade.AssetReverseResponseDO;
 import com.memberclub.infrastructure.assets.facade.AssetsFacadeSPI;
 import com.memberclub.sdk.common.Monitor;
-import com.memberclub.sdk.perform.extension.reverse.AssetsReverseExtension;
+import com.memberclub.sdk.perform.extension.reverse.RightsReverseExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
                 SceneEnum.RIGHT_TYPE_SCENE_COUPON,
         })
 })
-public class SPIAssetsReverseExtension implements AssetsReverseExtension {
+public class SPIAssetsRightsReverseExtension implements RightsReverseExtension {
 
     @Autowired
     private AssetsFacadeSPI assetsFacadeSPI;

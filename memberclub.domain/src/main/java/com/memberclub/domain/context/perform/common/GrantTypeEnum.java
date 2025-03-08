@@ -12,7 +12,9 @@ package com.memberclub.domain.context.perform.common;
 public enum GrantTypeEnum {
 
     GRANT(0, "发放"),
-    ACTIVATE(1, "激活");
+    ACTIVATE(1, "激活"),
+    GRANT_SHIP(2, "发资格"),
+    ;
 
     private int value;
 

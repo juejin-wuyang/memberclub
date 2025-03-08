@@ -24,7 +24,7 @@ import com.memberclub.domain.facade.GrantRequestDO;
 import com.memberclub.domain.facade.GrantResponseDO;
 import com.memberclub.infrastructure.assets.facade.AssetsFacadeSPI;
 import com.memberclub.sdk.common.Monitor;
-import com.memberclub.sdk.perform.extension.execute.AssetsGrantExtension;
+import com.memberclub.sdk.perform.extension.execute.MemberRightsGrantExtension;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -46,7 +46,7 @@ import java.util.Map;
                         SceneEnum.RIGHT_TYPE_SCENE_COUPON,
                 })
 })
-public class DefaultCouponAssetsGrantExtension implements AssetsGrantExtension {
+public class DefaultCouponMemberRightsGrantExtension implements MemberRightsGrantExtension {
 
     //@Qualifier("couponGrantFacade")
     @Resource()
@@ -68,7 +68,7 @@ public class DefaultCouponAssetsGrantExtension implements AssetsGrantExtension {
         for (MemberPerformItemDO item : items) {
             GrantItemDO grantItemDO = new GrantItemDO();
             grantItemDO.setItemToken(item.getItemToken());
-            grantItemDO.setAssetCount(item.getAssetCount());
+            grantItemDO.setAssetCount(item.getTotalCount());
             grantItemDO.setChannelKey(String.valueOf(item.getRightId()));
             grantItemDO.setStime(item.getStime());
             grantItemDO.setEtime(item.getEtime());

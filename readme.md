@@ -329,7 +329,7 @@ memberclub                       # 主项目①pom.xml
 │   ├── inventory                        # 会员商品库存领域能力（核心）
 │   ├── lock                             # 会员锁（核心）
 │   └── memberorder                      # 会员单管理（核心）
-│   └── membership                       # 会员身份域（核心）
+│   └── membership                       # 会员资格域（核心）
 │   └── newmember                        # 会员新客域
 │   └── oncetask                         # 会员任务域
 │   └── ordercenter                      # 订单中心域（防腐层）

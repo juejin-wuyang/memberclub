@@ -25,6 +25,8 @@ public class MemberShip {
 
     private String tradeId;
 
+    private int shipType;
+
     private String subTradeId;
 
     private String itemToken;
@@ -32,6 +34,10 @@ public class MemberShip {
     private String grantCode;
 
     private String extra;
+
+    private int usedCount;
+
+    private int totalCount;
 
     private int rightId;
 

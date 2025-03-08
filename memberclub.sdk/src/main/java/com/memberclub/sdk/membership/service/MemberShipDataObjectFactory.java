@@ -10,6 +10,7 @@ import com.memberclub.common.util.JsonUtils;
 import com.memberclub.common.util.TimeUtil;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.context.perform.PerformItemContext;
+import com.memberclub.domain.context.perform.common.ShipTypeEnum;
 import com.memberclub.domain.dataobject.membership.MemberShipDO;
 import com.memberclub.domain.dataobject.membership.MemberShipExtraDO;
 import com.memberclub.domain.dataobject.membership.MemberShipStatusEnum;
@@ -31,6 +32,7 @@ public class MemberShipDataObjectFactory {
     public MemberShip buildMemberShip(MemberShipDO memberShipDO) {
         MemberShip memberShip = PerformConvertor.INSTANCE.toMemberShip(memberShipDO);
         memberShip.setStatus(memberShipDO.getStatus().getCode());
+        memberShip.setShipType(memberShipDO.getShipType().getCode());
         memberShip.setBizType(memberShipDO.getBizType().getCode());
         memberShip.setExtra(JsonUtils.toJson(memberShipDO.getExtra()));
         return memberShip;
@@ -41,6 +43,7 @@ public class MemberShipDataObjectFactory {
         MemberShipDO memberShipDO = PerformConvertor.INSTANCE.toMemberShipDO(memberShip);
         memberShipDO.setStatus(MemberShipStatusEnum.findByCode(memberShip.getStatus()));
         memberShipDO.setBizType(BizTypeEnum.findByCode(memberShip.getBizType()));
+        memberShipDO.setShipType(ShipTypeEnum.findByCode(memberShip.getShipType()));
         memberShipDO.setExtra(JsonUtils.fromJson(memberShip.getExtra(), MemberShipExtraDO.class));
         return memberShipDO;
     }
@@ -54,6 +57,14 @@ public class MemberShipDataObjectFactory {
         memberShipDO.setStime(item.getStime());
         memberShipDO.setExtra(new MemberShipExtraDO());
         memberShipDO.setGrantCode(item.getItemToken());
+        //身份类型，和权益类型一般情况下等同，如果有特殊需要，可以进行二次拆分！！
+        memberShipDO.setShipType(ShipTypeEnum.findByCode(item.getRightType().getCode()));
+        memberShipDO.setUsedCount(0);
+        if (memberShipDO.getShipType() == ShipTypeEnum.MEMBER_SHIP) {
+            memberShipDO.setTotalCount(Integer.MAX_VALUE);//设置最大次数
+        } else {
+            memberShipDO.setTotalCount(item.getTotalCount());
+        }
         memberShipDO.setRightId(item.getRightId());
         memberShipDO.setStatus(MemberShipStatusEnum.INIT);
         memberShipDO.setSubTradeId(item.getSubTradeId());

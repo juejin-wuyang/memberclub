@@ -93,7 +93,7 @@ public class InitSkuData extends MockBaseTest {
             skuInfoDO.setPerformConfig(skuPerformConfigDO);
 
             SkuPerformItemConfigDO skuPerformItemConfigDO = new SkuPerformItemConfigDO();
-            skuPerformItemConfigDO.setAssetCount(1);
+            skuPerformItemConfigDO.setTotalCount(1);
             skuPerformItemConfigDO.setBizType(BizTypeEnum.DOUYIN_COUPON_PACKAGE.getCode());
             skuPerformItemConfigDO.setCycle(1);
             skuPerformItemConfigDO.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());
@@ -114,7 +114,7 @@ public class InitSkuData extends MockBaseTest {
             skuPerformItemConfigDO.setSettleInfo(rightFinanceInfo);
 
             SkuPerformItemConfigDO skuPerformItemConfigDO2 = new SkuPerformItemConfigDO();
-            skuPerformItemConfigDO2.setAssetCount(1);
+            skuPerformItemConfigDO2.setTotalCount(1);
             skuPerformItemConfigDO2.setBizType(BizTypeEnum.DOUYIN_COUPON_PACKAGE.getCode());
             skuPerformItemConfigDO2.setCycle(1);
             skuPerformItemConfigDO2.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());
@@ -192,7 +192,7 @@ public class InitSkuData extends MockBaseTest {
             RightViewInfo rightViewInfo;
 
             SkuPerformItemConfigDO skuPerformItemConfigDO2 = new SkuPerformItemConfigDO();
-            skuPerformItemConfigDO2.setAssetCount(1);
+            skuPerformItemConfigDO2.setTotalCount(1);
             skuPerformItemConfigDO2.setBizType(BizTypeEnum.DOUYIN_COUPON_PACKAGE.getCode());
             skuPerformItemConfigDO2.setCycle(1);
             skuPerformItemConfigDO2.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());
@@ -259,7 +259,7 @@ public class InitSkuData extends MockBaseTest {
 
 
             SkuPerformItemConfigDO skuPerformItemConfigDO = new SkuPerformItemConfigDO();
-            skuPerformItemConfigDO.setAssetCount(6);
+            skuPerformItemConfigDO.setTotalCount(6);
             skuPerformItemConfigDO.setBizType(1);
             skuPerformItemConfigDO.setCycle(3);
             skuPerformItemConfigDO.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());
@@ -280,7 +280,7 @@ public class InitSkuData extends MockBaseTest {
             skuPerformItemConfigDO.setSettleInfo(rightFinanceInfo);
 
             SkuPerformItemConfigDO skuPerformItemConfigDO2 = new SkuPerformItemConfigDO();
-            skuPerformItemConfigDO2.setAssetCount(0);
+            skuPerformItemConfigDO2.setTotalCount(Integer.MAX_VALUE);
             skuPerformItemConfigDO2.setBizType(1);
             skuPerformItemConfigDO2.setCycle(3);
             skuPerformItemConfigDO2.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());
@@ -302,7 +302,7 @@ public class InitSkuData extends MockBaseTest {
 
 
             SkuPerformItemConfigDO skuPerformItemConfigDO3 = new SkuPerformItemConfigDO();
-            skuPerformItemConfigDO3.setAssetCount(0);
+            skuPerformItemConfigDO3.setTotalCount(Integer.MAX_VALUE);
             skuPerformItemConfigDO3.setBizType(1);
             skuPerformItemConfigDO3.setCycle(3);
             skuPerformItemConfigDO3.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());
@@ -364,7 +364,7 @@ public class InitSkuData extends MockBaseTest {
             skuInfoDO.setPerformConfig(skuPerformConfigDO);
 
             SkuPerformItemConfigDO skuPerformItemConfigDO = new SkuPerformItemConfigDO();
-            skuPerformItemConfigDO.setAssetCount(6);
+            skuPerformItemConfigDO.setTotalCount(6);
             skuPerformItemConfigDO.setBizType(1);
             skuPerformItemConfigDO.setCycle(1);
             skuPerformItemConfigDO.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());
@@ -385,7 +385,7 @@ public class InitSkuData extends MockBaseTest {
             skuPerformItemConfigDO.setSettleInfo(rightFinanceInfo);
 
             SkuPerformItemConfigDO skuPerformItemConfigDO2 = new SkuPerformItemConfigDO();
-            skuPerformItemConfigDO2.setAssetCount(0);
+            skuPerformItemConfigDO2.setTotalCount(Integer.MAX_VALUE);
             skuPerformItemConfigDO2.setBizType(1);
             skuPerformItemConfigDO2.setCycle(1);
             skuPerformItemConfigDO2.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());
@@ -407,7 +407,7 @@ public class InitSkuData extends MockBaseTest {
 
 
             SkuPerformItemConfigDO skuPerformItemConfigDO3 = new SkuPerformItemConfigDO();
-            skuPerformItemConfigDO3.setAssetCount(0);
+            skuPerformItemConfigDO3.setTotalCount(Integer.MAX_VALUE);
             skuPerformItemConfigDO3.setBizType(1);
             skuPerformItemConfigDO3.setCycle(1);
             skuPerformItemConfigDO3.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());

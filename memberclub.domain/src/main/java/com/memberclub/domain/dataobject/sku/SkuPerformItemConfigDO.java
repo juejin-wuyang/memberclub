@@ -24,7 +24,7 @@ public class SkuPerformItemConfigDO {
 
     private int rightId;
 
-    private int assetCount;
+    private int totalCount;
 
     private int periodCount;
 

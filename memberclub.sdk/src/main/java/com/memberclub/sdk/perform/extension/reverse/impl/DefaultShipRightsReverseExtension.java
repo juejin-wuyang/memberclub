@@ -16,7 +16,7 @@ import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
 import com.memberclub.domain.context.perform.reverse.SubOrderReversePerformContext;
 import com.memberclub.domain.dataobject.membership.MemberShipDO;
 import com.memberclub.sdk.membership.service.MemberShipDomainService;
-import com.memberclub.sdk.perform.extension.reverse.AssetsReverseExtension;
+import com.memberclub.sdk.perform.extension.reverse.RightsReverseExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -24,10 +24,13 @@ import java.util.List;
 /**
  * author: 掘金五阳
  */
-@ExtensionProvider(desc = "默认会员身份逆向扩展点", bizScenes = {
-        @Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = SceneEnum.RIGHT_TYPE_SCENE_MEMBERSHIP)
+@ExtensionProvider(desc = "默认会员资格逆向扩展点", bizScenes = {
+        @Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = {
+                SceneEnum.RIGHT_TYPE_SCENE_MEMBERSHIP,
+                SceneEnum.RIGHT_TYPE_SCENE_MEMBER_DISCOUNT_PRICE
+        })
 })
-public class DefaultMemberShipReverseExtension implements AssetsReverseExtension {
+public class DefaultShipRightsReverseExtension implements RightsReverseExtension {
     @Autowired
     private MemberShipDomainService memberShipDomainService;
 
