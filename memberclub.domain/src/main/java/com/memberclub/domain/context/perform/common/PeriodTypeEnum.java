@@ -12,7 +12,9 @@ package com.memberclub.domain.context.perform.common;
 public enum PeriodTypeEnum {
 
     FIX_DAY(1, "fix_day"),
-    NATURE_MONTY(2, "nature_month");
+    NATURE_MONTY(2, "nature_month"),
+    TIME_RANGE(3, "time_range"),//指定时间段
+    ;
 
     private int value;
 

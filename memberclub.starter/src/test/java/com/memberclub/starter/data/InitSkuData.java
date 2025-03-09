@@ -40,7 +40,13 @@ public class InitSkuData extends MockBaseTest {
         SkuInfoDO douyinDoubleRightSku = InitDouyinCouponPackageSku.buildDoubleRightsSku();
         mockSkuBizService.addSku(douyinDoubleRightSku.getSkuId(), douyinDoubleRightSku);
 
+        //模仿在线课程，包含双权益；上课资格；购课优惠券（有价，非免费券）
+        SkuInfoDO lessonSku = InitLessonSKU.buildLessonSku();
+        mockSkuBizService.addSku(lessonSku.getSkuId(), lessonSku);
 
+        //模仿在线课程，包含双权益；上课资格；购课优惠券（有价，非免费券）
+        SkuInfoDO lessonSku2 = InitLessonSKU.buildLessonSku2();
+        mockSkuBizService.addSku(lessonSku2.getSkuId(), lessonSku2);
     }
 
     public static class InitDouyinCouponPackageSku {
@@ -433,5 +439,178 @@ public class InitSkuData extends MockBaseTest {
             skuInfoDO.setExtra(new SkuExtra());
             return skuInfoDO;
         }
+    }
+
+    public static class InitLessonSKU {
+
+        public static SkuInfoDO buildLessonSku() {
+            SkuInfoDO skuInfoDO = new SkuInfoDO();
+
+            skuInfoDO.setSkuId(skuIdGenerator.incrementAndGet());
+            skuInfoDO.setBizType(BizTypeEnum.LESSON.getCode());
+            skuInfoDO.setCtime(TimeUtil.now());
+            skuInfoDO.setUtime(TimeUtil.now());
+
+            SkuSaleInfo skuSaleInfo = new SkuSaleInfo();
+            skuSaleInfo.setOriginPriceFen(100000);
+            skuSaleInfo.setSalePriceFen(80000);
+
+            skuInfoDO.setSaleInfo(skuSaleInfo);
+
+            SkuFinanceInfo settleInfo = new SkuFinanceInfo();
+            settleInfo.setContractorId("438098434");
+            settleInfo.setSettlePriceFen(80000);
+            settleInfo.setFinanceProductType(1);
+            settleInfo.setPeriodCycle(1);
+
+            skuInfoDO.setFinanceInfo(settleInfo);
+
+            SkuViewInfo viewInfo = new SkuViewInfo();
+            viewInfo.setDisplayDesc("清北名师;20节课程;随时退;赠送200元购课券");
+            viewInfo.setDisplayName("小学3年级数学春季课");
+            viewInfo.setInternalDesc("小学3年级数学春季课");
+            viewInfo.setInternalName("小学3年级数学春季课");
+            viewInfo.setDisplayImage("https://img0.baidu.com/it/u=3749790905,1458087113&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500");
+            skuInfoDO.setViewInfo(viewInfo);
+
+            SkuPerformConfigDO skuPerformConfigDO = new SkuPerformConfigDO();
+            skuInfoDO.setPerformConfig(skuPerformConfigDO);
+
+
+            SkuPerformItemConfigDO skuPerformItemConfigDO = new SkuPerformItemConfigDO();
+            skuPerformItemConfigDO.setTotalCount(20);
+            skuPerformItemConfigDO.setBizType(BizTypeEnum.LESSON.getCode());
+            skuPerformItemConfigDO.setCycle(1);
+            skuPerformItemConfigDO.setPeriodType(PeriodTypeEnum.TIME_RANGE.getCode());
+            skuPerformItemConfigDO.setRightId(32424);
+            skuPerformItemConfigDO.setPeriodCount(31);
+            skuPerformItemConfigDO.setRightType(RightTypeEnum.LESSON.getCode());
+            skuPerformItemConfigDO.setProviderId("2");
+            RightViewInfo rightViewInfo = new RightViewInfo();
+            rightViewInfo.setDisplayName("线上大班课");
+
+            skuPerformItemConfigDO.setViewInfo(rightViewInfo);
+
+            RightFinanceInfo rightFinanceInfo = new RightFinanceInfo();
+            rightFinanceInfo.setContractorId("438098434");
+            rightFinanceInfo.setSettlePriceFen(80000);
+            rightFinanceInfo.setFinanceable(true);
+            rightFinanceInfo.setFinanceAssetType(RightTypeEnum.LESSON.getCode());//应该配置为实际的结算类型
+            skuPerformItemConfigDO.setSettleInfo(rightFinanceInfo);
+
+            SkuPerformItemConfigDO skuPerformItemConfigDO2 = new SkuPerformItemConfigDO();
+            skuPerformItemConfigDO2.setTotalCount(1);
+            skuPerformItemConfigDO2.setBizType(BizTypeEnum.LESSON.getCode());
+            skuPerformItemConfigDO2.setCycle(1);
+            skuPerformItemConfigDO2.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());
+            skuPerformItemConfigDO2.setRightId(32423);
+            skuPerformItemConfigDO2.setPeriodCount(31);
+            skuPerformItemConfigDO2.setRightType(RightTypeEnum.LESSON_COUPON.getCode());
+            skuPerformItemConfigDO2.setProviderId("1");//会员价资格类
+            rightViewInfo = new RightViewInfo();
+            rightViewInfo.setDisplayName("购课立减优惠券200元");
+            skuPerformItemConfigDO2.setViewInfo(rightViewInfo);
+
+
+            RightFinanceInfo rightFinanceInfo2 = new RightFinanceInfo();
+            rightFinanceInfo2.setContractorId("438098434");
+            rightFinanceInfo2.setSettlePriceFen(0);
+            rightFinanceInfo2.setFinanceable(false);
+            rightFinanceInfo2.setFinanceAssetType(RightTypeEnum.LESSON_COUPON.getCode());
+            skuPerformItemConfigDO2.setSettleInfo(rightFinanceInfo2);
+
+/*
+            SkuPerformItemConfigDO skuPerformItemConfigDO3 = new SkuPerformItemConfigDO();
+            skuPerformItemConfigDO3.setTotalCount(Integer.MAX_VALUE);
+            skuPerformItemConfigDO3.setBizType(1);
+            skuPerformItemConfigDO3.setCycle(3);
+            skuPerformItemConfigDO3.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());
+            skuPerformItemConfigDO3.setRightId(32425);
+            skuPerformItemConfigDO3.setPeriodCount(31);
+            skuPerformItemConfigDO3.setRightType(RightTypeEnum.MEMBERSHIP.getCode());
+            skuPerformItemConfigDO3.setProviderId("3");//会员价资格类
+            rightViewInfo = new RightViewInfo();
+            rightViewInfo.setDisplayName("会员身份");
+            skuPerformItemConfigDO3.setViewInfo(rightViewInfo);
+
+
+            RightFinanceInfo rightFinanceInfo3 = new RightFinanceInfo();
+            rightFinanceInfo3.setContractorId("438098434");
+            rightFinanceInfo3.setSettlePriceFen(0);
+            rightFinanceInfo3.setFinanceable(false);
+            rightFinanceInfo3.setFinanceAssetType(RightTypeEnum.MEMBERSHIP.getCode());
+            skuPerformItemConfigDO3.setSettleInfo(rightFinanceInfo3);*/
+
+            skuPerformConfigDO.setConfigs(Lists.newArrayList(skuPerformItemConfigDO, skuPerformItemConfigDO2));
+            skuInfoDO.setPerformConfig(skuPerformConfigDO);
+
+            skuInfoDO.setExtra(new SkuExtra());
+            return skuInfoDO;
+        }
+
+
+        public static SkuInfoDO buildLessonSku2() {
+            SkuInfoDO skuInfoDO = new SkuInfoDO();
+
+            skuInfoDO.setSkuId(skuIdGenerator.incrementAndGet());
+            skuInfoDO.setBizType(BizTypeEnum.LESSON.getCode());
+            skuInfoDO.setCtime(TimeUtil.now());
+            skuInfoDO.setUtime(TimeUtil.now());
+
+            SkuSaleInfo skuSaleInfo = new SkuSaleInfo();
+            skuSaleInfo.setOriginPriceFen(100000);
+            skuSaleInfo.setSalePriceFen(80000);
+
+            skuInfoDO.setSaleInfo(skuSaleInfo);
+
+            SkuFinanceInfo settleInfo = new SkuFinanceInfo();
+            settleInfo.setContractorId("438098434");
+            settleInfo.setSettlePriceFen(80000);
+            settleInfo.setFinanceProductType(1);
+            settleInfo.setPeriodCycle(1);
+
+            skuInfoDO.setFinanceInfo(settleInfo);
+
+            SkuViewInfo viewInfo = new SkuViewInfo();
+            viewInfo.setDisplayDesc("清北名师;20节课程;随时退");
+            viewInfo.setDisplayName("小学3年级语文春季课");
+            viewInfo.setInternalDesc("小学3年级语文春季课");
+            viewInfo.setInternalName("小学3年级语文春季课");
+            viewInfo.setDisplayImage("https://img0.baidu.com/it/u=3749790905,1458087113&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500");
+            skuInfoDO.setViewInfo(viewInfo);
+
+            SkuPerformConfigDO skuPerformConfigDO = new SkuPerformConfigDO();
+            skuInfoDO.setPerformConfig(skuPerformConfigDO);
+
+
+            SkuPerformItemConfigDO skuPerformItemConfigDO = new SkuPerformItemConfigDO();
+            skuPerformItemConfigDO.setTotalCount(20);
+            skuPerformItemConfigDO.setBizType(BizTypeEnum.LESSON.getCode());
+            skuPerformItemConfigDO.setCycle(1);
+            skuPerformItemConfigDO.setPeriodType(PeriodTypeEnum.TIME_RANGE.getCode());
+            skuPerformItemConfigDO.setRightId(32424);
+            skuPerformItemConfigDO.setPeriodCount(31);
+            skuPerformItemConfigDO.setRightType(RightTypeEnum.LESSON.getCode());
+            skuPerformItemConfigDO.setProviderId("2");
+            RightViewInfo rightViewInfo = new RightViewInfo();
+            rightViewInfo.setDisplayName("线上大班课");
+
+            skuPerformItemConfigDO.setViewInfo(rightViewInfo);
+
+            RightFinanceInfo rightFinanceInfo = new RightFinanceInfo();
+            rightFinanceInfo.setContractorId("438098434");
+            rightFinanceInfo.setSettlePriceFen(80000);
+            rightFinanceInfo.setFinanceable(true);
+            rightFinanceInfo.setFinanceAssetType(RightTypeEnum.LESSON.getCode());//应该配置为实际的结算类型
+            skuPerformItemConfigDO.setSettleInfo(rightFinanceInfo);
+
+
+            skuPerformConfigDO.setConfigs(Lists.newArrayList(skuPerformItemConfigDO));
+            skuInfoDO.setPerformConfig(skuPerformConfigDO);
+
+            skuInfoDO.setExtra(new SkuExtra());
+            return skuInfoDO;
+        }
+
     }
 }

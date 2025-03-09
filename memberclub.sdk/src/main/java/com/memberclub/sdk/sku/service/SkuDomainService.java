@@ -30,11 +30,9 @@ import java.util.stream.Collectors;
 @Service
 public class SkuDomainService {
 
+    public static final Logger LOG = LoggerFactory.getLogger(SkuDomainService.class);
     @Autowired
     private MemberSkuDao memberSkuDao;
-
-    public static final Logger LOG = LoggerFactory.getLogger(SkuDomainService.class);
-
     @Autowired
     private MemberSkuDataObjectFactory memberSkuDataObjectFactory;
 
@@ -45,7 +43,9 @@ public class SkuDomainService {
         int cnt = memberSkuDao.insertIgnoreBatch(Lists.newArrayList(memberSku));
         if (cnt <= 0) {
             CommonLog.warn("创建商品失败 sku:{}", sku);
+            return;
         }
+        CommonLog.info("创建商品成功 sku:{}", sku);
     }
 
 

@@ -18,6 +18,7 @@ public enum BizTypeEnum {
     VIDEO_MEMBER(3, "video_member"),
     MUSIC_MEMBER(4, "music_member"),
     DOUYIN_COUPON_PACKAGE(2, "douyin_coupon_package"),//douyin 优惠券包，支持过期退、多份数购买
+    LESSON(8, "lesson"),
     ;
 
     private int code;

@@ -19,6 +19,8 @@ public enum RightTypeEnum {
 
     FREE_FREIGHT_COUPON(4, RightUsedType.ASSET, "免运费券"),
     MEMBER_DISCOUNT_PRICE(5, RightUsedType.SHIP, "会员价"),
+    LESSON(6, RightUsedType.SHIP, "在线课程"),
+    LESSON_COUPON(7, RightUsedType.ASSET, "购课立减券"),
     ;
 
     private int value;
