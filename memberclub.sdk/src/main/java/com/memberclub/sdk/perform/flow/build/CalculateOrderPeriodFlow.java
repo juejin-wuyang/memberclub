@@ -6,9 +6,12 @@
  */
 package com.memberclub.sdk.perform.flow.build;
 
+import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.flow.FlowNode;
+import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.context.perform.PerformContext;
-import com.memberclub.domain.context.perform.SubOrderPerformContext;
+import com.memberclub.sdk.perform.extension.build.PerformSeparateOrderExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,20 +19,15 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CalculateOrderPeriodFlow extends FlowNode<PerformContext> {
+    @Autowired
+    private ExtensionManager extensionManager;
 
     @Override
     public void process(PerformContext context) {
-        for (SubOrderPerformContext subOrderPerformContext : context.getSubOrderPerformContexts()) {
-            long stime = context.getBaseTime();
-            long etime = context.getImmediatePerformEtime();
-            if (context.getDelayPerformEtime() > 0) {
-                etime = context.getDelayPerformEtime();
-            }
+        String separtateOrderScene = extensionManager.getSceneExtension(BizScene.of(context.getBizType().getCode()))
+                .buildSeparateOrderScene(context);
 
-            subOrderPerformContext.getSubOrder().setStime(stime);
-            subOrderPerformContext.getSubOrder().setEtime(etime);
-        }
-        context.setStime(context.getSubOrderPerformContexts().get(0).getSubOrder().getStime());
-        context.setEtime(context.getSubOrderPerformContexts().get(0).getSubOrder().getEtime());
+        extensionManager.getExtension(BizScene.of(context.getBizType().getCode(), separtateOrderScene), PerformSeparateOrderExtension.class)
+                .buildTimeRange(context);
     }
 }

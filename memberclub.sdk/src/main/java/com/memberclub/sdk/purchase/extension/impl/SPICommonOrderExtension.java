@@ -36,7 +36,8 @@ import java.util.stream.Collectors;
  */
 @ExtensionProvider(desc = "通用订单交互扩展点", bizScenes = {
         @Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = {SceneEnum.DEFAULT_SCENE}),
-        @Route(bizType = BizTypeEnum.DOUYIN_COUPON_PACKAGE, scenes = {SceneEnum.DEFAULT_SCENE})
+        @Route(bizType = BizTypeEnum.DOUYIN_COUPON_PACKAGE, scenes = {SceneEnum.DEFAULT_SCENE}),
+        @Route(bizType = BizTypeEnum.LESSON, scenes = {SceneEnum.DEFAULT_SCENE}),
 })
 public class SPICommonOrderExtension implements CommonOrderExtension {
 

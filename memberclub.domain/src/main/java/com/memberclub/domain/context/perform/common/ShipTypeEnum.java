@@ -3,6 +3,7 @@ package com.memberclub.domain.context.perform.common;
 public enum ShipTypeEnum {
     MEMBER_SHIP(RightTypeEnum.MEMBERSHIP.getCode(), "会员身份资格"),
     MEMBER_DISCOUNT_PRICE_SHIP(RightTypeEnum.MEMBER_DISCOUNT_PRICE.getCode(), "会员价资格"),
+    LESSON_SHIP(RightTypeEnum.LESSON.getCode(), "上课资格"),
     ;
 
     private int value;

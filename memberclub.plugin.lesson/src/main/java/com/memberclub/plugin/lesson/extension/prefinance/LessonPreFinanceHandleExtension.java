@@ -1,10 +1,4 @@
-/**
- * @(#)DemoMemberPreFinanceHandleExtension.java, 一月 12, 2025.
- * <p>
- * Copyright 2025 memberclub.com. All rights reserved.
- * memberclub.COM PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
-package com.memberclub.plugin.demomember.extension.prefinance;
+package com.memberclub.plugin.lesson.extension.prefinance;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Maps;
@@ -23,18 +17,17 @@ import com.memberclub.domain.dataobject.event.trade.TradeEventDO;
 import com.memberclub.domain.dataobject.event.trade.TradeEventEnum;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.sdk.prefinance.extension.PreFinanceHandleExtension;
-import com.memberclub.sdk.prefinance.flow.*;
+import com.memberclub.sdk.prefinance.flow.PreFinanceBuildMemberOrderFlow;
+import com.memberclub.sdk.prefinance.flow.PreFinanceBuildPerformItemsFlow;
+import com.memberclub.sdk.prefinance.flow.PreFinancePublishEventFlow;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
 
-/**
- * author: 掘金五阳
- */
 @ExtensionProvider(desc = "DemoMember 预结算处理扩展点", bizScenes = {
-        @Route(bizType = BizTypeEnum.DEMO_MEMBER)
+        @Route(bizType = BizTypeEnum.LESSON)
 })
-public class DemoMemberPreFinanceHandleExtension implements PreFinanceHandleExtension {
+public class LessonPreFinanceHandleExtension implements PreFinanceHandleExtension {
 
     private static Table<TradeEventEnum, SubOrderPerformStatusEnum, PreFinanceEventEnum> financeEventEnumTable = HashBasedTable.create();
     private static Map<PreFinanceEventEnum, FlowChain<PreFinanceContext>> financeEventChainMap = Maps.newHashMap();
@@ -45,17 +38,19 @@ public class DemoMemberPreFinanceHandleExtension implements PreFinanceHandleExte
         financeEventEnumTable.put(TradeEventEnum.SUB_ORDER_REFUND_SUCCESS, SubOrderPerformStatusEnum.PORTION_REVERSED, PreFinanceEventEnum.REFUND);
         financeEventEnumTable.put(TradeEventEnum.SUB_ORDER_FREEZE_SUCCESS, SubOrderPerformStatusEnum.PORTION_REVERSED, PreFinanceEventEnum.FREEZE_NON_REFUND);
         financeEventEnumTable.put(TradeEventEnum.SUB_ORDER_PERIOD_PERFORM_SUCCESS, SubOrderPerformStatusEnum.PERFORM_SUCCESS, PreFinanceEventEnum.PERFORM);
-        financeEventEnumTable.put(TradeEventEnum.MEMBER_PERFORM_ITEM_EXPIRE, SubOrderPerformStatusEnum.PERFORM_SUCCESS, PreFinanceEventEnum.EXPIRE);
+        //financeEventEnumTable.put(TradeEventEnum.MEMBER_PERFORM_ITEM_EXPIRE, SubOrderPerformStatusEnum.PERFORM_SUCCESS, PreFinanceEventEnum.EXPIRE);
     }
 
     @PostConstruct
     public void init() {
+        //采用直线摊销法，按天确收。
+
         FlowChain<PreFinanceContext> performChain = FlowChain.newChain(PreFinanceContext.class)
                 .addNode(PreFinanceBuildMemberOrderFlow.class)
                 .addNode(PreFinanceBuildPerformItemsFlow.class)
-                .addNode(PreFinanceQueryAssetsFlow.class)
+                //.addNode(PreFinanceQueryAssetsFlow.class)
                 .addNode(PreFinancePublishEventFlow.class)
-                .addNode(PreFinanceCreateExpiredTaskFlow.class)
+                //.addNode(PreFinanceCreateExpiredTaskFlow.class) 无需过期
                 //
                 ;
 
@@ -63,7 +58,7 @@ public class DemoMemberPreFinanceHandleExtension implements PreFinanceHandleExte
         FlowChain<PreFinanceContext> freezeChain = FlowChain.newChain(PreFinanceContext.class)
                 .addNode(PreFinanceBuildMemberOrderFlow.class)
                 .addNode(PreFinanceBuildPerformItemsFlow.class)
-                .addNode(PreFinanceQueryAssetsFlow.class)
+                //.addNode(PreFinanceQueryAssetsFlow.class)
                 .addNode(PreFinancePublishEventFlow.class)
                 //.addNode()
                 ;
@@ -72,7 +67,7 @@ public class DemoMemberPreFinanceHandleExtension implements PreFinanceHandleExte
         FlowChain<PreFinanceContext> refundChain = FlowChain.newChain(PreFinanceContext.class)
                 .addNode(PreFinanceBuildMemberOrderFlow.class)
                 .addNode(PreFinanceBuildPerformItemsFlow.class)
-                .addNode(PreFinanceQueryAssetsFlow.class)
+                //.addNode(PreFinanceQueryAssetsFlow.class)
                 .addNode(PreFinancePublishEventFlow.class)
                 //.addNode()
                 ;
@@ -80,7 +75,7 @@ public class DemoMemberPreFinanceHandleExtension implements PreFinanceHandleExte
         FlowChain<PreFinanceContext> expireChain = FlowChain.newChain(PreFinanceContext.class)
                 .addNode(PreFinanceBuildMemberOrderFlow.class)
                 .addNode(PreFinanceBuildPerformItemsFlow.class)
-                .addNode(PreFinanceQueryAssetsFlow.class)
+                //.addNode(PreFinanceQueryAssetsFlow.class)
                 .addNode(PreFinancePublishEventFlow.class)
                 //.addNode()
                 ;

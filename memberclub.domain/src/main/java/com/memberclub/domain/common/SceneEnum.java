@@ -22,10 +22,13 @@ public enum SceneEnum {
     RIGHT_TYPE_SCENE_DISCOUNT_COUPON(DISCOUNT_COUPON_RIGHT_TYPE.toString()),
 
     RIGHT_TYPE_SCENE_MEMBERSHIP(StringContants.MEMBERSHIP_RIGHT_TYPE.toString()),
+    
+    RIGHT_TYPE_SCENE_LESSONSHIP(StringContants.LESSON_RIGHT_TYPE.toString()),
 
     RIGHT_TYPE_SCENE_MEMBER_DISCOUNT_PRICE(StringContants.MEMBER_DISCOUNT_PRICE.toString()),//会员价
 
     RIGHT_TYPE_SCENE_FREE_FREIGHT_COUPON(StringContants.FREE_FREIGHT_COUPON.toString()), //免运费券
+
 
     SCENE_MONTH_CARD("201"),//履约上下文执行 scene, 月卡部分
 

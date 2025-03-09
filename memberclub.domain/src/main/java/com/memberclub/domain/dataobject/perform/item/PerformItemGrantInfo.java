@@ -16,5 +16,9 @@ public class PerformItemGrantInfo {
 
     private Integer periodCount;
 
+    private long startTime;
+
+    private long endTime;
+
     private Integer periodType;
 }

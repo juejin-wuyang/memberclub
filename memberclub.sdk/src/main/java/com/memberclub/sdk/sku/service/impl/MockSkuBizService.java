@@ -31,11 +31,8 @@ import java.util.Map;
 @Configuration
 public class MockSkuBizService implements SkuBizService {
 
-    private Map<Long, SkuInfoDO> map = Maps.newHashMap();
-
     public static final Logger LOG = LoggerFactory.getLogger(MockSkuBizService.class);
-
-
+    private Map<Long, SkuInfoDO> map = Maps.newHashMap();
     @Autowired
     private SkuDomainService skuDomainService;
 
@@ -45,7 +42,7 @@ public class MockSkuBizService implements SkuBizService {
     @Autowired
     private MemberSkuDataObjectFactory memberSkuDataObjectFactory;
 
-    @Scheduled(fixedDelay = 10000, initialDelay = 1000)
+    @Scheduled(fixedDelay = 60000, initialDelay = 1000)
     public void init() {
         List<SkuInfoDO> skus = skuDomainService.queryAllSkus();
         for (SkuInfoDO skuInfoDO : skus) {
@@ -73,7 +70,7 @@ public class MockSkuBizService implements SkuBizService {
     }
 
     @Override
-    public SkuInfoDO querySku( long skuId) {
+    public SkuInfoDO querySku(long skuId) {
         return map.get(skuId);
     }
 }

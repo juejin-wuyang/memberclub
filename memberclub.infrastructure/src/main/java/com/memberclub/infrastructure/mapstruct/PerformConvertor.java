@@ -74,6 +74,8 @@ public interface PerformConvertor {
             @Mapping(target = "extra.settleInfo", source = "settleInfo"),
             @Mapping(target = "extra.grantInfo.periodCount", source = "periodCount"),
             @Mapping(target = "extra.grantInfo.periodType", source = "periodType"),
+            @Mapping(target = "extra.grantInfo.startTime", source = "grantInfo.startTime"),
+            @Mapping(target = "extra.grantInfo.endTime", source = "grantInfo.endTime"),
 
     })
     public MemberPerformItemDO toPerformItem(SkuPerformItemConfigDO performConfigDO);

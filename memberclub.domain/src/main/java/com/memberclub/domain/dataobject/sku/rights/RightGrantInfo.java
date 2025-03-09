@@ -17,8 +17,8 @@ public class RightGrantInfo {
     private String rightConfigId;
 
     //开始时间
-    private long startTime;
+    private Long startTime;
 
     //截止时间
-    private long endTime;
+    private Long endTime;
 }

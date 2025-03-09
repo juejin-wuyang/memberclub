@@ -40,6 +40,9 @@ import java.util.stream.Collectors;
         @Route(bizType = BizTypeEnum.DOUYIN_COUPON_PACKAGE, scenes = {
                 SceneEnum.RIGHT_TYPE_SCENE_COUPON,
         }),
+        @Route(bizType = BizTypeEnum.LESSON, scenes = {
+                SceneEnum.RIGHT_TYPE_SCENE_COUPON,
+        }),
 })
 public class DefaultRealtimeCalculateUsageExtension implements RealtimeCalculateUsageExtension {
 

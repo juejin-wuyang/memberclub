@@ -32,6 +32,11 @@
         </dependency>
         <dependency>
             <groupId>com.memberclub</groupId>
+            <artifactId>memberclub.plugin.lesson</artifactId>
+            <version>${baseversion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.memberclub</groupId>
             <artifactId>memberclub.infrastructure</artifactId>
             <version>${baseversion}</version>
         </dependency>

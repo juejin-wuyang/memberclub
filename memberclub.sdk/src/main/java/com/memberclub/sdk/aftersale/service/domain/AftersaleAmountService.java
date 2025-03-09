@@ -35,7 +35,7 @@ public class AftersaleAmountService {
 
     public Integer recommendRefundPrice(AftersalePreviewContext context) {
         int recommendRefundPrice = extensionManager.getExtension(
-                BizScene.of(context.getCmd().getBizType().getCode()), AftersaleAmountExtension.class)
+                        BizScene.of(context.getCmd().getBizType().getCode()), AftersaleAmountExtension.class)
                 .calculteRecommendRefundPrice(context, context.getBatchCode2ItemUsage());
         return recommendRefundPrice;
     }
@@ -83,6 +83,24 @@ public class AftersaleAmountService {
         int recommendRefundPrice = unuse.divide(total).multiply(pay).intValue();
         return recommendRefundPrice;
     }
+
+    public int payPriceDividedUsed(int payPriceFen, Map<String, ItemUsage> itemUsageMap) {
+        int usedPriceFen = 0;
+
+        int totalPriceFen = payPriceFen;
+        for (Map.Entry<String, ItemUsage> entry : itemUsageMap.entrySet()) {
+            usedPriceFen += entry.getValue().getUsedPrice();
+        }
+        int unusePriceFen = totalPriceFen - usedPriceFen;
+
+        if (unusePriceFen <= 0) {
+            unusePriceFen = 0;
+        }
+
+        int recommendRefundPrice = unusePriceFen;
+        return recommendRefundPrice;
+    }
+
 
     public void calculateUsageTypeByAmount(AftersalePreviewContext context) {
         if (context.getRecommendRefundPrice() < 0) {

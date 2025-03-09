@@ -46,6 +46,9 @@ public class DefaultPerformItemCalculateExtension implements PerformItemCalculat
         if (itemDO.getPeriodType() == PeriodTypeEnum.FIX_DAY) {
             return PeriodUtils.buildTimeRangeFromBaseTime(baseTime, itemDO.getPeriodCount(), true);
         }
+        if (itemDO.getPeriodType() == PeriodTypeEnum.TIME_RANGE) {
+            return new TimeRange(itemDO.getExtra().getGrantInfo().getStartTime(), itemDO.getExtra().getGrantInfo().getEndTime());
+        }
         return null;
     }
 

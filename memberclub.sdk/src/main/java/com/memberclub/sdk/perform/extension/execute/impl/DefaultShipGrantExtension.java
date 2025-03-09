@@ -31,6 +31,10 @@ import java.util.Map;
         @Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = {
                 SceneEnum.RIGHT_TYPE_SCENE_MEMBERSHIP, SceneEnum.RIGHT_TYPE_SCENE_MEMBER_DISCOUNT_PRICE
         }),
+        @Route(bizType = BizTypeEnum.LESSON, scenes = {
+                SceneEnum.RIGHT_TYPE_SCENE_LESSONSHIP
+        }),
+
 })
 public class DefaultShipGrantExtension implements MemberRightsGrantExtension {
 

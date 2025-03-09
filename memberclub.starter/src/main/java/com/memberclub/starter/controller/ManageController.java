@@ -97,6 +97,7 @@ public class ManageController {
         List<SkuPreviewVO> skuPreviewVOS = Lists.newArrayList();
         skuPreviewVOS.addAll(buildDisplaySkusForMallMember());
         skuPreviewVOS.addAll(buildDisplaySkusForDouyinCouponPackage());
+        skuPreviewVOS.addAll(buildDisplaySkusForLesson());
         return skuPreviewVOS;
     }
 
@@ -126,6 +127,22 @@ public class ManageController {
             previewVO.setAttr_val("券包");
             previewVO.setSingleBuy(false);
             previewVO.setStock(2L);
+        }
+        return previewVOs;
+    }
+
+
+    public List<SkuPreviewVO> buildDisplaySkusForLesson() {
+        List<Long> skuIds = Lists.newArrayList();
+        skuIds.add(200405L);//数学课 附赠购课券
+        skuIds.add(200406L);//语文课 无赠券
+        List<SkuInfoDO> skus = skuDomainService.queryByIds(skuIds);
+        List<SkuPreviewVO> previewVOs = CollectionUtilEx.mapToList(skus, ManageConvertor::toSkuPreviewVO);
+        for (SkuPreviewVO previewVO : previewVOs) {
+            previewVO.setFirmName("在线教育");
+            previewVO.setAttr_val("课程");
+            previewVO.setSingleBuy(false);
+            previewVO.setStock(1L);
         }
         return previewVOs;
     }

@@ -20,7 +20,7 @@ import java.util.List;
  * author: 掘金五阳
  */
 @Service
-public class PreFinanceBuildMemberAssetsFlow extends FlowNode<PreFinanceContext> {
+public class PreFinanceBuildPerformItemsFlow extends FlowNode<PreFinanceContext> {
 
     @Autowired
     private MemberPerformItemDomainService memberPerformItemDomainService;

@@ -16,6 +16,7 @@ import org.assertj.core.util.Lists;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class InitSkuData extends MockBaseTest {
@@ -484,6 +485,8 @@ public class InitSkuData extends MockBaseTest {
             skuPerformItemConfigDO.setPeriodType(PeriodTypeEnum.TIME_RANGE.getCode());
             skuPerformItemConfigDO.setRightId(32424);
             skuPerformItemConfigDO.setPeriodCount(31);
+            skuPerformItemConfigDO.getGrantInfo().setStartTime(TimeUtil.now() + TimeUnit.DAYS.toMillis(100));
+            skuPerformItemConfigDO.getGrantInfo().setEndTime(TimeUtil.now() + TimeUnit.DAYS.toMillis(130));
             skuPerformItemConfigDO.setRightType(RightTypeEnum.LESSON.getCode());
             skuPerformItemConfigDO.setProviderId("2");
             RightViewInfo rightViewInfo = new RightViewInfo();
@@ -505,7 +508,7 @@ public class InitSkuData extends MockBaseTest {
             skuPerformItemConfigDO2.setPeriodType(PeriodTypeEnum.FIX_DAY.getCode());
             skuPerformItemConfigDO2.setRightId(32423);
             skuPerformItemConfigDO2.setPeriodCount(31);
-            skuPerformItemConfigDO2.setRightType(RightTypeEnum.LESSON_COUPON.getCode());
+            skuPerformItemConfigDO2.setRightType(RightTypeEnum.COUPON.getCode());
             skuPerformItemConfigDO2.setProviderId("1");//会员价资格类
             rightViewInfo = new RightViewInfo();
             rightViewInfo.setDisplayName("购课立减优惠券200元");
@@ -516,7 +519,7 @@ public class InitSkuData extends MockBaseTest {
             rightFinanceInfo2.setContractorId("438098434");
             rightFinanceInfo2.setSettlePriceFen(0);
             rightFinanceInfo2.setFinanceable(false);
-            rightFinanceInfo2.setFinanceAssetType(RightTypeEnum.LESSON_COUPON.getCode());
+            rightFinanceInfo2.setFinanceAssetType(RightTypeEnum.COUPON.getCode());
             skuPerformItemConfigDO2.setSettleInfo(rightFinanceInfo2);
 
 /*
@@ -590,6 +593,8 @@ public class InitSkuData extends MockBaseTest {
             skuPerformItemConfigDO.setPeriodType(PeriodTypeEnum.TIME_RANGE.getCode());
             skuPerformItemConfigDO.setRightId(32424);
             skuPerformItemConfigDO.setPeriodCount(31);
+            skuPerformItemConfigDO.getGrantInfo().setStartTime(TimeUtil.now() + TimeUnit.DAYS.toMillis(100));
+            skuPerformItemConfigDO.getGrantInfo().setEndTime(TimeUtil.now() + TimeUnit.DAYS.toMillis(130));
             skuPerformItemConfigDO.setRightType(RightTypeEnum.LESSON.getCode());
             skuPerformItemConfigDO.setProviderId("2");
             RightViewInfo rightViewInfo = new RightViewInfo();

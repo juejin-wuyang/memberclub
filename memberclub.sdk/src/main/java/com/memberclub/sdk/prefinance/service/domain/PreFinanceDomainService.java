@@ -6,6 +6,7 @@
  */
 package com.memberclub.sdk.prefinance.service.domain;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.google.common.collect.Lists;
 import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.log.CommonLog;
@@ -86,6 +87,9 @@ public class PreFinanceDomainService {
             if (!performItem.isFinanceable()) {
                 CommonLog.warn("该履约项无需参与资产结算 itemToken:{}, assetBatchCode:{}",
                         performItem.getItemToken(), performItem.getBatchCode());
+                continue;
+            }
+            if (CollectionUtil.isEmpty(context.getBatchCode2Assets())) {
                 continue;
             }
             details.add(

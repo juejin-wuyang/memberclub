@@ -28,4 +28,6 @@ public interface StringContants {
 
     Integer MEMBER_DISCOUNT_PRICE = 5;
 
+    Integer LESSON_RIGHT_TYPE = 6;
+
 }
