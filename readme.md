@@ -414,13 +414,25 @@ memberclub 在standalone模式下无需任何中间件即可启动，在集成�
 
 git clone git@gitee.com:juejinwuyang/memberclub.git
 
-### 启动服务
+### 启动 MemberClub 后端服务
+
+#### MAC Linux
 
 进入项目目录下
 
 cd bin && ./starter.sh -e ut
 
 -e ut 是指指定启动模式为 独立启动，不依赖mysql数据库、redis等。（方便学习和展示，实际业务使用应使用集成模式）
+
+#### Windows
+
+1. mvn clean package -P ut -Dmaven.test.skip=true
+2. java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -jar
+   memberclub.starter/target/memberclub-starter-ut.jar
+
+-P ut 是指指定启动模式为 独立启动，不依赖mysql数据库、redis等。（方便学习和展示，实际业务使用应使用集成模式）
+
+### 下载启动 H5项目
 
 然后 git clone 下载memberclub H5项目，地址在 https://gitee.com/juejinwuyang/memberclub-buy-app
 
@@ -480,9 +492,17 @@ https://developer.aliyun.com/article/1369063
 
 ### 启动项目
 
+#### MAC 和 Linux
+
 memberclub项目根目录下
 
-cd bin && ./starter.sh
+cd bin && ./starter.sh -e test
+
+#### Windows
+
+1. mvn clean package -P test -Dmaven.test.skip=true
+2. java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -jar
+   memberclub.starter/target/memberclub-starter-test.jar
 
 # 调试单元测试
 
@@ -492,7 +512,15 @@ cd bin && ./starter.sh
 
 mvn clean package -P ut
 
-## 2. 调试单元测试
+## 2 配置IDEA
+
+路径 Settings -> Build, Execution, Deployment -> Compiler -> User-LOCAL VM Options
+
+添加如下
+
+-Djps.track.ap.dependencies=false
+
+## 3. 调试单元测试
 
 从TestDemoMember 单测类入手，通过断点调试，深入学习。
 
