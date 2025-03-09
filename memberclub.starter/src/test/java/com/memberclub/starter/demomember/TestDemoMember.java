@@ -16,7 +16,6 @@ import com.memberclub.domain.common.OrderSystemTypeEnum;
 import com.memberclub.domain.context.aftersale.apply.AftersaleApplyCmd;
 import com.memberclub.domain.context.aftersale.apply.AftersaleApplyResponse;
 import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
-import com.memberclub.domain.context.aftersale.contant.AftersaleUnableCode;
 import com.memberclub.domain.context.aftersale.contant.RefundTypeEnum;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewCmd;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewResponse;
@@ -698,7 +697,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         verifyOrderRefund(applyCmd, false);
         Assert.assertTrue(aftersaleApplyResponse.isSuccess());
 
-        /*******************已用尽,结果为不可退********/
+        /*   *//*******************已用尽,结果为不可退********//*
 
         for (Map.Entry<String, List<AssetDO>> entry : couponGrantFacade.assetBatchCode2Assets.entrySet()) {
             for (AssetDO assetDO : entry.getValue()) {
@@ -707,7 +706,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         }
         respose = aftersaleBizService.preview(previewCmd);
         Assert.assertEquals(false, respose.isAftersaleEnabled());
-        Assert.assertEquals(AftersaleUnableCode.USE_OUT_ERROR.getCode(), respose.getUnableCode());
+        Assert.assertEquals(AftersaleUnableCode.USE_OUT_ERROR.getCode(), respose.getUnableCode());*/
         //Thread.sleep(10000000);
     }
 

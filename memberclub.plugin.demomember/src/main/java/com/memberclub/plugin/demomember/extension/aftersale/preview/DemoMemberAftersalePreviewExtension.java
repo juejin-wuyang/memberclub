@@ -41,7 +41,7 @@ public class DemoMemberAftersalePreviewExtension implements AftersalePreviewExte
                 .addNode(AftersaleStatusCheckFlow.class)
                 .addNode(AftersaleGetAndCheckPeriodFlow.class)
                 .addNode(GetAndCheckAftersaleTimesFlow.class)
-                .addNode(AftersaleValidateLastOrderFlow.class)      //优先退最后一笔订单
+                //.addNode(AftersaleValidateLastOrderFlow.class)      //优先退最后一笔订单
                 //.addNode(AftersaleGetUsageFlow.class)               //售后获取使用情况
                 //.addNode(OfflineStatatisticsUsageAmountFlow.class) //离线统计使用金额
                 .addNode(RealtimeCalculateUsageAmountFlow.class)            //实时计算使用类型

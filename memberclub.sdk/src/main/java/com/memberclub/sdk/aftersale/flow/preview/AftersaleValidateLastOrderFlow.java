@@ -23,7 +23,9 @@ public class AftersaleValidateLastOrderFlow extends FlowNode<AftersalePreviewCon
     public void process(AftersalePreviewContext context) {
         List<MemberOrderDO> orders = renewDomainService.getNonExpiredMemberOrders(context.getCmd().getUserId(),
                 context.getCmd().getBizType().getCode());
-
+        if (CollectionUtil.isEmpty(orders)) {
+            return;
+        }
         orders = CollectionUtil.sort(orders, Comparator.comparingLong(MemberOrderDO::getCtime).reversed());
         if (!StringUtil.equals(orders.get(0).getTradeId(), context.getCmd().getTradeId())) {
             throw AftersaleUnableCode.REFUND_NONLAST_ORDER_ERROR.newException();

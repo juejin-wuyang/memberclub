@@ -46,13 +46,13 @@ public class DemoMemberPurchaseExtension implements PurchaseExtension {
                 .addNode(PurchaseSubmitLockFlow.class)
                 .addNode(SkuInfoInitalSubmitFlow.class)
                 .addNode(PurchaseSubmitCmdValidateFlow.class)
-                .addNode(PurchaseUserQuotaFlow.class)//检查限额
-                .addNode(PurchaseRenewValidateFlow.class)
-                .addNode(PurchaseValidateInventoryFlow.class)//检查库存
-                .addNode(MemberOrderSubmitFlow.class)// 会员提单
-                .addNode(PurchaseMarkNewMemberFlow.class)//新会员标记
-                .addNode(PurchaseOperateInventoryFlow.class)//扣减库存
-                .addNode(CommonOrderSubmitFlow.class)//订单系统提单
+                .addNode(PurchaseUserQuotaFlow.class)           //检查限额
+                //.addNode(PurchaseRenewValidateFlow.class)     //检查续费
+                .addNode(PurchaseValidateInventoryFlow.class)   //检查库存
+                .addNode(MemberOrderSubmitFlow.class)           // 会员提单
+                .addNode(PurchaseMarkNewMemberFlow.class)       //新会员标记
+                .addNode(PurchaseOperateInventoryFlow.class)    //扣减库存
+                .addNode(CommonOrderSubmitFlow.class)           //订单系统提单
         ;
 
         purchaseReverseChain = FlowChain.newChain(AfterSaleApplyContext.class)
