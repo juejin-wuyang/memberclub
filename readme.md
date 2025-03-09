@@ -408,7 +408,7 @@ memberclub                       # 主项目①pom.xml
 memberclub 在standalone模式下无需任何中间件即可启动，在集成测试环境默认依赖 mysql/redis/apollo/rabbitmq
 等中间件。所以如果仅学习使用，可以选择独立启动模式，那么只需要1条命令就可以启动memberclub服务！
 
-## 独立启动
+## 独立启动(不依赖其他中间件)
 
 ### 下载项目
 
