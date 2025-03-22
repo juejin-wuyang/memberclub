@@ -1,13 +1,16 @@
 <a href='https://gitee.com/juejinwuyang/memberclub/stargazers'><img src='https://gitee.com/juejinwuyang/memberclub/badge/star.svg?theme=dark' alt='star'></img></a>
 <a href='https://gitee.com/juejinwuyang/memberclub/members'><img src='https://gitee.com/juejinwuyang/memberclub/badge/fork.svg?theme=dark' alt='fork'></img></a>
 
+大家我是五阳，**专注于电商交易系统架构的经验分享**，欢迎关注我的[掘金主页](https://juejin.cn/user/1732486057428952)，目前粉丝超过
+4000，文章点赞收藏量已超过30000。
+
 # 项目地址
 
 Gitee：<https://gitee.com/juejinwuyang/memberclub>
 
 GitHub  <https://github.com/juejin-wuyang/memberclub>
 
-开源3周以来，已有近 **300** 多个关注和Fork
+开源3周以来，全网已有近 **370** 多个关注和Fork
 
 # 简介
 
