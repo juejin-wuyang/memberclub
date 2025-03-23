@@ -34,8 +34,8 @@ GitHub  <https://github.com/juejin-wuyang/memberclub>
 
 开发者们，可以择需选择需要的能力组件，组件中差异化的部分有插件扩展点能轻松扩展。或者能支持开发者快速的重新写一个完全适合自己的新组件然后编排注册到系统中？
 
-memberclub 就是基于这样的想法而设计的。 它是开源免费的交易引擎，
-以SDK方式对外提供通用的交易能力，能让开发者像搭积木方式，从0到1，快速构建一个新的电商交易系统！通过扩展点引擎和流程引擎定义复杂的交易流程
+memberclub 就是基于这样的想法而设计的。 它是开源免费的交易引擎，通过扩展点引擎和流程引擎定义复杂的交易流程，
+以SDK方式对外提供通用的交易能力，能让开发者像搭积木方式，从0到1，快速构建一个新的电商交易系统！
 
 <a href='https://gitee.com/juejinwuyang/memberclub'><img src='https://gitee.com/juejinwuyang/memberclub/widgets/widget_6.svg' alt='Fork me on Gitee'></img></a>
 
