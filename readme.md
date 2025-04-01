@@ -10,7 +10,7 @@ Gitee：<https://gitee.com/juejinwuyang/memberclub>
 
 GitHub  <https://github.com/juejin-wuyang/memberclub>
 
-开源3周以来，全网已有近 **370** 多个关注和Fork
+开源3周以来，全网已有近 **400** 多个关注和Fork， **感兴趣可以Star，随时感知我们的进展** 
 
 # 简介
 
