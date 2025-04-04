@@ -1,9 +1,4 @@
-## 您的star是我继续前进的动力，如果喜欢请右上角帮忙点个star
-
-
-开源3周以来，全网已有近 **400** 多个关注和Fork， **感兴趣可以Star，随时感知我们的进展** 
-
-
+## 您的star是我继续前进的动力，如果喜欢请右上角帮忙点个Star，随时感知我们的进展
 
 <a href='https://gitee.com/juejinwuyang/memberclub/stargazers'><img src='https://gitee.com/juejinwuyang/memberclub/badge/star.svg?theme=dark' alt='star'></img></a>
 <a href='https://gitee.com/juejinwuyang/memberclub/members'><img src='https://gitee.com/juejinwuyang/memberclub/badge/fork.svg?theme=dark' alt='fork'></img></a>
