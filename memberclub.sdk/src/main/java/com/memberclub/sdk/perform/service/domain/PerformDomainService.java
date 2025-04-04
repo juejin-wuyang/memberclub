@@ -28,6 +28,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +52,37 @@ public class PerformDomainService {
         return subOrderPerformContext.getSubOrder().getExtra();
     }
 
+    /**
+     * 构建时间，基于最大值和最小值。
+     *
+     * @param context
+     */
+    public void buildTimeRangeOnPerformBaseMaxMin(PerformContext context) {
+        for (SubOrderPerformContext subOrderPerformContext : context.getSubOrderPerformContexts()) {
+            long stime = context.getBaseTime();
+            long etime = context.getImmediatePerformEtime();
+            if (context.getDelayPerformEtime() > 0) {
+                etime = context.getDelayPerformEtime();
+            }
+            for (MemberPerformItemDO immediatePerformItem : subOrderPerformContext.getImmediatePerformItems()) {
+                stime = immediatePerformItem.getStime();
+                etime = immediatePerformItem.getEtime();
+            }
+
+            subOrderPerformContext.getSubOrder().setStime(stime);
+            subOrderPerformContext.getSubOrder().setEtime(etime);
+        }
+        long stime = context.getSubOrderPerformContexts().stream()
+                .min(Comparator.comparingLong(o -> o.getSubOrder().getStime()))
+                .get().getSubOrder().getStime();
+
+        long etime = context.getSubOrderPerformContexts().stream()
+                .max(Comparator.comparingLong(o -> o.getSubOrder().getEtime()))
+                .get().getSubOrder().getEtime();
+
+        context.setStime(stime);
+        context.setEtime(etime);
+    }
 
     public List<MemberPerformItemDO> queryByTradeId(long userId, String tradeId) {
         List<MemberPerformItem> items = memberPerformItemDao.selectByTradeId(userId, tradeId);

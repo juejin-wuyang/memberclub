@@ -10,7 +10,6 @@ import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.perform.PerformItemContext;
 import com.memberclub.sdk.perform.extension.execute.PerformExecuteExtension;
-import com.memberclub.sdk.perform.flow.complete.MemberExpireRefundTaskCreatedFlow;
 import com.memberclub.sdk.perform.flow.complete.MemberPerformMessageFlow;
 import com.memberclub.sdk.perform.flow.execute.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +41,7 @@ public class LessonPerformExecuteExtension implements PerformExecuteExtension {
                 .addNode(MemberResourcesLockFlow.class)
                 .addNode(MemberOrderOnPerformSuccessFlow.class)
                 .addNode(MemberPerformMessageFlow.class)
-                .addNode(MemberExpireRefundTaskCreatedFlow.class)
+                //.addNode(MemberExpireRefundTaskCreatedFlow.class)
                 .addNodeWithSubNodes(MutilSubOrderPerformFlow.class, subFlowChain)
         ;
     }

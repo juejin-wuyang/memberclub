@@ -13,20 +13,17 @@ import com.memberclub.common.flow.FlowChainService;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.perform.PerformContext;
-import com.memberclub.domain.context.perform.SubOrderPerformContext;
-import com.memberclub.domain.context.perform.common.RightTypeEnum;
-import com.memberclub.domain.dataobject.perform.MemberPerformItemDO;
 import com.memberclub.sdk.perform.extension.build.PerformSeparateOrderExtension;
 import com.memberclub.sdk.perform.flow.build.*;
+import com.memberclub.sdk.perform.service.domain.PerformDomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
-import java.util.Comparator;
 
 /**
  * author: 掘金五阳
  */
-@ExtensionProvider(desc = "默认 履约上下文构建", bizScenes = {
+@ExtensionProvider(desc = "在线课程履约拆单扩展点实现类", bizScenes = {
         @Route(bizType = BizTypeEnum.LESSON, scenes = {SceneEnum.SCENE_MONTH_CARD}),
 })
 public class LessonPerformSeparateOrderExtension implements PerformSeparateOrderExtension {
@@ -36,6 +33,9 @@ public class LessonPerformSeparateOrderExtension implements PerformSeparateOrder
 
     @Autowired
     private FlowChainService flowChainService;
+
+    @Autowired
+    private PerformDomainService performDomainService;
 
     @PostConstruct
     public void run() throws Exception {
@@ -54,33 +54,13 @@ public class LessonPerformSeparateOrderExtension implements PerformSeparateOrder
         flowChainService.execute(performSeparateOrderChain, context);
     }
 
+    /**
+     * 取履约项最大时间和最小时间 作为整笔订单的有效期。
+     *
+     * @param context
+     */
     @Override
     public void buildTimeRange(PerformContext context) {
-        for (SubOrderPerformContext subOrderPerformContext : context.getSubOrderPerformContexts()) {
-            long stime = context.getBaseTime();
-            long etime = context.getImmediatePerformEtime();
-            if (context.getDelayPerformEtime() > 0) {
-                etime = context.getDelayPerformEtime();
-            }
-            for (MemberPerformItemDO immediatePerformItem : subOrderPerformContext.getImmediatePerformItems()) {
-                if (immediatePerformItem.getRightType() == RightTypeEnum.LESSON) {
-                    stime = immediatePerformItem.getStime();
-                    etime = immediatePerformItem.getEtime();
-                }
-            }
-
-            subOrderPerformContext.getSubOrder().setStime(stime);
-            subOrderPerformContext.getSubOrder().setEtime(etime);
-        }
-        long stime = context.getSubOrderPerformContexts().stream()
-                .min(Comparator.comparingLong(o -> o.getSubOrder().getStime()))
-                .get().getSubOrder().getStime();
-
-        long etime = context.getSubOrderPerformContexts().stream()
-                .max(Comparator.comparingLong(o -> o.getSubOrder().getEtime()))
-                .get().getSubOrder().getEtime();
-
-        context.setStime(stime);
-        context.setEtime(etime);
+        performDomainService.buildTimeRangeOnPerformBaseMaxMin(context);
     }
 }
