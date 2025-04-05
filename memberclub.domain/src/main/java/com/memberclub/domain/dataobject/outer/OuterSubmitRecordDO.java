@@ -26,8 +26,6 @@ import java.util.List;
 @Data
 public class OuterSubmitRecordDO {
 
-    private long id;
-
     private long userId;
 
     /**

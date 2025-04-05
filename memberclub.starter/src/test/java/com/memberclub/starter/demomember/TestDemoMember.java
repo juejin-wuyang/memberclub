@@ -515,7 +515,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
     @SneakyThrows
     @Test
     public void testRedeem() {
-        String code = System.currentTimeMillis() + "";
+        String code = RandomUtils.nextLong() + "";
         Redeem redeem = buildRedeem(code);
 
         int cnt = redeemDao.insert(redeem);
