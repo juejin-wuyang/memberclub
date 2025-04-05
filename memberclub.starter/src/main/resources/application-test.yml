@@ -17,6 +17,12 @@ spring:
       common:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
+      admin0:
+        type: com.zaxxer.hikari.HikariDataSource  ## 数据源连接池连接类型,支持 Durid,Hikari 等常见数据库连接池
+        driver-class-name: com.mysql.cj.jdbc.Driver  ## 数据库连接驱动
+        jdbc-url: jdbc:mysql://localhost:3306/member_admin?useUnicode=true&characterEncoding=UTF-8
+        username: root
+        password: 1234567890
       trade0:
         type: com.zaxxer.hikari.HikariDataSource  ## 数据源连接池连接类型,支持 Durid,Hikari 等常见数据库连接池
         driver-class-name: com.mysql.cj.jdbc.Driver  ## 数据库连接驱动
@@ -32,6 +38,30 @@ spring:
     rules: ## 分库分表规则配置
       sharding:
         tables:
+          batch_trigger_job:
+            actual-data-nodes: admin0.batch_trigger_job_$->{0..1}  ## 实际表名
+            table-strategy: ## 分表策略
+              standard:
+                sharding-column: id  ## 按照分表的列
+                sharding-algorithm-name: batch-trigger-job  ## 分表算法名称(使用 yml 配置不能包含下划线,否则不生效)
+          redeem_job:
+            actual-data-nodes: admin0.redeem_job_$->{0..1}  ## 实际表名
+            table-strategy: ## 分表策略
+              standard:
+                sharding-column: id  ## 按照分表的列
+                sharding-algorithm-name: redeem-job  ## 分表算法名称(使用 yml 配置不能包含下划线,否则不生效)
+          redeem:
+            actual-data-nodes: admin0.redeem_$->{0..1}  ## 实际表名
+            table-strategy: ## 分表策略
+              standard:
+                sharding-column: user_id  ## 按照分表的列
+                sharding-algorithm-name: redeem  ## 分表算法名称(使用 yml 配置不能包含下划线,否则不生效)
+          trigger_record:
+            actual-data-nodes: admin0.trigger_record_$->{0..1}  ## 实际表名
+            table-strategy: ## 分表策略
+              standard:
+                sharding-column: user_id  ## 按照分表的列
+                sharding-algorithm-name: batch-trigger-record  ## 分表算法名称(使用 yml 配置不能包含下划线,否则不生效)
           outer_submit_record:
             actual-data-nodes: trade0.outer_submit_record_$->{0..1}  ## 实际表名
             table-strategy: ## 分表策略
@@ -103,6 +133,22 @@ spring:
             type: HINT_INLINE
             props:
               algorithm-expression: once_task_$->{value}
+          redeem-job:
+            type: INLINE
+            props:
+              algorithm-expression: redeem_job  ## 分表算法(取余)
+          batch-trigger-job:
+            type: INLINE
+            props:
+              algorithm-expression: batch_trigger_record  ## 分表算法(取余)
+          redeem:
+            type: INLINE
+            props:
+              algorithm-expression: outer_submit_record_$->{user_id % 2}  ## 分表算法(取余)
+          batch-trigger-record:
+            type: INLINE
+            props:
+              algorithm-expression: batch_trigger_record_$->{user_id % 2}  ## 分表算法(取余)
           outer-submit-record:
             type: INLINE
             props:

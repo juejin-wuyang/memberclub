@@ -97,6 +97,15 @@ public class ExtensionManager {
         T value = (T) extensionBeanMap.get(key);
 
         if (value == null) {
+            key = buildKey(tClass, bizScene.getBizType(), SceneEnum.DEFAULT_SCENE.getValue());
+            value = (T) extensionBeanMap.get(key);
+        }
+        if (value == null) {
+            key = buildKey(tClass, BizTypeEnum.DEFAULT.getCode(), bizScene.getScene());
+            value = (T) extensionBeanMap.get(key);
+        }
+
+        if (value == null) {
             key = buildKey(tClass, BizTypeEnum.DEFAULT.getCode(), SceneEnum.DEFAULT_SCENE.getValue());
             value = (T) extensionBeanMap.get(key);
         }

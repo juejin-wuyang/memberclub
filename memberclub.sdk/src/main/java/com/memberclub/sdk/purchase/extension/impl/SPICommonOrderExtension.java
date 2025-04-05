@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  * 为了演示方便,设计 SPI 接口和实现类.
  */
 @ExtensionProvider(desc = "通用订单交互扩展点", bizScenes = {
-        @Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = {SceneEnum.HOMEPAGE_SUBMIT_SCENE, SceneEnum.OUTER_SUBMIT_PURCHASE_SCENE}),
+        @Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = {SceneEnum.DEFAULT_SCENE}),
         @Route(bizType = BizTypeEnum.DOUYIN_COUPON_PACKAGE, scenes = {SceneEnum.HOMEPAGE_SUBMIT_SCENE}),
         @Route(bizType = BizTypeEnum.LESSON, scenes = {SceneEnum.HOMEPAGE_SUBMIT_SCENE}),
 })

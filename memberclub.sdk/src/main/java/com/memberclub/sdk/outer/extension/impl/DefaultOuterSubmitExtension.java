@@ -1,15 +1,10 @@
 package com.memberclub.sdk.outer.extension.impl;
 
-
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.google.common.collect.ImmutableList;
-import com.memberclub.common.annotation.Route;
-import com.memberclub.common.extension.ExtensionProvider;
 import com.memberclub.common.flow.EmptySubFlowNode;
 import com.memberclub.common.flow.FlowChain;
 import com.memberclub.common.log.CommonLog;
-import com.memberclub.domain.common.BizTypeEnum;
-import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.dataobject.outer.OuterSubmitContext;
 import com.memberclub.domain.entity.trade.OuterSubmitRecord;
 import com.memberclub.domain.exception.ResultCode;
@@ -21,31 +16,23 @@ import com.memberclub.sdk.outer.flow.OuterSubmitRecordFlow;
 import com.memberclub.sdk.outer.service.OuterSubmitDataObjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
+public abstract class DefaultOuterSubmitExtension implements OuterSubmitExtension {
 
-/**
- * 不区分兑换码、外部下单、免费领取
- */
-@ExtensionProvider(desc = "默认外部下单扩展点", bizScenes = {
-        @Route(bizType = BizTypeEnum.DEFAULT, scenes = {SceneEnum.DEFAULT_SCENE})
-})
-public class DefaultOuterPurchaseSubmitExtension implements OuterSubmitExtension {
-
-    private FlowChain<OuterSubmitContext> flowChain;
+    public FlowChain<OuterSubmitContext> flowChain;
 
     @Autowired
     private OuterSubmitDataObjectService outerSubmitDataObjectService;
 
     @Autowired
     private OuterSubmitRecordDao outerSubmitRecordDao;
-    
-    @PostConstruct
-    public void init() {
+
+    protected void defualtInit() {
         flowChain = FlowChain.newChain(OuterSubmitContext.class)
+
                 .addNode(OuterSubmitRecordFlow.class)                           //创建外部提单记录
-                .addEmptyNodeWithSubNodes(OuterPurchaseSubmitSubNode.class, OuterSubmitContext.class,
+                .addEmptyNodeWithSubNodes(OuterSubmitSubNode.class, OuterSubmitContext.class,
                         ImmutableList.of(OuterSubmitOrderFlow.class))           //记录外部提单记录，调用提单流程
-                .addEmptyNodeWithSubNodes(OuterPurchaseSubmitSubNode.class, OuterSubmitContext.class,
+                .addEmptyNodeWithSubNodes(OuterSubmitSubNode.class, OuterSubmitContext.class,
                         ImmutableList.of(OuterSubmitAutoPerformFlow.class))     //调用履约流程
         ;
     }
@@ -80,6 +67,6 @@ public class DefaultOuterPurchaseSubmitExtension implements OuterSubmitExtension
         outerSubmitRecordDao.update(null, wrapper);
     }
 
-    public static class OuterPurchaseSubmitSubNode extends EmptySubFlowNode<OuterSubmitContext> {
+    public static class OuterSubmitSubNode extends EmptySubFlowNode<OuterSubmitContext> {
     }
 }

@@ -40,11 +40,14 @@ import com.memberclub.domain.dataobject.outer.OuterSubmitCmd;
 import com.memberclub.domain.dataobject.outer.OuterSubmitResponse;
 import com.memberclub.domain.dataobject.outer.OuterSubmitStatusEnum;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
+import com.memberclub.domain.dataobject.redeem.RedeemStatusEnum;
 import com.memberclub.domain.dataobject.sku.SkuInfoDO;
 import com.memberclub.domain.dataobject.task.OnceTaskDO;
 import com.memberclub.domain.dataobject.task.TaskContentDO;
 import com.memberclub.domain.dataobject.task.perform.PerformTaskContentDO;
 import com.memberclub.domain.entity.trade.*;
+import com.memberclub.domain.exception.MemberException;
+import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.domain.facade.AssetDO;
 import com.memberclub.domain.facade.AssetStatusEnum;
 import com.memberclub.infrastructure.dynamic_config.DynamicConfig;
@@ -113,6 +116,17 @@ public class TestDemoMember extends TestDemoMemberPurchase {
     private PerformBizService performBizService;
     @Autowired
     private OuterSubmitBizService outerSubmitBizService;
+    @Autowired
+    private RedeemDao redeemDao;
+
+    private static Redeem buildRedeem(String code) {
+        Redeem redeem = new Redeem();
+        redeem.setCode(code);
+        redeem.setCtime(System.currentTimeMillis());
+        redeem.setUtime(System.currentTimeMillis());
+        redeem.setStatus(RedeemStatusEnum.INIT.getCode());
+        return redeem;
+    }
 
     @Test
     public void testApollo() throws Exception {
@@ -495,6 +509,50 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         OuterSubmitRecord record = outerSubmitRecordDao.selectByOutId(cmd.getUserId(), cmd.getOuterId());
 
         Assert.assertEquals(OuterSubmitStatusEnum.PERFORMED.getCode(), record.getStatus());
+        //Thread.sleep(1000000);
+    }
+
+    @SneakyThrows
+    @Test
+    public void testRedeem() {
+        String code = System.currentTimeMillis() + "";
+        Redeem redeem = buildRedeem(code);
+
+        int cnt = redeemDao.insert(redeem);
+        System.out.println("写入兑换码数量:" + cnt);
+
+        OuterSubmitCmd cmd = new OuterSubmitCmd();
+        cmd.setOuterId(code);
+        cmd.setOuterConfigId("101");
+
+
+        PurchaseSkuSubmitCmd sku = new PurchaseSkuSubmitCmd();
+        sku.setSkuId(membershipSku.getSkuId());
+        sku.setBuyCount(1);
+        cmd.setSkus(Lists.newArrayList(sku));
+        cmd.setOuterType(SubmitSourceEnum.REDEEM);
+        CommonUserInfo userInfo = new CommonUserInfo();
+        cmd.setUserInfo(userInfo);
+        cmd.setUserId(userIdGenerator.incrementAndGet());
+        cmd.setBizType(BizTypeEnum.DEMO_MEMBER);
+
+        OuterSubmitResponse resp = outerSubmitBizService.submit(cmd);
+        MemberOrder memberOrder = memberOrderDao.selectByTradeId(cmd.getUserId(), resp.getTradeId());
+        Assert.assertEquals(MemberOrderStatusEnum.PERFORMED.getCode(), memberOrder.getStatus());
+
+        OuterSubmitRecord record = outerSubmitRecordDao.selectByOutId(cmd.getUserId(), cmd.getOuterId());
+
+        Assert.assertEquals(OuterSubmitStatusEnum.PERFORMED.getCode(), record.getStatus());
+
+        try {
+            OuterSubmitResponse resp2 = outerSubmitBizService.submit(cmd);
+        } catch (Exception e) {
+            if (e instanceof MemberException) {
+                ResultCode resultCode = ((MemberException) e).getCode();
+                Assert.assertEquals(resultCode, ResultCode.REDEEM_USE_ERROR);
+
+            }
+        }
         //Thread.sleep(1000000);
     }
 

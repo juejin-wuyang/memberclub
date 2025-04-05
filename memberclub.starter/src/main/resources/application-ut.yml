@@ -10,6 +10,13 @@ spring:
           initialSize: 3
           minIdle: 3
           maxActive: 20
+        adminDataSource:
+          url: jdbc:h2:mem:member_admin;DB_CLOSE_DELAY=-1;mode=MySQL;
+          ## #TRACE_LEVEL_SYSTEM_OUT=2;
+          username: sa
+          password: dean
+          driverClassName: org.h2.Driver
+          schema: classpath:sql/member_admin.sql
         tradeDataSource:
           url: jdbc:h2:mem:member_db;DB_CLOSE_DELAY=-1;mode=MySQL;
           ## #TRACE_LEVEL_SYSTEM_OUT=2;
