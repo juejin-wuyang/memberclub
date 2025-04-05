@@ -35,9 +35,9 @@ public class OuterSubmitRecord {
      */
     private String outerConfigId;
 
-    private int bizId;
+    private String tradeId;
 
-    private String skus;
+    private int bizType;
 
     private String extra;
 

@@ -30,7 +30,7 @@ import javax.annotation.PostConstruct;
  * author: 掘金五阳
  */
 @ExtensionProvider(desc = "DemoMember 购买提单扩展点", bizScenes = {
-        @Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = {SceneEnum.HOMEPAGE_SUBMIT_SCENE})
+        @Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = {SceneEnum.HOMEPAGE_SUBMIT_SCENE, SceneEnum.OUTER_SUBMIT_PURCHASE_SCENE})
 })
 public class DemoMemberPurchaseExtension implements PurchaseExtension {
 

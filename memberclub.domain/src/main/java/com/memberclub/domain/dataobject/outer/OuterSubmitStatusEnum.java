@@ -6,16 +6,18 @@
  */
 package com.memberclub.domain.dataobject.outer;
 
+import com.memberclub.domain.context.purchase.common.MemberOrderStatusEnum;
+
 /**
  * @author yuhaiqiang
  */
 public enum OuterSubmitStatusEnum {
 
     INIT(0, "初始化"),
-    PRE_SUBMIT(1, "预提单"),
-    SUBMITTED(2, "已提单"),
-    PERFORMED(3, "已履约"),
-    FINISH(4, "完成"),
+    SUBMIT_SUCCESS(MemberOrderStatusEnum.SUBMITED.getCode(), "已提单"),
+    SUBMIT_FAIL(MemberOrderStatusEnum.FAIL.getCode(), "提单失败"),
+    PERFORMED(MemberOrderStatusEnum.PERFORMED.getCode(), "已履约"),
+    FINISH(36, "完成"),
     ;
 
     private int code;

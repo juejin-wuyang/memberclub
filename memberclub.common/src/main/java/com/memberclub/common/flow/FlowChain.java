@@ -9,6 +9,7 @@ package com.memberclub.common.flow;
 import com.google.common.collect.Lists;
 import com.memberclub.common.util.ApplicationContextUtils;
 import lombok.Data;
+import lombok.SneakyThrows;
 
 import java.util.List;
 
@@ -50,6 +51,21 @@ public class FlowChain<T> {
     public FlowChain<T> addNode(Class<? extends FlowNode<T>> clazz) {
         clazzs.add(clazz);
         FlowNode<T> bean = (FlowNode<T>) flowChainService.getApplicationContext().getBean(clazz);
+        nodes.add(bean);
+        return this;
+    }
+
+
+    @SneakyThrows
+    public <S> FlowChain<T> addEmptyNodeWithSubNodes(Class<? extends EmptySubFlowNode<?>> clazz,
+                                                     Class<T> subContextClass,
+                                                     List<Class<? extends FlowNode<T>>> subNodes) {
+        SubFlowNode<T, T> bean = (SubFlowNode<T, T>) clazz.newInstance();
+        FlowChain<T> subChain = newChain(flowChainService, subContextClass);
+        for (Class<? extends FlowNode<T>> subNode : subNodes) {
+            subChain.addNode(subNode);
+        }
+        bean.setSubChain(subChain);
         nodes.add(bean);
         return this;
     }

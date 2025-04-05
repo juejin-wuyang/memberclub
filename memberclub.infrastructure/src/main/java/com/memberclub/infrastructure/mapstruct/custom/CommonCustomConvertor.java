@@ -14,9 +14,9 @@ import com.memberclub.domain.context.oncetask.common.OnceTaskStatusEnum;
 import com.memberclub.domain.context.oncetask.common.TaskTypeEnum;
 import com.memberclub.domain.context.perform.common.SubOrderPerformStatusEnum;
 import com.memberclub.domain.context.purchase.common.MemberOrderStatusEnum;
-import com.memberclub.domain.context.purchase.common.PurchaseSourceEnum;
 import com.memberclub.domain.context.purchase.common.RenewTypeEnum;
 import com.memberclub.domain.context.purchase.common.SubOrderStatusEnum;
+import com.memberclub.domain.context.purchase.common.SubmitSourceEnum;
 import com.memberclub.domain.dataobject.order.MemberOrderExtraInfo;
 import com.memberclub.domain.dataobject.perform.his.SubOrderExtraInfo;
 import com.memberclub.domain.dataobject.task.TaskContentDO;
@@ -129,13 +129,13 @@ public class CommonCustomConvertor {
     }
 
     @Named("toPurchaseSourceEnumInt")
-    public int toPurchaseSourceEnumInt(PurchaseSourceEnum e) {
+    public int toPurchaseSourceEnumInt(SubmitSourceEnum e) {
         return e.getCode();
     }
 
     @Named("toPurchaseSourceEnum")
-    public PurchaseSourceEnum toPurchaseSourceEnumEnum(int code) {
-        return PurchaseSourceEnum.findByCode(code);
+    public SubmitSourceEnum toPurchaseSourceEnumEnum(int code) {
+        return SubmitSourceEnum.findByCode(code);
     }
 
     @Named("toMemberOrderPerformStatusEnum")

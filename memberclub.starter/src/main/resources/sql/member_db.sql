@@ -2,6 +2,8 @@
 
 SET MODE MYSQL;
 
+
+
 CREATE TABLE IF NOT EXISTS member_order (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
     biz_type INT(11)  NOT NULL COMMENT '产品线',
@@ -142,3 +144,19 @@ CREATE TABLE IF NOT EXISTS aftersale_order (
     --UNIQUE KEY uniq_aftersale_order (user_id, preview_token),
     KEY tradeid_key (user_id, trade_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+
+CREATE TABLE IF NOT EXISTS outer_submit_record (
+    id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
+    biz_type INT(11)  NOT NULL COMMENT '产品线',
+    user_id BIGINT(20)  NOT NULL COMMENT 'userId',
+    trade_id VARCHAR(128)  NULL COMMENT '内部交易订单Id',
+    outer_config_id VARCHAR(128)  NOT NULL COMMENT '外部系统配置ID',
+    outer_id VARCHAR(128)  NULL COMMENT '外部系统凭证',
+    outer_type INT(11)  NOT NULL COMMENT '外部下单类型',
+    status INT(11)  NOT NULL COMMENT '状态',
+    extra TEXT NOT NULL COMMENT '扩展属性',
+    utime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '更新时间',
+    ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
+    PRIMARY KEY (id),
+    UNIQUE KEY uniq_outer (user_id, outer_id, outer_type)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;

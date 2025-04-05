@@ -26,4 +26,6 @@ public class SubmitOrderRequestDTO {
     private List<SkuBuyInfoDTO> skus;
 
     private int orderType;
+
+    private Boolean zeroPay;
 }

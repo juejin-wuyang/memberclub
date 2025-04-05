@@ -12,8 +12,8 @@ import com.memberclub.domain.common.OrderSystemTypeEnum;
 import com.memberclub.domain.context.perform.common.MemberOrderPerformStatusEnum;
 import com.memberclub.domain.context.perform.common.SubOrderPerformStatusEnum;
 import com.memberclub.domain.context.purchase.common.MemberOrderStatusEnum;
-import com.memberclub.domain.context.purchase.common.PurchaseSourceEnum;
 import com.memberclub.domain.context.purchase.common.SubOrderStatusEnum;
+import com.memberclub.domain.context.purchase.common.SubmitSourceEnum;
 import com.memberclub.domain.dataobject.order.MemberOrderExtraInfo;
 import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
 import com.memberclub.domain.dataobject.perform.his.SubOrderExtraInfo;
@@ -56,7 +56,7 @@ public class MemberOrderDataObjectBuildFactory {
         orderDo.setStime(memberOrder.getStime());
         orderDo.setTradeId(memberOrder.getTradeId());
         orderDo.setUserId(memberOrder.getUserId());
-        orderDo.setSource(PurchaseSourceEnum.findByCode(memberOrder.getSource()));
+        orderDo.setSource(SubmitSourceEnum.findByCode(memberOrder.getSource()));
         orderDo.setUserInfo(orderDo.getExtra().getUserInfo());
         orderDo.setUtime(memberOrder.getUtime());
         return orderDo;

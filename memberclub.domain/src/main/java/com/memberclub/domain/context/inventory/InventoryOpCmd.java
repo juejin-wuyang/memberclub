@@ -7,6 +7,7 @@
 package com.memberclub.domain.context.inventory;
 
 import com.memberclub.domain.common.BizTypeEnum;
+import com.memberclub.domain.context.purchase.common.SubmitSourceEnum;
 import com.memberclub.domain.entity.inventory.InventoryTargetTypeEnum;
 import lombok.Data;
 
@@ -23,7 +24,7 @@ public class InventoryOpCmd {
     private BizTypeEnum bizType;
 
     /**
-     * @see com.memberclub.domain.context.purchase.common.PurchaseSourceEnum
+     * @see SubmitSourceEnum
      */
     private int source;
 

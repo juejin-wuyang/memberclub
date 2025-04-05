@@ -6,7 +6,9 @@
  */
 package com.memberclub.domain.dataobject.outer;
 
+import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.context.purchase.PurchaseSkuSubmitCmd;
+import com.memberclub.domain.context.purchase.common.SubmitSourceEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,20 +40,38 @@ public class OuterSubmitRecordDO {
      */
     private String outerConfigId;
 
+    private String tradeId;
+
     private List<PurchaseSkuSubmitCmd> skus;
 
     private OuterSubmitRecordExtraDO extra;
 
-    private int bizId;
+    private BizTypeEnum bizType;
 
     /**
      * 外部下单类型
      */
-    private OuterType outerType;
+    private SubmitSourceEnum outerType;
 
     private OuterSubmitStatusEnum status;
 
     private long utime;
 
     private long ctime;
+
+    public void onSubmitSuccess(OuterSubmitContext context) {
+        status = OuterSubmitStatusEnum.SUBMIT_SUCCESS;
+        utime = System.currentTimeMillis();
+        tradeId = context.getMemberOrder().getTradeId();
+    }
+
+    public void onSubmitFail(OuterSubmitContext context) {
+        status = OuterSubmitStatusEnum.SUBMIT_FAIL;
+        utime = System.currentTimeMillis();
+    }
+
+    public void onPerformSuccess(OuterSubmitContext context) {
+        status = OuterSubmitStatusEnum.PERFORMED;
+        utime = System.currentTimeMillis();
+    }
 }

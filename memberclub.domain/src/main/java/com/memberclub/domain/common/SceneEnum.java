@@ -7,6 +7,7 @@
 package com.memberclub.domain.common;
 
 import com.memberclub.domain.contants.StringContants;
+import com.memberclub.domain.context.purchase.common.SubmitSourceEnum;
 
 import static com.memberclub.domain.contants.StringContants.DISCOUNT_COUPON_RIGHT_TYPE;
 
@@ -22,7 +23,7 @@ public enum SceneEnum {
     RIGHT_TYPE_SCENE_DISCOUNT_COUPON(DISCOUNT_COUPON_RIGHT_TYPE.toString()),
 
     RIGHT_TYPE_SCENE_MEMBERSHIP(StringContants.MEMBERSHIP_RIGHT_TYPE.toString()),
-    
+
     RIGHT_TYPE_SCENE_LESSONSHIP(StringContants.LESSON_RIGHT_TYPE.toString()),
 
     RIGHT_TYPE_SCENE_MEMBER_DISCOUNT_PRICE(StringContants.MEMBER_DISCOUNT_PRICE.toString()),//会员价
@@ -45,6 +46,13 @@ public enum SceneEnum {
     //提单部分
     HOMEPAGE_SUBMIT_SCENE(StringContants.HOMEPAGE_VALUE + ""),
 
+    /*****************************************/
+    //外部下单部分
+    OUTER_SUBMIT_REDEEM_SCENE(SubmitSourceEnum.REDEEM.getCode() + ""),
+
+    OUTER_SUBMIT_PURCHASE_SCENE(SubmitSourceEnum.OUTER_PURCHASE.getCode() + ""),
+
+    OUTER_SUBMIT_FREE_TAKE_SCENE(SubmitSourceEnum.FREE_TAKE.getCode() + ""),
 
     /*****************************************/
     /**

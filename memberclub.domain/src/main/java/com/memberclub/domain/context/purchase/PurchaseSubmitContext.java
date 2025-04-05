@@ -34,6 +34,7 @@ public class PurchaseSubmitContext {
     private BizTypeEnum bizType;
     private PurchaseSubmitCmd submitCmd;
     private Long lockValue;
+    private Boolean zeroPay;
     /********************************************/
     //模型数据
 
@@ -55,6 +56,7 @@ public class PurchaseSubmitContext {
         this.userId = cmd.getUserId();
         this.bizType = cmd.getBizType();
         this.userInfo = cmd.getUserInfo();
+        this.zeroPay = cmd.getZeroPay();
     }
 
 

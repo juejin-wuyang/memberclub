@@ -10,7 +10,7 @@ import com.memberclub.common.util.CollectionUtilEx;
 import com.memberclub.common.util.TimeUtil;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.context.purchase.PurchaseSubmitCmd;
-import com.memberclub.domain.context.purchase.common.PurchaseSourceEnum;
+import com.memberclub.domain.context.purchase.common.SubmitSourceEnum;
 import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
 import com.memberclub.sdk.memberorder.biz.MemberOrderAftersalePreviewDO;
 import com.memberclub.sdk.util.PriceUtils;
@@ -34,7 +34,7 @@ public class PurchaseConvertor {
         cmd.setBizType(BizTypeEnum.findByCode(param.getBizId()));
         cmd.setClientInfo(param.getClientInfo());
         cmd.setSubmitToken(param.getSubmitToken());
-        cmd.setSource(PurchaseSourceEnum.findByCode(param.getSubmitSource()));
+        cmd.setSource(SubmitSourceEnum.findByCode(param.getSubmitSource()));
         cmd.setSkus(param.getSkus());
         cmd.setLocationInfo(param.getLocationInfo());
         return cmd;

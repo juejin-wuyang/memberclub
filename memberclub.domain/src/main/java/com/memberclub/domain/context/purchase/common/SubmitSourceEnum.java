@@ -11,9 +11,15 @@ import com.memberclub.domain.contants.StringContants;
 /**
  * @author wuyang
  */
-public enum PurchaseSourceEnum {
+public enum SubmitSourceEnum {
 
     HOMEPAGE(StringContants.HOMEPAGE_VALUE, "主页"),
+
+    OUTER_PURCHASE(2, "外部系统购买"),
+
+    REDEEM(3, "兑换码"),
+
+    FREE_TAKE(4, "免费领取"),
 
     ;
 
@@ -21,13 +27,13 @@ public enum PurchaseSourceEnum {
 
     private String name;
 
-    PurchaseSourceEnum(int code, String name) {
+    SubmitSourceEnum(int code, String name) {
         this.code = code;
         this.name = name;
     }
 
-    public static PurchaseSourceEnum findByCode(int code) throws IllegalArgumentException {
-        for (PurchaseSourceEnum item : PurchaseSourceEnum.values()) {
+    public static SubmitSourceEnum findByCode(int code) throws IllegalArgumentException {
+        for (SubmitSourceEnum item : SubmitSourceEnum.values()) {
             if (item.code == code) {
                 return item;
             }

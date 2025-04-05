@@ -38,7 +38,8 @@ public enum ResultCode {
     PURCHASE_REVERSE_ERROR(28, "开通逆向失败", false),
     PURCHASE_CANCEL_ERROR(29, "开通取消失败", false),
     RENEW_EXCEED(30, "不允许再次续费购买", false),
-    ;
+    PERFORM_ERROR(31, "履约失败", true),
+    OUTER_SUBMIT_RETRY(32, "外部提单重试错误码", true);
 
     private int value;
 

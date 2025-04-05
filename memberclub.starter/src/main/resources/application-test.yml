@@ -32,6 +32,12 @@ spring:
     rules: ## 分库分表规则配置
       sharding:
         tables:
+          outer_submit_record:
+            actual-data-nodes: trade0.outer_submit_record_$->{0..1}  ## 实际表名
+            table-strategy: ## 分表策略
+              standard:
+                sharding-column: user_id  ## 按照分表的列
+                sharding-algorithm-name: outer-submit-record  ## 分表算法名称(使用 yml 配置不能包含下划线,否则不生效)
           member_order: ## 数据库表名前缀
             actual-data-nodes: trade0.member_order_$->{0..1}  ## 实际表名
             table-strategy: ## 分表策略
@@ -97,6 +103,10 @@ spring:
             type: HINT_INLINE
             props:
               algorithm-expression: once_task_$->{value}
+          outer-submit-record:
+            type: INLINE
+            props:
+              algorithm-expression: outer_submit_record_$->{user_id % 2}  ## 分表算法(取余)
           member-order-inline:
             type: INLINE
             props:

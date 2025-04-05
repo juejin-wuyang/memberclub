@@ -14,6 +14,8 @@ public interface StringContants {
 
     Integer HOMEPAGE_VALUE = 1;
 
+    Integer OUTER_SUBMIT_SOURCE = 2;
+
     Integer DEFAULT_SCENE = 1;
     /**********************************************/
     //权益类型常量

@@ -26,14 +26,19 @@ import com.memberclub.domain.context.perform.PerformCmd;
 import com.memberclub.domain.context.perform.PerformResp;
 import com.memberclub.domain.context.perform.common.PerformItemStatusEnum;
 import com.memberclub.domain.context.perform.common.SubOrderPerformStatusEnum;
+import com.memberclub.domain.context.purchase.PurchaseSkuSubmitCmd;
 import com.memberclub.domain.context.purchase.PurchaseSubmitCmd;
 import com.memberclub.domain.context.purchase.PurchaseSubmitResponse;
 import com.memberclub.domain.context.purchase.common.MemberOrderStatusEnum;
 import com.memberclub.domain.context.purchase.common.SubOrderStatusEnum;
+import com.memberclub.domain.context.purchase.common.SubmitSourceEnum;
 import com.memberclub.domain.dataobject.CommonUserInfo;
 import com.memberclub.domain.dataobject.aftersale.AftersaleOrderStatusEnum;
 import com.memberclub.domain.dataobject.order.LocationInfo;
 import com.memberclub.domain.dataobject.order.MemberOrderExtraInfo;
+import com.memberclub.domain.dataobject.outer.OuterSubmitCmd;
+import com.memberclub.domain.dataobject.outer.OuterSubmitResponse;
+import com.memberclub.domain.dataobject.outer.OuterSubmitStatusEnum;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.dataobject.sku.SkuInfoDO;
 import com.memberclub.domain.dataobject.task.OnceTaskDO;
@@ -52,6 +57,7 @@ import com.memberclub.infrastructure.mq.MessageQuenePublishFacade;
 import com.memberclub.infrastructure.mq.MessageQueueDebugFacade;
 import com.memberclub.infrastructure.mybatis.mappers.trade.*;
 import com.memberclub.sdk.aftersale.service.AftersaleBizService;
+import com.memberclub.sdk.outer.biz.OuterSubmitBizService;
 import com.memberclub.sdk.perform.service.PerformBizService;
 import com.memberclub.starter.job.OnceTaskTriggerBizService;
 import com.memberclub.starter.util.JustUnitTest;
@@ -102,7 +108,11 @@ public class TestDemoMember extends TestDemoMemberPurchase {
     @Autowired
     private MemberOrderDao memberOrderDao;
     @Autowired
+    private OuterSubmitRecordDao outerSubmitRecordDao;
+    @Autowired
     private PerformBizService performBizService;
+    @Autowired
+    private OuterSubmitBizService outerSubmitBizService;
 
     @Test
     public void testApollo() throws Exception {
@@ -456,6 +466,35 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         Assert.assertTrue(resp.isSuccess());
         verifyData(cmd);
 
+        //Thread.sleep(1000000);
+    }
+
+    @SneakyThrows
+    @Test
+    public void testOuterSubmit() {
+        OuterSubmitCmd cmd = new OuterSubmitCmd();
+        cmd.setOuterId(System.currentTimeMillis() + "");
+        cmd.setOuterConfigId("101");
+
+
+        PurchaseSkuSubmitCmd sku = new PurchaseSkuSubmitCmd();
+        sku.setSkuId(membershipSku.getSkuId());
+        sku.setBuyCount(1);
+        cmd.setSkus(Lists.newArrayList(sku));
+        cmd.setOuterType(SubmitSourceEnum.OUTER_PURCHASE);
+        CommonUserInfo userInfo = new CommonUserInfo();
+        cmd.setUserInfo(userInfo);
+        cmd.setUserId(userIdGenerator.incrementAndGet());
+        cmd.setBizType(BizTypeEnum.DEMO_MEMBER);
+
+        OuterSubmitResponse resp = outerSubmitBizService.submit(cmd);
+        OuterSubmitResponse resp2 = outerSubmitBizService.submit(cmd);
+        MemberOrder memberOrder = memberOrderDao.selectByTradeId(cmd.getUserId(), resp.getTradeId());
+        Assert.assertEquals(MemberOrderStatusEnum.PERFORMED.getCode(), memberOrder.getStatus());
+
+        OuterSubmitRecord record = outerSubmitRecordDao.selectByOutId(cmd.getUserId(), cmd.getOuterId());
+
+        Assert.assertEquals(OuterSubmitStatusEnum.PERFORMED.getCode(), record.getStatus());
         //Thread.sleep(1000000);
     }
 

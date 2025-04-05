@@ -6,10 +6,13 @@
  */
 package com.memberclub.domain.dataobject.outer;
 
+import com.memberclub.domain.context.purchase.PurchaseSkuSubmitCmd;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * author: 掘金五阳
@@ -20,4 +23,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class OuterSubmitRecordExtraDO {
+
+    List<PurchaseSkuSubmitCmd> skus;
 }

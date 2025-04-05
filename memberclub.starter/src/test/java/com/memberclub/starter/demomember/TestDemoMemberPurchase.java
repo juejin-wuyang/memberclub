@@ -16,7 +16,7 @@ import com.memberclub.domain.context.purchase.PurchaseSubmitCmd;
 import com.memberclub.domain.context.purchase.PurchaseSubmitResponse;
 import com.memberclub.domain.context.purchase.cancel.PurchaseCancelCmd;
 import com.memberclub.domain.context.purchase.common.MemberOrderStatusEnum;
-import com.memberclub.domain.context.purchase.common.PurchaseSourceEnum;
+import com.memberclub.domain.context.purchase.common.SubmitSourceEnum;
 import com.memberclub.domain.dataobject.CommonUserInfo;
 import com.memberclub.domain.dataobject.aftersale.ClientInfo;
 import com.memberclub.domain.dataobject.inventory.InventoryCacheDO;
@@ -105,7 +105,7 @@ public class TestDemoMemberPurchase extends MockBaseTest {
         sku.setBuyCount(buyCount);
         cmd.setSkus(Lists.newArrayList(sku));
 
-        cmd.setSource(PurchaseSourceEnum.HOMEPAGE);
+        cmd.setSource(SubmitSourceEnum.HOMEPAGE);
         cmd.setSubmitToken(RandomStringUtils.randomAscii(10));
         return cmd;
     }

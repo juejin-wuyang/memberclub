@@ -6,6 +6,7 @@
  */
 package com.memberclub.domain.dataobject.outer;
 
+import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,15 +22,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class OuterSubmitContext {
-
-
-
     private long userId;
 
-    private int bizId;
+    private BizTypeEnum bizType;
+
+    private OuterSubmitCmd cmd;
 
     private OuterSubmitRecordDO record;
-
 
     private MemberOrderDO memberOrder;
 }

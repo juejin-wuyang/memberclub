@@ -6,6 +6,7 @@
  */
 package com.memberclub.infrastructure.mapstruct;
 
+import com.memberclub.domain.dataobject.outer.OuterSubmitRecordDO;
 import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
 import com.memberclub.domain.dataobject.perform.his.SubOrderFinanceInfo;
 import com.memberclub.domain.dataobject.perform.his.SubOrderSaleInfo;
@@ -16,6 +17,7 @@ import com.memberclub.domain.dataobject.sku.SkuSaleInfo;
 import com.memberclub.domain.dataobject.sku.SkuViewInfo;
 import com.memberclub.domain.entity.trade.MemberOrder;
 import com.memberclub.domain.entity.trade.MemberSubOrder;
+import com.memberclub.domain.entity.trade.OuterSubmitRecord;
 import com.memberclub.infrastructure.mapstruct.custom.CommonCustomConvertor;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -60,5 +62,13 @@ public interface PurchaseConvertor {
     })
     public MemberOrder toMemberOrder(MemberOrderDO order);
 
+
+    @Mappings(value = {
+            @Mapping(source = "bizType", target = "bizType", ignore = true),
+            @Mapping(source = "extra", target = "extra", ignore = true),
+            @Mapping(source = "outerType", target = "outerType", ignore = true),
+            @Mapping(source = "status", target = "status", ignore = true),
+    })
+    public OuterSubmitRecord toOuterSubmitRecord(OuterSubmitRecordDO record);
 
 }

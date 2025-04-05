@@ -7,7 +7,7 @@
 package com.memberclub.domain.context.purchase;
 
 import com.memberclub.domain.common.BizTypeEnum;
-import com.memberclub.domain.context.purchase.common.PurchaseSourceEnum;
+import com.memberclub.domain.context.purchase.common.SubmitSourceEnum;
 import com.memberclub.domain.dataobject.CommonUserInfo;
 import com.memberclub.domain.dataobject.aftersale.ClientInfo;
 import com.memberclub.domain.dataobject.order.LocationInfo;
@@ -32,7 +32,9 @@ public class PurchaseSubmitCmd {
 
     private LocationInfo locationInfo;
 
-    private PurchaseSourceEnum source;
+    private SubmitSourceEnum source;
+
+    private Boolean zeroPay;
 
     private String submitToken;
 
