@@ -18,6 +18,7 @@ public enum ExtensionType {
     REVERSE_PERFORM(5, "逆向履约"),
     PRE_FINANCE(6, "预结算"),
     COMMON(7, "通用"),
+    OUTER_SUBMIT(8, "外部下单"),
     ;
 
     private int code;
