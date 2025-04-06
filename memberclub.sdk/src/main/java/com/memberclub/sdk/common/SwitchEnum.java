@@ -29,6 +29,17 @@ public enum SwitchEnum {
      * 售后降级开关
      */
     AFTERSALE_DEGRADE("aftersale_degrade_%s", false),
+
+    /**
+     * 售后发起次数缓存的过期时间
+     */
+    AFTERSALE_QUOTA_EXPIRE_DAYS("aftersale_quota_expire_days", 31),
+
+    /**
+     * 售后超过这个次数以后，不允许购买
+     */
+    AFTERSALE_QUOTA_MAX_VALUE("aftersale_quota_expire_days", 2),
+
     /**
      * 售后计划摘要默认版本
      */
@@ -153,23 +164,23 @@ public enum SwitchEnum {
     }
 
     public int getInt() {
-        return getDynamicConfig().getInt(key, (int) defaultValue);
+        return getDynamicConfig().getInt(key, defaultValue);
     }
 
     public int getInt(int bizType) {
         String key = getKey(bizType);
         return getDynamicConfig()
-                .getInt(key, (int) defaultValue);
+                .getInt(key, defaultValue);
     }
 
     public long getLong() {
         return getDynamicConfig()
-                .getLong(key, (long) defaultValue);
+                .getLong(key, defaultValue);
     }
 
     public long getLong(int bizType) {
         String key = getKey(bizType);
-        return getDynamicConfig().getLong(key, (long) defaultValue);
+        return getDynamicConfig().getLong(key, defaultValue);
     }
 
     public String getString() {

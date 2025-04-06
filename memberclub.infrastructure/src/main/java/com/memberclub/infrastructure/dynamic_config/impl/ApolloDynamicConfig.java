@@ -30,12 +30,12 @@ public class ApolloDynamicConfig implements DynamicConfig {
     }
 
     @Override
-    public int getInt(String key, int value) {
+    public int getInt(String key, Object value) {
         return Integer.valueOf(environment.getProperty(key, value + ""));
     }
 
     @Override
-    public long getLong(String key, long value) {
+    public long getLong(String key, Object value) {
         return Long.valueOf(environment.getProperty(key, value + ""));
     }
 

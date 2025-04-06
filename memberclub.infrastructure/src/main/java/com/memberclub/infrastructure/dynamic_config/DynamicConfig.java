@@ -15,9 +15,9 @@ public interface DynamicConfig {
 
     boolean getBoolean(String key, Boolean value);
 
-    int getInt(String key, int value);
+    int getInt(String key, Object value);
 
-    long getLong(String key, long value);
+    long getLong(String key, Object value);
 
     String getString(String key, String value);
 }

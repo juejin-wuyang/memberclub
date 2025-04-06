@@ -42,6 +42,7 @@ public enum ResultCode {
     OUTER_SUBMIT_RETRY(32, "外部提单重试错误码", true),
     REDEEM_USE_ERROR(33, "兑换码兑换失败", false),
     REDEEM_INVALID_ERROR(34, "无效的兑换码", false),
+    AFTERSALE_FREQUNCE_EXCEED(35, "售后频率过高，禁止购买", false, false),
     ;
 
     private int value;

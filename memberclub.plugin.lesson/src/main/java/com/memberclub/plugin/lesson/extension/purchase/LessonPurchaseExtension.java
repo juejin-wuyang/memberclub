@@ -42,6 +42,7 @@ public class LessonPurchaseExtension implements PurchaseExtension {
                 .addNode(SkuInfoInitalSubmitFlow.class)
                 .addNode(PurchaseSubmitCmdValidateFlow.class)
                 .addNode(PurchaseUserQuotaFlow.class)                       //检查限额
+                .addNode(AftersaleFrequnceValidateFlow.class)               //检查售后频率
                 //.addNode(PurchaseValidateInventoryFlow.class)               //检查库存
                 .addNode(MemberOrderSubmitFlow.class)                       // 会员提单
                 //.addNode(PurchaseMarkNewMemberFlow.class)                   //新会员标记

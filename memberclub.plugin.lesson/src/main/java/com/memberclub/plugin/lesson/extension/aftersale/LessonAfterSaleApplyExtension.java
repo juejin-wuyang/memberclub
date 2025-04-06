@@ -45,6 +45,7 @@ public class LessonAfterSaleApplyExtension implements AfterSaleApplyExtension {
 
         doApplyFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
                 .addNode(AftersaleOrderDomainFlow.class)
+                .addNode(AftersaleQuotaFlow.class)           // 记录售后次数
                 .addNode(MemberOrderRefundSuccessFlow.class) //售后成功后, 更新主单子单的状态为成功
                 .addNode(AftersaleAsyncRollbackFlow.class)   // 失败异步回滚
                 .addNode(AftersaleReversePerformFlow.class)  //逆向履约

@@ -35,6 +35,11 @@ if [ $penv="test" ]; then
     echo "debug参数: $pdebug"
 fi
 
+if [ $penv="ut" ]; then
+    pdebug=${debug:--agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005}
+    echo "debug参数: $pdebug"
+fi
+
 if [ $pop="start" ];then
    (cd ../ && java "$pdebug" -jar memberclub.starter/target/memberclub-starter-"$penv".jar )
 fi
