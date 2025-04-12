@@ -3,11 +3,40 @@
 <a href='https://gitee.com/juejinwuyang/memberclub/stargazers'><img src='https://gitee.com/juejinwuyang/memberclub/badge/star.svg?theme=dark' alt='star'></img></a>
 <a href='https://gitee.com/juejinwuyang/memberclub/members'><img src='https://gitee.com/juejinwuyang/memberclub/badge/fork.svg?theme=dark' alt='fork'></img></a>
 
-大家我是五阳，**专注于电商交易系统架构的经验分享**，欢迎关注我的[掘金主页](https://juejin.cn/user/1732486057428952)，目前粉丝超过
-4000，文章点赞收藏量已超过30000
-
-
 # 简介
+
+memberclub 可实现一天时间快搭建一套订单交易系统。 轻量级完全开源的交易引擎，以SDK方式对外提供通用的交易能力，能让开发者像搭积木方式，从0到1，快速构建一个新的电商交易系统！
+
+# 项目架构
+
+![img.png](img.png)
+
+# 可以学到什么技术？
+
+在这个项目中你可以学习到 SpringBoot 集成 以下框架或组件。
+
+1. Mybatis-plus
+2. Sharding-sphere 多数据源分库分表
+3. Redis/redisson
+4. Apollo
+5. Springcloud（feign/enreka）
+6. RabbitMQ
+7. H2 内存数据库
+8. Swagger
+9. Lombok+MapStruct
+
+同时你也可以学习到以下组件的实现原理
+
+1. [流程引擎](https://juejin.cn/post/7469330882945318922)
+7. [扩展点引擎](https://juejin.cn/post/7472678890277535770)
+1. [分布式重试组件](https://juejin.cn/post/7476352294084067338)
+2. [通用日志组件](https://juejin.cn/post/7407275971902357558)
+3. 商品库存
+4. 分布式锁组件
+5. Redis Lua的使用
+6. [Spring 上下文工具类](https://juejin.cn/post/7469272970771742759)
+
+# 解决的痛点
 
 开源平台上有很多在线商城系统，功能很全，很完善，关注者众多，然而实际业务场景非常复杂和多样化，开源的在线商城系统很难完全匹配实际业务，广泛的痛点是
 
@@ -35,35 +64,6 @@ memberclub 就是基于这样的想法而设计的。 它是开源免费的交�
 <a href='https://gitee.com/juejinwuyang/memberclub'><img src='https://gitee.com/juejinwuyang/memberclub/widgets/widget_6.svg' alt='Fork me on Gitee'></img></a>
 
 我认为这很有价值！
-
-# 项目架构
-
-![doc/img_5.png](doc/img_5.png)
-
-# 可以学到什么技术？
-
-在这个项目中你可以学习到 SpringBoot 集成 以下框架或组件。
-
-1. Mybatis-plus
-2. Sharding-sphere 多数据源分库分表
-3. Redis/redisson
-4. Apollo
-5. Springcloud（feign/enreka）
-6. RabbitMQ
-7. H2 内存数据库
-8. Swagger
-9. Lombok+MapStruct
-
-同时你也可以学习到以下组件的实现原理
-
-1. [流程引擎](https://juejin.cn/post/7469330882945318922)
-7. [扩展点引擎](https://juejin.cn/post/7472678890277535770)
-1. [分布式重试组件](https://juejin.cn/post/7476352294084067338)
-2. [通用日志组件](https://juejin.cn/post/7407275971902357558)
-3. 商品库存
-4. 分布式锁组件
-5. Redis Lua的使用
-6. [Spring 上下文工具类](https://juejin.cn/post/7469272970771742759)
 
 # 效果展示
 
