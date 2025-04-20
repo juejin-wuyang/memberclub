@@ -9,7 +9,7 @@ memberclub 可实现一天时间快搭建一套订单交易系统。 轻量级�
 
 # 项目架构
 
-![img_6.png](doc/img_6.png)
+![img_7.png](doc/img_7.png)
 
 # 可以学到什么技术？
 
