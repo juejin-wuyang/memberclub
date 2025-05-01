@@ -39,7 +39,7 @@ public interface AftersaleBasicCheckExtension extends BaseExtension {
         }
     }
 
-    default void getAndCheckPeriod(AftersalePreviewContext context) {
+    default void validatePeriod(AftersalePreviewContext context) {
         context.setStime(context.getMemberOrder().getStime());
         context.setEtime(context.getMemberOrder().getEtime());
         if (context.getEtime() < TimeUtil.now()) {

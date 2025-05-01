@@ -10,7 +10,7 @@ import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.perform.PerformItemContext;
 import com.memberclub.sdk.perform.extension.execute.PerformExecuteExtension;
-import com.memberclub.sdk.perform.flow.complete.MemberPerformMessageFlow;
+import com.memberclub.sdk.perform.flow.complete.PerformMessagePublishFlow;
 import com.memberclub.sdk.perform.flow.execute.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -35,12 +35,12 @@ public class LessonPerformExecuteExtension implements PerformExecuteExtension {
                 .addNode(SingleSubOrderPerformFlow.class)
                 .addNodeWithSubNodes(ImmediatePerformFlow.class, PerformItemContext.class,
                         // 构建 MemberPerformItem, 发放权益
-                        ImmutableList.of(MemberPerformItemFlow.class, PerformItemGrantFlow.class));
+                        ImmutableList.of(PerformItemCreateFlow.class, PerformItemGrantFlow.class));
 
         flowChain = FlowChain.newChain(flowChainService, PerformContext.class)
-                .addNode(MemberResourcesLockFlow.class)
+                .addNode(PerformResourceLockFlow.class)
                 .addNode(MemberOrderOnPerformSuccessFlow.class)
-                .addNode(MemberPerformMessageFlow.class)
+                .addNode(PerformMessagePublishFlow.class)
                 //.addNode(MemberExpireRefundTaskCreatedFlow.class)
                 .addNodeWithSubNodes(MutilSubOrderPerformFlow.class, subFlowChain)
         ;

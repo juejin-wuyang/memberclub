@@ -14,8 +14,8 @@ import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.purchase.extension.PurchaseExtension;
 import com.memberclub.sdk.purchase.flow.*;
 import com.memberclub.sdk.purchase.flow.aftersale.PurchaseMemberQuotaReverseFlow;
-import com.memberclub.sdk.purchase.flow.cancel.PurchaseLockCancelFlow;
 import com.memberclub.sdk.purchase.flow.cancel.PurchaseOrderCancelFlow;
+import com.memberclub.sdk.purchase.flow.cancel.PurchaseResourceLockCancelFlow;
 import com.memberclub.sdk.purchase.flow.cancel.PurchaseUserQuotaCancelFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -38,13 +38,13 @@ public class LessonPurchaseExtension implements PurchaseExtension {
     @PostConstruct
     public void init() {
         submitChain = FlowChain.newChain(PurchaseSubmitContext.class)
-                .addNode(PurchaseLockSubmitFlow.class)
+                .addNode(PurchaseResourceLockSubmitFlow.class)
                 .addNode(PurchaseContextInitalizeSubmitFlow.class)
                 .addNode(PurchaseSubmitCmdValidateSubmitFlow.class)
                 .addNode(PurchaseUserQuotaSubmitFlow.class)                       //检查限额
                 .addNode(AftersaleFrequnceValidateFlow.class)               //检查售后频率
                 //.addNode(PurchaseValidateInventoryFlow.class)               //检查库存
-                .addNode(MemberOrderSubmitSubmitFlow.class)                       // 会员提单
+                .addNode(MemberOrderSubmitFlow.class)                       // 会员提单
                 //.addNode(PurchaseMarkNewMemberFlow.class)                   //新会员标记
                 //.addNode(PurchaseOperateInventoryFlow.class)                //扣减库存
                 .addNode(CommonOrderSubmitFlow.class)                       //订单系统提单
@@ -58,7 +58,7 @@ public class LessonPurchaseExtension implements PurchaseExtension {
         ;
 
         purchaseCancelFlowChain = FlowChain.newChain(PurchaseCancelContext.class)
-                .addNode(PurchaseLockCancelFlow.class)
+                .addNode(PurchaseResourceLockCancelFlow.class)
                 .addNode(PurchaseOrderCancelFlow.class)
                 //.addNode(PurchaseCancelNewMemberFlow.class)
                 .addNode(PurchaseUserQuotaCancelFlow.class)

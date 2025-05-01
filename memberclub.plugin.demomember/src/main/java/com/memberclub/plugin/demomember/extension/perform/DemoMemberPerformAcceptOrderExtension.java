@@ -16,9 +16,9 @@ import com.memberclub.domain.context.perform.PerformCmd;
 import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.infrastructure.mapstruct.PerformConvertor;
 import com.memberclub.sdk.perform.extension.build.PerformAcceptOrderExtension;
-import com.memberclub.sdk.perform.flow.build.CalculateRetrySourceFlow;
-import com.memberclub.sdk.perform.flow.build.CheckMemberOrderPerformedFlow;
-import com.memberclub.sdk.perform.flow.build.StartPerformUpdteMemberOrderFlow;
+import com.memberclub.sdk.perform.flow.build.AftersaleRetrySourceDeterminFlow;
+import com.memberclub.sdk.perform.flow.build.MemberOrderOnStartPerformFlow;
+import com.memberclub.sdk.perform.flow.build.MemberOrderPerformCheckFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -41,9 +41,9 @@ public class DemoMemberPerformAcceptOrderExtension implements PerformAcceptOrder
     @Override
     public void run(ApplicationArguments args) throws Exception {
         performAcceptOrderChain = FlowChain.newChain(flowChainService, PerformContext.class)
-                .addNode(StartPerformUpdteMemberOrderFlow.class)
-                .addNode(CalculateRetrySourceFlow.class)
-                .addNode(CheckMemberOrderPerformedFlow.class)
+                .addNode(MemberOrderOnStartPerformFlow.class)
+                .addNode(AftersaleRetrySourceDeterminFlow.class)
+                .addNode(MemberOrderPerformCheckFlow.class)
         ;
     }
 

@@ -38,10 +38,10 @@ public class DemoMemberPerformSeparateOrderForMutilPeriodCardExtension implement
         buildPerformContextChain = FlowChain.newChain(flowChainService, PerformContext.class)
                 .addNode(PerformContextsInitializeFlow.class)
                 .addNode(PerformItemClone4BuyCountFlow.class)
-                .addNode(MutilPeriodMemberClonePerformItemFlow.class)
+                .addNode(PerformItemClone4MutilPeriodCardFlow.class)
                 //如果年卡周期是自然月,则可以在此处根据当前期数计算每期的天数
                 .addNode(PeriodCompute4ImmediatePerformItemFlow.class)//计算立即履约项 时间周期
-                .addNode(CalculateDelayPerformItemPeriodFlow.class)//计算延迟履约项 时间周期
+                .addNode(PeriodCompute4DelayPerformItemsFlow.class)//计算延迟履约项 时间周期
                 .addNode(PeriodCompute4WholeOrderFlow.class)//计算订单整体有效期
                 .addNode(PerformContextExtraInfoBuildFlow.class)// 构建扩展属性
         ;

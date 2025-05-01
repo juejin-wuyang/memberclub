@@ -17,11 +17,11 @@ import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.perform.PerformItemContext;
 import com.memberclub.domain.context.perform.delay.DelayItemContext;
 import com.memberclub.sdk.perform.extension.execute.PerformExecuteExtension;
-import com.memberclub.sdk.perform.flow.complete.MemberPerformMessageFlow;
+import com.memberclub.sdk.perform.flow.complete.PerformMessagePublishFlow;
 import com.memberclub.sdk.perform.flow.execute.*;
-import com.memberclub.sdk.perform.flow.execute.delay.BuildDelayPerformOnceTaskFlow;
-import com.memberclub.sdk.perform.flow.execute.delay.CreateDelayPerformOnceTaskFlow;
 import com.memberclub.sdk.perform.flow.execute.delay.DelayPerformFlow;
+import com.memberclub.sdk.perform.flow.execute.delay.PerformDelayTaskBuildFlow;
+import com.memberclub.sdk.perform.flow.execute.delay.PerformDelayTaskCreateFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -41,16 +41,16 @@ public class DemoMemberPerformExecuteExtension implements PerformExecuteExtensio
     @PostConstruct
     public void init() {
         flowChain = FlowChain.newChain(flowChainService, PerformContext.class)
-                .addNode(MemberResourcesLockFlow.class)
+                .addNode(PerformResourceLockFlow.class)
                 .addNode(MemberOrderOnPerformSuccessFlow.class)
-                .addNode(MemberPerformMessageFlow.class)
+                .addNode(PerformMessagePublishFlow.class)
                 .addNode(SingleSubOrderPerformFlow.class)
                 .addNodeWithSubNodes(ImmediatePerformFlow.class, PerformItemContext.class,
                         // 构建 MemberPerformItem, 发放权益
-                        ImmutableList.of(MemberPerformItemFlow.class, PerformItemGrantFlow.class))
+                        ImmutableList.of(PerformItemCreateFlow.class, PerformItemGrantFlow.class))
                 .addNodeWithSubNodes(DelayPerformFlow.class, DelayItemContext.class,
                         // 构建 任务, 存储任务
-                        ImmutableList.of(BuildDelayPerformOnceTaskFlow.class, CreateDelayPerformOnceTaskFlow.class))
+                        ImmutableList.of(PerformDelayTaskBuildFlow.class, PerformDelayTaskCreateFlow.class))
 
         ;
     }

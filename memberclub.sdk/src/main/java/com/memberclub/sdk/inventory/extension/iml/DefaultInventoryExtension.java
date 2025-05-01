@@ -19,7 +19,7 @@ import com.memberclub.sdk.inventory.extension.InventoryExtension;
 import com.memberclub.sdk.inventory.flow.InventoryFilteredByRecordsFlow;
 import com.memberclub.sdk.inventory.flow.InventoryFilteredFlow;
 import com.memberclub.sdk.inventory.flow.InventoryOperateFlow;
-import com.memberclub.sdk.inventory.flow.InventoryQueryRecordsFlow;
+import com.memberclub.sdk.inventory.flow.InventoryRecordsQueryFlow;
 import com.memberclub.sdk.inventory.flow.InventoryValidateFlow;
 
 import javax.annotation.PostConstruct;
@@ -53,7 +53,7 @@ public class DefaultInventoryExtension implements InventoryExtension {
 
 
         inventoryRollbackFlowChain = FlowChain.newChain(InventoryOpContext.class)
-                .addNode(InventoryQueryRecordsFlow.class)
+                .addNode(InventoryRecordsQueryFlow.class)
                 .addNode(InventoryFilteredByRecordsFlow.class)
                 .addNode(InventoryOperateFlow.class)
         ;

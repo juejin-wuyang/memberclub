@@ -18,7 +18,7 @@ import com.memberclub.domain.dataobject.task.OnceTaskDO;
 import com.memberclub.domain.dataobject.task.perform.PerformTaskContentDO;
 import com.memberclub.sdk.perform.extension.period.PeriodPerformExecuteExtension;
 import com.memberclub.sdk.perform.flow.complete.PeriodPerformMessageFlow;
-import com.memberclub.sdk.perform.flow.execute.MemberPerformItemFlow;
+import com.memberclub.sdk.perform.flow.execute.PerformItemCreateFlow;
 import com.memberclub.sdk.perform.flow.execute.PerformItemGrantFlow;
 import com.memberclub.sdk.perform.flow.period.PeriodPerformImmediatePerformFlow;
 import com.memberclub.sdk.perform.flow.period.PeriodPerformResourceLockFlow;
@@ -46,7 +46,7 @@ public class DemoMemberPeriodPerformExecuteExtension implements PeriodPerformExe
                 .addNode(PeriodPerformMessageFlow.class)//构建周期履约消息
                 //编排周期履约流程,按权益类型分别履约
                 .addNodeWithSubNodes(PeriodPerformImmediatePerformFlow.class, PerformItemContext.class,
-                        ImmutableList.of(MemberPerformItemFlow.class, PerformItemGrantFlow.class));
+                        ImmutableList.of(PerformItemCreateFlow.class, PerformItemGrantFlow.class));
 
     }
 

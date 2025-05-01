@@ -43,13 +43,13 @@ public class DemoMemberPurchaseExtension implements PurchaseExtension {
     @PostConstruct
     public void init() {
         submitChain = FlowChain.newChain(PurchaseSubmitContext.class)
-                .addNode(PurchaseLockSubmitFlow.class)
+                .addNode(PurchaseResourceLockSubmitFlow.class)
                 .addNode(PurchaseContextInitalizeSubmitFlow.class)
                 .addNode(PurchaseSubmitCmdValidateSubmitFlow.class)
                 .addNode(PurchaseUserQuotaSubmitFlow.class)           //检查限额
                 //.addNode(PurchaseRenewValidateFlow.class)         //检查续费
                 .addNode(PurchaseInventoryValidateSubmitFlow.class)   //检查库存
-                .addNode(MemberOrderSubmitSubmitFlow.class)           // 会员提单
+                .addNode(MemberOrderSubmitFlow.class)           // 会员提单
                 .addNode(PurchaseNewMemberSubmitFlow.class)         //新会员标记
                 .addNode(PurchaseInventoryOperateSubmitFlow.class)    //扣减库存
                 .addNode(CommonOrderSubmitFlow.class)               //订单系统提单
@@ -63,7 +63,7 @@ public class DemoMemberPurchaseExtension implements PurchaseExtension {
         ;
 
         purchaseCancelFlowChain = FlowChain.newChain(PurchaseCancelContext.class)
-                .addNode(PurchaseLockCancelFlow.class)
+                .addNode(PurchaseResourceLockCancelFlow.class)
                 .addNode(PurchaseOrderCancelFlow.class)
                 .addNode(PurchaseNewMemberCancelFlow.class)
                 .addNode(PurchaseUserQuotaCancelFlow.class)

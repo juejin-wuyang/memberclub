@@ -8,9 +8,9 @@ import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.dataobject.outer.OuterSubmitContext;
 import com.memberclub.sdk.outer.extension.impl.DefaultOuterSubmitExtension;
-import com.memberclub.sdk.outer.flow.OuterSubmitAutoPerformFlow;
 import com.memberclub.sdk.outer.flow.OuterSubmitOrderFlow;
 import com.memberclub.sdk.outer.flow.OuterSubmitRecordFlow;
+import com.memberclub.sdk.outer.flow.Perform4OuterSubmitFlow;
 import com.memberclub.sdk.outer.flow.RedeemExchangeFlow;
 
 import javax.annotation.PostConstruct;
@@ -28,7 +28,7 @@ public class DemoMemberOuterRedeemSubmitExtension extends DefaultOuterSubmitExte
                 .addEmptyNodeWithSubNodes(OuterSubmitSubNode.class, OuterSubmitContext.class,
                         ImmutableList.of(OuterSubmitOrderFlow.class))           //记录外部提单记录，调用提单流程
                 .addEmptyNodeWithSubNodes(OuterSubmitSubNode.class, OuterSubmitContext.class,
-                        ImmutableList.of(OuterSubmitAutoPerformFlow.class))     //调用履约流程
+                        ImmutableList.of(Perform4OuterSubmitFlow.class))     //调用履约流程
         ;
     }
 }

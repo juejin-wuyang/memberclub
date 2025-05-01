@@ -14,7 +14,7 @@ import com.memberclub.common.flow.FlowChainService;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
 import com.memberclub.sdk.perform.extension.reverse.ReversePerformExtension;
-import com.memberclub.sdk.perform.flow.period.reverse.CancelPeriodPerformTaskFlow;
+import com.memberclub.sdk.perform.flow.period.reverse.PeriodPerformTaskCancelFlow;
 import com.memberclub.sdk.perform.flow.reverse.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -38,17 +38,17 @@ public class DefaultReversePerformExtensionImpl implements ReversePerformExtensi
     @PostConstruct
     public void init() {
         subReversePerformChain = FlowChain.newChain(flowChainService, ReversePerformContext.class)
-                .addNode(ReversePerformSubOrderFlow.class)//修改子单的履约状态
-                .addNode(CancelPeriodPerformTaskFlow.class)// 取消周期履约任务
-                .addNodeWithSubNodes(MutilReversePerformItemFlow.class, ReversePerformContext.class,
-                        Lists.newArrayList(ReversePerformItemFlow.class,//逆向履约项
-                                ReverseAssetsFlow.class))//// 逆向资产
+                .addNode(SubOrderReversePerformFlow.class)//修改子单的履约状态
+                .addNode(PeriodPerformTaskCancelFlow.class)// 取消周期履约任务
+                .addNodeWithSubNodes(PerformItemReverse4MutilPeriodCardFlow.class, ReversePerformContext.class,
+                        Lists.newArrayList(PerformItemReverseFlow.class,//逆向履约项
+                                AssetsReverseFlow.class))//// 逆向资产
         ;
 
         reversePerformChain = FlowChain.newChain(flowChainService, ReversePerformContext.class)
-                .addNode(BuildReversePerformInfosFlow.class)//构建逆向履约信息
-                .addNode(MemberOrderReverseDomainFlow.class)//修改主单 的履约状态)
-                .addNodeWithSubNodes(ReversePerformMutilSubOrderFlow.class, subReversePerformChain)
+                .addNode(ReversePerformContextInitializeFlow.class)//构建逆向履约信息
+                .addNode(MemberOrderOnReverseSuccessFlow.class)//修改主单 的履约状态)
+                .addNodeWithSubNodes(ReversePerform4MutilSubOrderFlow.class, subReversePerformChain)
         //addNote 清理 Tasks
         ;
     }

@@ -31,18 +31,18 @@ public class DouyinPkgAftersalePreviewExtension implements AftersalePreviewExten
     @PostConstruct
     public void init() {
         subPreviewChain = FlowChain.newChain(AftersalePreviewContext.class)
-                .addNode(RealtimeCalculateUsageAmountFlow.class)            //实时计算使用类型
+                .addNode(AftersaleUsageAmountCompute4RealtimeCalculateFlow.class)            //实时计算使用类型
                 .addNode(OverallCheckUsageFlow.class)               //完全检查使用类型
-                .addNode(CalculateRefundWayFlow.class)                  //计算赔付类型
-                .addNode(GenerateAftersalePlanDigestFlow.class)         //生成售后计划摘要
+                .addNode(AftersaleRefundWayComputeFlow.class)                  //计算赔付类型
+                .addNode(AftersalePlanDigestGenerateFlow.class)         //生成售后计划摘要
         ;
 
         previewChain = FlowChain.newChain(AftersalePreviewContext.class)
                 .addNode(AftersalePreviewDegradeFlow.class)
                 // TODO: 2025/1/1  //增加售后单 进行中校验,当前存在生效中受理单,不允许预览(数据处于不一致状态,无法获得准确的预览结果),返回特殊错误码
-                .addNode(AftersaleStatusCheckFlow.class)
-                .addNode(AftersaleGetAndCheckPeriodFlow.class)
-                .addNode(GetAndCheckAftersaleTimesFlow.class)
+                .addNode(AftersaleOrderMainStatusValidatePreviewFlow.class)
+                .addNode(AftersalePeriodValidateFlow.class)
+                .addNode(AftersaleTimesValidateFlow.class)
                 .addNodeWithSubNodes(MutilSubOrderPreviewFlow.class, subPreviewChain)
         ;
     }

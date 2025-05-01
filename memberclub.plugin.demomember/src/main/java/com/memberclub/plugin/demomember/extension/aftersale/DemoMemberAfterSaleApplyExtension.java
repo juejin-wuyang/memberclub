@@ -15,17 +15,8 @@ import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.dataobject.aftersale.AftersaleOrderDO;
 import com.memberclub.sdk.aftersale.extension.apply.AfterSaleApplyExtension;
-import com.memberclub.sdk.aftersale.flow.apply.AfterSalePlanDigestCheckFlow;
-import com.memberclub.sdk.aftersale.flow.apply.AftersaleApplyLockFlow;
-import com.memberclub.sdk.aftersale.flow.apply.AftersaleApplyPreviewFlow;
-import com.memberclub.sdk.aftersale.flow.apply.AftersaleDoApplyFlow;
-import com.memberclub.sdk.aftersale.flow.apply.AftersaleGenerateOrderFlow;
-import com.memberclub.sdk.aftersale.flow.doapply.AftersaleAsyncRollbackFlow;
-import com.memberclub.sdk.aftersale.flow.doapply.AftersaleOrderDomainFlow;
-import com.memberclub.sdk.aftersale.flow.doapply.AftersaleRefundOrderFlow;
-import com.memberclub.sdk.aftersale.flow.doapply.AftersaleReversePerformFlow;
-import com.memberclub.sdk.aftersale.flow.doapply.AftersaleReversePurchaseFlow;
-import com.memberclub.sdk.aftersale.flow.doapply.MemberOrderRefundSuccessFlow;
+import com.memberclub.sdk.aftersale.flow.apply.*;
+import com.memberclub.sdk.aftersale.flow.doapply.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -51,20 +42,20 @@ public class DemoMemberAfterSaleApplyExtension implements AfterSaleApplyExtensio
     @PostConstruct
     public void init() {
         applyFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
-                .addNode(AftersaleApplyLockFlow.class)     //加锁
+                .addNode(AftersaleResourceLockFlow.class)     //加锁
                 .addNode(AftersaleApplyPreviewFlow.class)       //售后预览
                 .addNode(AfterSalePlanDigestCheckFlow.class)    //校验售后计划摘要
-                .addNode(AftersaleGenerateOrderFlow.class)      //生成售后单
+                .addNode(AftersaleOrderGenerateFlow.class)      //生成售后单
                 .addNode(AftersaleDoApplyFlow.class)
         ;
 
         doApplyFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
-                .addNode(AftersaleOrderDomainFlow.class)
-                .addNode(MemberOrderRefundSuccessFlow.class) //售后成功后, 更新主单子单的状态为成功
+                .addNode(AftersaleOrderApplyFlow.class)
+                .addNode(MemberOrderOnRefundSuccessFlow.class) //售后成功后, 更新主单子单的状态为成功
                 .addNode(AftersaleAsyncRollbackFlow.class)
                 .addNode(AftersaleReversePerformFlow.class)
                 .addNode(AftersaleReversePurchaseFlow.class)
-                .addNode(AftersaleRefundOrderFlow.class)
+                .addNode(AftersaleOrderRefundFlow.class)
         //.addNode()
         ;
 

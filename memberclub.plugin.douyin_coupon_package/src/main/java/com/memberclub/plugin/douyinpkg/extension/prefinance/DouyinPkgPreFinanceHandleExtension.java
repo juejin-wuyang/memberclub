@@ -43,9 +43,9 @@ public class DouyinPkgPreFinanceHandleExtension implements PreFinanceHandleExten
     @PostConstruct
     public void init() {
         FlowChain<PreFinanceContext> performChain = FlowChain.newChain(PreFinanceContext.class)
-                .addNode(PreFinanceBuildMemberOrderFlow.class)
+                .addNode(PreFinanceMemberOrderInfoBuildFlow.class)
                 .addNode(PreFinanceBuildPerformItemsFlow.class)
-                .addNode(PreFinanceQueryAssetsFlow.class)
+                .addNode(PreFinanceAssetsQueryFlow.class)
                 .addNode(PreFinancePublishEventFlow.class)
                 .addNode(PreFinanceCreateExpiredTaskFlow.class)
                 //
@@ -53,26 +53,26 @@ public class DouyinPkgPreFinanceHandleExtension implements PreFinanceHandleExten
 
 
         FlowChain<PreFinanceContext> freezeChain = FlowChain.newChain(PreFinanceContext.class)
-                .addNode(PreFinanceBuildMemberOrderFlow.class)
+                .addNode(PreFinanceMemberOrderInfoBuildFlow.class)
                 .addNode(PreFinanceBuildPerformItemsFlow.class)
-                .addNode(PreFinanceQueryAssetsFlow.class)
+                .addNode(PreFinanceAssetsQueryFlow.class)
                 .addNode(PreFinancePublishEventFlow.class)
                 //.addNode()
                 ;
 
 
         FlowChain<PreFinanceContext> refundChain = FlowChain.newChain(PreFinanceContext.class)
-                .addNode(PreFinanceBuildMemberOrderFlow.class)
+                .addNode(PreFinanceMemberOrderInfoBuildFlow.class)
                 .addNode(PreFinanceBuildPerformItemsFlow.class)
-                .addNode(PreFinanceQueryAssetsFlow.class)
+                .addNode(PreFinanceAssetsQueryFlow.class)
                 .addNode(PreFinancePublishEventFlow.class)
                 //.addNode()
                 ;
 
         FlowChain<PreFinanceContext> expireChain = FlowChain.newChain(PreFinanceContext.class)
-                .addNode(PreFinanceBuildMemberOrderFlow.class)
+                .addNode(PreFinanceMemberOrderInfoBuildFlow.class)
                 .addNode(PreFinanceBuildPerformItemsFlow.class)
-                .addNode(PreFinanceQueryAssetsFlow.class)
+                .addNode(PreFinanceAssetsQueryFlow.class)
                 .addNode(PreFinancePublishEventFlow.class)
                 //.addNode()
                 ;

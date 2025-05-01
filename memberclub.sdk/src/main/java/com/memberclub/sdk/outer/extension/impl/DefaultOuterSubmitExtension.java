@@ -10,9 +10,9 @@ import com.memberclub.domain.entity.trade.OuterSubmitRecord;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.mybatis.mappers.trade.OuterSubmitRecordDao;
 import com.memberclub.sdk.outer.extension.OuterSubmitExtension;
-import com.memberclub.sdk.outer.flow.OuterSubmitAutoPerformFlow;
 import com.memberclub.sdk.outer.flow.OuterSubmitOrderFlow;
 import com.memberclub.sdk.outer.flow.OuterSubmitRecordFlow;
+import com.memberclub.sdk.outer.flow.Perform4OuterSubmitFlow;
 import com.memberclub.sdk.outer.service.OuterSubmitDataObjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -33,7 +33,7 @@ public abstract class DefaultOuterSubmitExtension implements OuterSubmitExtensio
                 .addEmptyNodeWithSubNodes(OuterSubmitSubNode.class, OuterSubmitContext.class,
                         ImmutableList.of(OuterSubmitOrderFlow.class))           //记录外部提单记录，调用提单流程
                 .addEmptyNodeWithSubNodes(OuterSubmitSubNode.class, OuterSubmitContext.class,
-                        ImmutableList.of(OuterSubmitAutoPerformFlow.class))     //调用履约流程
+                        ImmutableList.of(Perform4OuterSubmitFlow.class))     //调用履约流程
         ;
     }
 

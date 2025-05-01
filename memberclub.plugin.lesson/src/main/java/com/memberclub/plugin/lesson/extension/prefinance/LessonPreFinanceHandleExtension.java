@@ -17,8 +17,8 @@ import com.memberclub.domain.dataobject.event.trade.TradeEventDO;
 import com.memberclub.domain.dataobject.event.trade.TradeEventEnum;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.sdk.prefinance.extension.PreFinanceHandleExtension;
-import com.memberclub.sdk.prefinance.flow.PreFinanceBuildMemberOrderFlow;
 import com.memberclub.sdk.prefinance.flow.PreFinanceBuildPerformItemsFlow;
+import com.memberclub.sdk.prefinance.flow.PreFinanceMemberOrderInfoBuildFlow;
 import com.memberclub.sdk.prefinance.flow.PreFinancePublishEventFlow;
 
 import javax.annotation.PostConstruct;
@@ -46,7 +46,7 @@ public class LessonPreFinanceHandleExtension implements PreFinanceHandleExtensio
         //采用直线摊销法，按天确收。
 
         FlowChain<PreFinanceContext> performChain = FlowChain.newChain(PreFinanceContext.class)
-                .addNode(PreFinanceBuildMemberOrderFlow.class)
+                .addNode(PreFinanceMemberOrderInfoBuildFlow.class)
                 .addNode(PreFinanceBuildPerformItemsFlow.class)
                 //.addNode(PreFinanceQueryAssetsFlow.class)
                 .addNode(PreFinancePublishEventFlow.class)
@@ -56,7 +56,7 @@ public class LessonPreFinanceHandleExtension implements PreFinanceHandleExtensio
 
 
         FlowChain<PreFinanceContext> freezeChain = FlowChain.newChain(PreFinanceContext.class)
-                .addNode(PreFinanceBuildMemberOrderFlow.class)
+                .addNode(PreFinanceMemberOrderInfoBuildFlow.class)
                 .addNode(PreFinanceBuildPerformItemsFlow.class)
                 //.addNode(PreFinanceQueryAssetsFlow.class)
                 .addNode(PreFinancePublishEventFlow.class)
@@ -65,7 +65,7 @@ public class LessonPreFinanceHandleExtension implements PreFinanceHandleExtensio
 
 
         FlowChain<PreFinanceContext> refundChain = FlowChain.newChain(PreFinanceContext.class)
-                .addNode(PreFinanceBuildMemberOrderFlow.class)
+                .addNode(PreFinanceMemberOrderInfoBuildFlow.class)
                 .addNode(PreFinanceBuildPerformItemsFlow.class)
                 //.addNode(PreFinanceQueryAssetsFlow.class)
                 .addNode(PreFinancePublishEventFlow.class)
@@ -73,7 +73,7 @@ public class LessonPreFinanceHandleExtension implements PreFinanceHandleExtensio
                 ;
 
         FlowChain<PreFinanceContext> expireChain = FlowChain.newChain(PreFinanceContext.class)
-                .addNode(PreFinanceBuildMemberOrderFlow.class)
+                .addNode(PreFinanceMemberOrderInfoBuildFlow.class)
                 .addNode(PreFinanceBuildPerformItemsFlow.class)
                 //.addNode(PreFinanceQueryAssetsFlow.class)
                 .addNode(PreFinancePublishEventFlow.class)
