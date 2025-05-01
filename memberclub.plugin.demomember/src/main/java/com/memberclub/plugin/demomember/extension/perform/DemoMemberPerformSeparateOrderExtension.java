@@ -37,12 +37,12 @@ public class DemoMemberPerformSeparateOrderExtension implements PerformSeparateO
     @PostConstruct
     public void run() throws Exception {
         performSeparateOrderChain = FlowChain.newChain(flowChainService, PerformContext.class)
-                .addNode(InitialSkuPerformContextsFlow.class)
-                .addNode(MutilBuyCountClonePerformItemFlow.class)
+                .addNode(PerformContextsInitializeFlow.class)       // 履约上下文初始化
+                .addNode(PerformItemClone4BuyCountFlow.class)       // 履约项克隆，用于多份数购买场景
                 //如果年卡周期是自然月,则可以在此处根据当前期数计算每期的天数
-                .addNode(CalculateImmediatePerformItemPeriodFlow.class)//计算立即履约项 时间周期
-                .addNode(CalculateOrderPeriodFlow.class)//计算订单整体有效期
-                .addNode(PerformContextExtraInfoBuildFlow.class)// 构建扩展属性
+                .addNode(PeriodCompute4ImmediatePerformItemFlow.class)//计算立即履约项 时间周期
+                .addNode(PeriodCompute4WholeOrderFlow.class)        //计算订单整体有效期
+                .addNode(PerformContextExtraInfoBuildFlow.class)    // 构建扩展属性
         ;
     }
 

@@ -14,13 +14,7 @@ import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.sdk.perform.extension.build.PerformSeparateOrderExtension;
-import com.memberclub.sdk.perform.flow.build.CalculateDelayPerformItemPeriodFlow;
-import com.memberclub.sdk.perform.flow.build.CalculateImmediatePerformItemPeriodFlow;
-import com.memberclub.sdk.perform.flow.build.CalculateOrderPeriodFlow;
-import com.memberclub.sdk.perform.flow.build.InitialSkuPerformContextsFlow;
-import com.memberclub.sdk.perform.flow.build.MutilBuyCountClonePerformItemFlow;
-import com.memberclub.sdk.perform.flow.build.MutilPeriodMemberClonePerformItemFlow;
-import com.memberclub.sdk.perform.flow.build.PerformContextExtraInfoBuildFlow;
+import com.memberclub.sdk.perform.flow.build.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -42,13 +36,13 @@ public class DemoMemberPerformSeparateOrderForMutilPeriodCardExtension implement
     @PostConstruct
     public void run() throws Exception {
         buildPerformContextChain = FlowChain.newChain(flowChainService, PerformContext.class)
-                .addNode(InitialSkuPerformContextsFlow.class)
-                .addNode(MutilBuyCountClonePerformItemFlow.class)
+                .addNode(PerformContextsInitializeFlow.class)
+                .addNode(PerformItemClone4BuyCountFlow.class)
                 .addNode(MutilPeriodMemberClonePerformItemFlow.class)
                 //如果年卡周期是自然月,则可以在此处根据当前期数计算每期的天数
-                .addNode(CalculateImmediatePerformItemPeriodFlow.class)//计算立即履约项 时间周期
+                .addNode(PeriodCompute4ImmediatePerformItemFlow.class)//计算立即履约项 时间周期
                 .addNode(CalculateDelayPerformItemPeriodFlow.class)//计算延迟履约项 时间周期
-                .addNode(CalculateOrderPeriodFlow.class)//计算订单整体有效期
+                .addNode(PeriodCompute4WholeOrderFlow.class)//计算订单整体有效期
                 .addNode(PerformContextExtraInfoBuildFlow.class)// 构建扩展属性
         ;
     }

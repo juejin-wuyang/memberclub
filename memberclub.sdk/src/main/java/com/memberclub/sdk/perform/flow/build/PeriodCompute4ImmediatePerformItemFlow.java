@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
  * author: 掘金五阳
  */
 @Service
-public class CalculateImmediatePerformItemPeriodFlow extends FlowNode<PerformContext> {
+public class PeriodCompute4ImmediatePerformItemFlow extends FlowNode<PerformContext> {
 
 
     @Autowired

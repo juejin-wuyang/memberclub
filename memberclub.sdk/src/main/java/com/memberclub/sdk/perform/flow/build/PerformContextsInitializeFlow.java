@@ -25,7 +25,7 @@ import java.util.List;
  * author: 掘金五阳
  */
 @Service
-public class InitialSkuPerformContextsFlow extends FlowNode<PerformContext> {
+public class PerformContextsInitializeFlow extends FlowNode<PerformContext> {
 
     @Autowired
     private ExtensionManager extensionManager;

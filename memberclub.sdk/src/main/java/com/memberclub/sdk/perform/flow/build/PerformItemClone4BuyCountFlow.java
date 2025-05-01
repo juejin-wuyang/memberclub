@@ -20,7 +20,7 @@ import java.util.List;
  * author: 掘金五阳
  */
 @Service
-public class MutilBuyCountClonePerformItemFlow extends FlowNode<PerformContext> {
+public class PerformItemClone4BuyCountFlow extends FlowNode<PerformContext> {
 
     @Override
     public void process(PerformContext context) {

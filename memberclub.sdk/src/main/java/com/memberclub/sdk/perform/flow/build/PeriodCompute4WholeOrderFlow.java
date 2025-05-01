@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * author: 掘金五阳
  */
 @Service
-public class CalculateOrderPeriodFlow extends FlowNode<PerformContext> {
+public class PeriodCompute4WholeOrderFlow extends FlowNode<PerformContext> {
     @Autowired
     private ExtensionManager extensionManager;
 
