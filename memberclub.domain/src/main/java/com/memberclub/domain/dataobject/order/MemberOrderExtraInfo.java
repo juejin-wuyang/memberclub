@@ -25,5 +25,5 @@ public class MemberOrderExtraInfo {
 
     private Long lockValue;
 
-    private Long renewStime;
+    private Long startTime;
 }

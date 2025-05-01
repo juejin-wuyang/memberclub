@@ -55,6 +55,7 @@ public class QuotaDomainService {
         quotaExtensionContext.setUserId(userId);
         quotaExtensionContext.setBizType(context.getBizType());
         quotaExtensionContext.setOpType(UserTagOpTypeEnum.GET);
+        quotaExtensionContext.setStartTime(context.getStartTime());
 
         List<SkuAndRestrictInfo> skuAndRestrictInfos = Lists.newArrayList();
         for (SkuInfoDO skuInfoDO : context.getSkuInfos()) {
@@ -66,8 +67,9 @@ public class QuotaDomainService {
         }
         quotaExtensionContext.setSkus(skuAndRestrictInfos);
 
-        extensionManager.getExtension(BizScene.of(context.getBizType()),
-                QuotaExtension.class).buildUserTagOp(quotaExtensionContext);
+        QuotaExtension quotaExtension = extensionManager.getExtension(BizScene.of(context.getBizType()),
+                QuotaExtension.class);
+        quotaExtension.buildUserTagOp(quotaExtensionContext);
         List<UserTagOpDO> usertagOps = quotaExtensionContext.getUserTagOpDOList();
 
         if (CollectionUtils.isEmpty(usertagOps)) {
@@ -122,6 +124,7 @@ public class QuotaDomainService {
         quotaExtensionContext.setUserId(userId);
         quotaExtensionContext.setBizType(context.getBizType());
         quotaExtensionContext.setOpType(UserTagOpTypeEnum.ADD);
+        quotaExtensionContext.setStartTime(context.getStartTime());
         List<SkuAndRestrictInfo> skuAndRestrictInfos = Lists.newArrayList();
         for (MemberSubOrderDO subOrder : context.getMemberOrder().getSubOrders()) {
             SkuAndRestrictInfo skuAndRestrictInfo = new SkuAndRestrictInfo();
@@ -133,8 +136,10 @@ public class QuotaDomainService {
         quotaExtensionContext.setSkus(skuAndRestrictInfos);
 
 
-        extensionManager.getExtension(BizScene.of(context.getBizType()),
-                QuotaExtension.class).buildUserTagOp(quotaExtensionContext);
+        QuotaExtension quotaExtension = extensionManager.getExtension(
+                BizScene.of(context.getBizType()), QuotaExtension.class);
+        quotaExtension.buildUserTagOp(quotaExtensionContext);
+
         List<UserTagOpDO> usertagOps = quotaExtensionContext.getUserTagOpDOList();
 
         if (CollectionUtils.isEmpty(usertagOps)) {
@@ -165,10 +170,12 @@ public class QuotaDomainService {
         cmd.setUniqueKey(memberOrderDO.getTradeId());
         cmd.setOpType(UserTagOpTypeEnum.DEL);
 
-        QuotaExtensionContext quotaExtensionContext = buildQuotaExtensionContext(memberOrderDO, userId);
+        QuotaExtensionContext quotaExtensionContext = buildQuotaExtensionContext4AfterSubmit(memberOrderDO, userId);
 
-        extensionManager.getExtension(BizScene.of(memberOrderDO.getBizType()),
-                QuotaExtension.class).buildUserTagOp(quotaExtensionContext);
+        QuotaExtension quotaExtension = extensionManager.getExtension(BizScene.of(memberOrderDO.getBizType()),
+                QuotaExtension.class);
+        quotaExtension.buildUserTagOp(quotaExtensionContext);
+
         List<UserTagOpDO> usertagOps = quotaExtensionContext.getUserTagOpDOList();
 
         if (CollectionUtils.isEmpty(usertagOps)) {
@@ -188,11 +195,12 @@ public class QuotaDomainService {
         }
     }
 
-    private QuotaExtensionContext buildQuotaExtensionContext(MemberOrderDO memberOrderDO, long userId) {
+    private QuotaExtensionContext buildQuotaExtensionContext4AfterSubmit(MemberOrderDO memberOrderDO, long userId) {
         QuotaExtensionContext quotaExtensionContext = new QuotaExtensionContext();
         quotaExtensionContext.setUserId(userId);
         quotaExtensionContext.setOpType(UserTagOpTypeEnum.DEL);
         quotaExtensionContext.setBizType(memberOrderDO.getBizType());
+        quotaExtensionContext.setStartTime(memberOrderDO.getStime());
 
         List<SkuAndRestrictInfo> skuAndRestrictInfos = Lists.newArrayList();
         for (MemberSubOrderDO subOrder : memberOrderDO.getSubOrders()) {
@@ -220,7 +228,7 @@ public class QuotaDomainService {
         cmd.setUniqueKey(memberOrderDO.getTradeId());
         cmd.setOpType(UserTagOpTypeEnum.DEL);
 
-        QuotaExtensionContext quotaExtensionContext = buildQuotaExtensionContext(memberOrderDO, userId);
+        QuotaExtensionContext quotaExtensionContext = buildQuotaExtensionContext4AfterSubmit(memberOrderDO, userId);
         extensionManager.getExtension(BizScene.of(quotaExtensionContext.getBizType()),
                 QuotaExtension.class).buildUserTagOp(quotaExtensionContext);
         List<UserTagOpDO> usertagOps = quotaExtensionContext.getUserTagOpDOList();

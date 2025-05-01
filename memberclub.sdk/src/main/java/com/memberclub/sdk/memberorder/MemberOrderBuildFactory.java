@@ -74,8 +74,8 @@ public class MemberOrderBuildFactory {
     public MemberOrderDO build(PurchaseSubmitContext context) {
         MemberOrderDO order = new MemberOrderDO();
         order.setBizType(context.getBizType());
-        order.setCtime(TimeUtil.now());
-        order.setUtime(TimeUtil.now());
+        order.setCtime(context.getStartTime());
+        order.setUtime(order.getCtime());
         order.setLocationInfo(context.getSubmitCmd().getLocationInfo());
         order.setOrderInfo(new OrderInfoDO());
         order.setTradeId(idGenerator.generateId(IdTypeEnum.PURCHASE_TRADE).toString());
@@ -93,9 +93,7 @@ public class MemberOrderBuildFactory {
         order.getExtra().setSettleInfo(order.getSettleInfo());
         order.getExtra().setSaleInfo(order.getSaleInfo());
         order.getExtra().setLockValue(context.getLockValue());
-        if (context.getRenewStime() != null) {
-            order.getExtra().setRenewStime(context.getRenewStime());
-        }
+        order.getExtra().setStartTime(context.getStartTime());
 
         extensionManager.getExtension(context.toDefaultBizScene(),
                 PurchaseOrderBuildExtension.class).buildOrder(order, context);

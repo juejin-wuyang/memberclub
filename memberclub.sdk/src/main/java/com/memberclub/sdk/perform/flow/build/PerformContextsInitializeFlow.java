@@ -54,8 +54,8 @@ public class PerformContextsInitializeFlow extends FlowNode<PerformContext> {
         }
         context.setSubOrderPerformContexts(subOrderPerformContexts);
         if (context.getBaseTime() == 0) {
-            if (context.getMemberOrder().getExtra().getRenewStime() != null) {
-                context.setBaseTime(context.getMemberOrder().getExtra().getRenewStime());
+            if (context.getMemberOrder().getExtra().getStartTime() != null) {
+                context.setBaseTime(context.getMemberOrder().getExtra().getStartTime());
             } else {
                 context.setBaseTime(TimeUtil.now());
             }

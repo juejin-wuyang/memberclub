@@ -11,7 +11,6 @@ import com.memberclub.common.annotation.Route;
 import com.memberclub.common.extension.ExtensionProvider;
 import com.memberclub.common.util.PeriodUtils;
 import com.memberclub.common.util.TimeRange;
-import com.memberclub.common.util.TimeUtil;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.context.usertag.UserTagKeyEnum;
 import com.memberclub.domain.context.usertag.UserTagOpDO;
@@ -33,6 +32,12 @@ import java.util.List;
 })
 public class DefaultQuotaExtension implements QuotaExtension {
 
+    public static final String TOTAL = "total";
+
+    public static String buildPair(UserTagKeyEnum tagKey, Object value) {
+        return String.format("%s:%s", tagKey.getName(), value.toString());
+    }
+
     @Override
     public void buildUserTagOp(QuotaExtensionContext context) {
         List<UserTagOpDO> usertagOps = null;
@@ -44,7 +49,6 @@ public class DefaultQuotaExtension implements QuotaExtension {
         }
         context.setUserTagOpDOList(usertagOps);
     }
-
 
     private List<UserTagOpDO> extractAndLoadUserTag(QuotaExtensionContext context) {
         long userId = context.getUserId();
@@ -100,7 +104,7 @@ public class DefaultQuotaExtension implements QuotaExtension {
                                          SkuAndRestrictInfo skuInfoDO, SkuRestrictItem restrictItem, List<String> pairs) {
         if (restrictItem.getItemType() != null) {
             if (restrictItem.getItemType() == RestrictItemType.TOTAL) {
-                pairs.add(buildPair(UserTagKeyEnum.ITEM_TYPE, "total"));
+                pairs.add(buildPair(UserTagKeyEnum.ITEM_TYPE, TOTAL));
             }
             if (restrictItem.getItemType() == RestrictItemType.SKU) {
                 pairs.add(buildPair(UserTagKeyEnum.ITEM_TYPE, skuInfoDO.getSkuId()));
@@ -111,15 +115,11 @@ public class DefaultQuotaExtension implements QuotaExtension {
     private void extractAndLoadPeriodTypesAndLoadExpiredTime(QuotaExtensionContext context, SkuRestrictItem restrictItem, List<String> pairs, UserTagOpDO userTagOpDO) {
         if (restrictItem.getPeriodType() != null) {
             if (restrictItem.getPeriodType() == RestrictPeriodType.TOTAL) {
-                pairs.add(buildPair(UserTagKeyEnum.PERIOD_TYPE, "total"));
+                pairs.add(buildPair(UserTagKeyEnum.PERIOD_TYPE, TOTAL));
                 TimeRange timeRange = PeriodUtils.buildTimeRangeFromBaseTime(restrictItem.getPeriodCount());
-                userTagOpDO.setExpireSeconds(timeRange.getEtime() - TimeUtil.now());
+                userTagOpDO.setExpireSeconds(timeRange.getEtime() - context.getStartTime());
             }
         }
-    }
-
-    public static String buildPair(UserTagKeyEnum tagKey, Object value) {
-        return String.format("%s:%s", tagKey.getName(), value.toString());
     }
 
 }

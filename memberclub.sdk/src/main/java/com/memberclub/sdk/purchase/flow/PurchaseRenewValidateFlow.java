@@ -18,6 +18,6 @@ public class PurchaseRenewValidateFlow extends FlowNode<PurchaseSubmitContext> {
 
         renewDomainService.validateRenewTimes(context);
 
-        renewDomainService.generateRenewOrderStartTime(context);
+        renewDomainService.generateStartTime4RenewOrder(context);
     }
 }

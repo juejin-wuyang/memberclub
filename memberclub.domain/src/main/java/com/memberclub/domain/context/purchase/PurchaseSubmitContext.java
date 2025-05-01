@@ -41,7 +41,7 @@ public class PurchaseSubmitContext {
     private MemberOrderDO memberOrder;
     private List<SkuInfoDO> skuInfos;
 
-    private Long renewStime;
+    private Long startTime;
 
     /***
      * 待生效或生效中订单

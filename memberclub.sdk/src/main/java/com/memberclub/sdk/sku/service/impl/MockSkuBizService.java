@@ -42,7 +42,7 @@ public class MockSkuBizService implements SkuBizService {
     @Autowired
     private MemberSkuDataObjectFactory memberSkuDataObjectFactory;
 
-    @Scheduled(fixedDelay = 60000, initialDelay = 1000)
+    @Scheduled(fixedDelay = 600000, initialDelay = 1000)
     public void init() {
         List<SkuInfoDO> skus = skuDomainService.queryAllSkus();
         for (SkuInfoDO skuInfoDO : skus) {

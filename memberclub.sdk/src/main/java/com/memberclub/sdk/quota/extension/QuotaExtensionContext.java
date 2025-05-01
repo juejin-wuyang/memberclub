@@ -20,14 +20,11 @@ import java.util.List;
 @Data
 public class QuotaExtensionContext {
     long userId;
-
-    private BizTypeEnum bizType;
-
     List<SkuAndRestrictInfo> skus;
-
-    private MemberOrderDO memberOrderDO;
-
-    private UserTagOpTypeEnum opType;
-
     List<UserTagOpDO> userTagOpDOList;
+    private BizTypeEnum bizType;
+    private MemberOrderDO memberOrderDO;
+    private UserTagOpTypeEnum opType;
+    //限额的开始时间
+    private long startTime;
 }

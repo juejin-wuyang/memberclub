@@ -60,13 +60,13 @@ public class RenewDomainService {
         }
     }
 
-    public void generateRenewOrderStartTime(PurchaseSubmitContext context) {
+    public void generateStartTime4RenewOrder(PurchaseSubmitContext context) {
         long stime = TimeUtil.now();
         for (MemberOrderDO order : context.getNonExpiredMemberOrderDOS()) {
             if (order.getEtime() + 1 > stime) {
                 stime = order.getEtime() + 1;
             }
         }
-        context.setRenewStime(stime);
+        context.setStartTime(stime);
     }
 }

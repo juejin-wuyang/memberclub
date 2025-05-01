@@ -39,7 +39,7 @@ public class DouyinPkgPurchaseExtension implements PurchaseExtension {
     public void init() {
         submitChain = FlowChain.newChain(PurchaseSubmitContext.class)
                 .addNode(PurchaseLockSubmitFlow.class)
-                .addNode(PurchaseSkuInfoInitalSubmitFlow.class)
+                .addNode(PurchaseContextInitalizeSubmitFlow.class)
                 .addNode(PurchaseSubmitCmdValidateSubmitFlow.class)
                 .addNode(PurchaseUserQuotaSubmitFlow.class)                       //检查限额
                 //.addNode(PurchaseValidateInventoryFlow.class)               //检查库存
