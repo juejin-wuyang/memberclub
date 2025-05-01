@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  * author: 掘金五阳
  */
 @Service
-public class PurchaseMarkNewMemberFlow extends FlowNode<PurchaseSubmitContext> {
+public class PurchaseNewMemberSubmitFlow extends FlowNode<PurchaseSubmitContext> {
 
     @Autowired
     private NewMemberDomainService newMemberDomainService;

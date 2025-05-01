@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
  * author: 掘金五阳
  */
 @Service
-public class PurchaseValidateInventoryFlow extends FlowNode<PurchaseSubmitContext> {
+public class PurchaseInventoryValidateSubmitFlow extends FlowNode<PurchaseSubmitContext> {
 
     @Autowired
     private InventoryBizService inventoryBizService;

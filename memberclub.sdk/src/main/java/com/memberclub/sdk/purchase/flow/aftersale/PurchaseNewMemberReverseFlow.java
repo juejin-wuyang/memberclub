@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  * author: 掘金五阳
  */
 @Service
-public class PurchaseReverseNewMemberFlow extends FlowNode<AfterSaleApplyContext> {
+public class PurchaseNewMemberReverseFlow extends FlowNode<AfterSaleApplyContext> {
 
     @Autowired
     private NewMemberDomainService newMemberDomainService;

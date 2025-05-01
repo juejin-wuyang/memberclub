@@ -23,13 +23,13 @@ import org.springframework.stereotype.Service;
  * author: 掘金五阳
  */
 @Service
-public class PurchaseOperateInventoryFlow extends FlowNode<PurchaseSubmitContext> {
+public class PurchaseInventoryOperateSubmitFlow extends FlowNode<PurchaseSubmitContext> {
 
     @Autowired
     private InventoryBizService inventoryBizService;
 
     @Autowired
-    private PurchaseOperateInventoryFlow purchaseOperateInventoryFlow;
+    private PurchaseInventoryOperateSubmitFlow purchaseInventoryOperateSubmitFlow;
 
     @Autowired
     private PurchaseDataObjectFactory purchaseDataObjectFactory;
@@ -41,7 +41,7 @@ public class PurchaseOperateInventoryFlow extends FlowNode<PurchaseSubmitContext
         InventoryOpResponse response = inventoryBizService.operateSkuInventory(cmd);
         if (response.isNeedRetry()) {
             CommonLog.error("库存扣减操作需要重试 response:{} cmd:{}", response, cmd);
-            purchaseOperateInventoryFlow.retryOperate(cmd);
+            purchaseInventoryOperateSubmitFlow.retryOperate(cmd);
         }
 
         if (!response.isSuccess()) {
@@ -52,11 +52,11 @@ public class PurchaseOperateInventoryFlow extends FlowNode<PurchaseSubmitContext
     @Override
     public void rollback(PurchaseSubmitContext context, Exception e) {
         InventoryOpCmd inventoryOpCmd = purchaseDataObjectFactory.toInventoryOpCmd(context, InventoryOpTypeEnum.ROLLBACK);
-        
+
         InventoryOpResponse response = inventoryBizService.operateSkuInventory(inventoryOpCmd);
         if (response.isNeedRetry()) {
             CommonLog.error("库存回补操作需要重试 response:{} cmd:{}", response, inventoryOpCmd);
-            purchaseOperateInventoryFlow.retryOperate(inventoryOpCmd);
+            purchaseInventoryOperateSubmitFlow.retryOperate(inventoryOpCmd);
         }
 
         if (!response.isSuccess()) {

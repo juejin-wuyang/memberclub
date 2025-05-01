@@ -38,8 +38,7 @@ import java.util.Map;
 @DS("tradeDataSource")
 @Service
 public class PerformDomainService {
-
-
+    
     @Autowired
     private MemberPerformItemDao memberPerformItemDao;
 

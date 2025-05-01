@@ -21,7 +21,7 @@ import java.util.List;
  * author: 掘金五阳
  */
 @Service
-public class SkuInfoInitalSubmitFlow extends FlowNode<PurchaseSubmitContext> {
+public class PurchaseSkuInfoInitalSubmitFlow extends FlowNode<PurchaseSubmitContext> {
 
     @Autowired
     private SkuBizService skuBizService;

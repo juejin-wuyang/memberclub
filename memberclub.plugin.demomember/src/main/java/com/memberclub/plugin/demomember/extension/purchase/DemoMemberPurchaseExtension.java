@@ -18,9 +18,9 @@ import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.purchase.extension.PurchaseExtension;
 import com.memberclub.sdk.purchase.flow.*;
-import com.memberclub.sdk.purchase.flow.aftersale.PurchaseReverseInventoryFlow;
-import com.memberclub.sdk.purchase.flow.aftersale.PurchaseReverseMemberQuotaFlow;
-import com.memberclub.sdk.purchase.flow.aftersale.PurchaseReverseNewMemberFlow;
+import com.memberclub.sdk.purchase.flow.aftersale.PurchaseInventoryOperateReverseFlow;
+import com.memberclub.sdk.purchase.flow.aftersale.PurchaseMemberQuotaReverseFlow;
+import com.memberclub.sdk.purchase.flow.aftersale.PurchaseNewMemberReverseFlow;
 import com.memberclub.sdk.purchase.flow.cancel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,31 +43,31 @@ public class DemoMemberPurchaseExtension implements PurchaseExtension {
     @PostConstruct
     public void init() {
         submitChain = FlowChain.newChain(PurchaseSubmitContext.class)
-                .addNode(PurchaseSubmitLockFlow.class)
-                .addNode(SkuInfoInitalSubmitFlow.class)
-                .addNode(PurchaseSubmitCmdValidateFlow.class)
-                .addNode(PurchaseUserQuotaFlow.class)           //检查限额
-                //.addNode(PurchaseRenewValidateFlow.class)     //检查续费
-                .addNode(PurchaseValidateInventoryFlow.class)   //检查库存
-                .addNode(MemberOrderSubmitFlow.class)           // 会员提单
-                .addNode(PurchaseMarkNewMemberFlow.class)       //新会员标记
-                .addNode(PurchaseOperateInventoryFlow.class)    //扣减库存
-                .addNode(CommonOrderSubmitFlow.class)           //订单系统提单
+                .addNode(PurchaseLockSubmitFlow.class)
+                .addNode(PurchaseSkuInfoInitalSubmitFlow.class)
+                .addNode(PurchaseSubmitCmdValidateSubmitFlow.class)
+                .addNode(PurchaseUserQuotaSubmitFlow.class)           //检查限额
+                //.addNode(PurchaseRenewValidateFlow.class)         //检查续费
+                .addNode(PurchaseInventoryValidateSubmitFlow.class)   //检查库存
+                .addNode(MemberOrderSubmitSubmitFlow.class)           // 会员提单
+                .addNode(PurchaseNewMemberSubmitFlow.class)         //新会员标记
+                .addNode(PurchaseInventoryOperateSubmitFlow.class)    //扣减库存
+                .addNode(CommonOrderSubmitFlow.class)               //订单系统提单
         ;
 
         purchaseReverseChain = FlowChain.newChain(AfterSaleApplyContext.class)
-                .addNode(PurchaseReverseNewMemberFlow.class)
-                .addNode(PurchaseReverseInventoryFlow.class)
-                .addNode(PurchaseReverseMemberQuotaFlow.class)
+                .addNode(PurchaseNewMemberReverseFlow.class)
+                .addNode(PurchaseInventoryOperateReverseFlow.class)
+                .addNode(PurchaseMemberQuotaReverseFlow.class)
         //
         ;
 
         purchaseCancelFlowChain = FlowChain.newChain(PurchaseCancelContext.class)
-                .addNode(PurchaseCancelLockFlow.class)
-                .addNode(PurchaseCancelOrderFlow.class)
-                .addNode(PurchaseCancelNewMemberFlow.class)
-                .addNode(PurchaseCancelQuotaFlow.class)
-                .addNode(PurchaseCancelInventoryFlow.class)
+                .addNode(PurchaseLockCancelFlow.class)
+                .addNode(PurchaseOrderCancelFlow.class)
+                .addNode(PurchaseNewMemberCancelFlow.class)
+                .addNode(PurchaseUserQuotaCancelFlow.class)
+                .addNode(PurchaseInventoryCancelFlow.class)
 
         //
         ;

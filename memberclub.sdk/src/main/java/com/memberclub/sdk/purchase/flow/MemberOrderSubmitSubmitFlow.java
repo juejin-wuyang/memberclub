@@ -9,8 +9,8 @@ package com.memberclub.sdk.purchase.flow;
 import com.memberclub.common.flow.FlowNode;
 import com.memberclub.domain.context.purchase.PurchaseSubmitContext;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
-import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.memberorder.MemberOrderBuildFactory;
+import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * author: 掘金五阳
  */
 @Service
-public class MemberOrderSubmitFlow extends FlowNode<PurchaseSubmitContext> {
+public class MemberOrderSubmitSubmitFlow extends FlowNode<PurchaseSubmitContext> {
 
     @Autowired
     private MemberOrderBuildFactory memberOrderBuildFactory;

@@ -28,10 +28,10 @@ import java.util.List;
  * author: 掘金五阳
  */
 @Service
-public class PurchaseReverseInventoryFlow extends FlowNode<AfterSaleApplyContext> {
+public class PurchaseInventoryOperateReverseFlow extends FlowNode<AfterSaleApplyContext> {
 
     @Autowired
-    private PurchaseReverseInventoryFlow purchaseReverseInventoryFlow;
+    private PurchaseInventoryOperateReverseFlow purchaseInventoryOperateReverseFlow;
 
     @Autowired
     private InventoryBizService inventoryBizService;
@@ -61,7 +61,7 @@ public class PurchaseReverseInventoryFlow extends FlowNode<AfterSaleApplyContext
         InventoryOpResponse response = inventoryBizService.operateSkuInventory(cmd);
         if (response.isNeedRetry()) {
             CommonLog.error("库存回补操作需要重试 response:{} cmd:{}", response, cmd);
-            purchaseReverseInventoryFlow.retryOperate(cmd);
+            purchaseInventoryOperateReverseFlow.retryOperate(cmd);
         }
 
         if (!response.isSuccess()) {

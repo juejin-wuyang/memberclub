@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  * author: 掘金五阳
  */
 @Service
-public class PurchaseCancelNewMemberFlow extends FlowNode<PurchaseCancelContext> {
+public class PurchaseNewMemberCancelFlow extends FlowNode<PurchaseCancelContext> {
 
     @Autowired
     private NewMemberDomainService newMemberDomainService;

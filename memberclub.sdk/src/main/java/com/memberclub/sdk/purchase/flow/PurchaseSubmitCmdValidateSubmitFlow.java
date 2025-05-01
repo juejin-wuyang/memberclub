@@ -8,7 +8,7 @@ import com.memberclub.domain.exception.ResultCode;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PurchaseSubmitCmdValidateFlow extends FlowNode<PurchaseSubmitContext> {
+public class PurchaseSubmitCmdValidateSubmitFlow extends FlowNode<PurchaseSubmitContext> {
 
     @Override
     public void process(PurchaseSubmitContext purchaseSubmitContext) {
