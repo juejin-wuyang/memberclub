@@ -8,6 +8,7 @@ package com.memberclub.sdk.common;
 
 import com.memberclub.common.util.ApplicationContextUtils;
 import com.memberclub.infrastructure.dynamic_config.DynamicConfig;
+import com.memberclub.infrastructure.mq.MQContants;
 import org.springframework.util.Assert;
 
 import java.util.concurrent.TimeUnit;
@@ -89,7 +90,13 @@ public enum SwitchEnum {
     ONCE_TASK_TABLE_NUM("once_task_table_num", 2),
     //
 
-    RENEWABLE("renewable", 0);;
+    RENEWABLE("renewable", 0),
+
+    //系统自身商户ID，用于支付
+    SELF_MERCHANT_ID("self_merchant_id", "888888"),
+
+    WAIT_PAY_TIME_SECONDS("wait_pay_time_seconds", MQContants.WAIT_PAY_EXPIRE_SECONDS),
+    ;
 
 
     private String key;

@@ -20,6 +20,7 @@ import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.perform.common.MemberOrderPerformStatusEnum;
 import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
+import com.memberclub.domain.context.purchase.PurchaseSubmitContext;
 import com.memberclub.domain.context.purchase.cancel.PurchaseCancelContext;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.entity.trade.MemberOrder;
@@ -66,7 +67,7 @@ public class MemberOrderDomainService {
     private MemberOrderDataObjectBuildFactory memberOrderDataObjectBuildFactory;
 
     public void createMemberOrder(MemberOrderDO memberOrderDO) {
-        MemberOrder order = PurchaseConvertor.INSTANCE.toMemberOrder(memberOrderDO);
+        MemberOrder order = memberOrderDataObjectBuildFactory.buildOrder4Create(memberOrderDO);
 
         List<MemberSubOrder> subOrders = memberOrderDO.getSubOrders().stream()
                 .map(PurchaseConvertor.INSTANCE::toMemberSubOrder)
@@ -155,6 +156,28 @@ public class MemberOrderDomainService {
     @Transactional(rollbackFor = Exception.class)
     public void submitFail(MemberOrderDO order) {
         // TODO: 2025/1/4
+
+    }
+
+    public void onPrePay(PurchaseSubmitContext context, MemberOrderDO order) {
+        order.onPrePay(context);
+        //更新数据库
+        LambdaUpdateWrapper<MemberOrder> wrapper = new LambdaUpdateWrapper<>();
+
+        wrapper.eq(MemberOrder::getUserId, order.getUserId())
+                .eq(MemberOrder::getTradeId, order.getTradeId())
+                .set(MemberOrder::getPayStatus, order.getPaymentInfo().getPayStatus().getCode())
+                .set(MemberOrder::getPayTradeNo, order.getPaymentInfo().getPayTradeNo())
+                .set(MemberOrder::getPayNodeType, order.getPaymentInfo().getPayNodeType().getName())
+                .set(MemberOrder::getPayOnlineType, order.getPaymentInfo().getPayOnlineType().getName())
+                .set(MemberOrder::getUtime, order.getUtime())
+        ;
+
+        extensionManager.getExtension(BizScene.of(context.getBizType()),
+                MemberOrderDomainExtension.class).onPrePay(order, wrapper);
+    }
+
+    public void onPayTimeoutCheck(MemberOrderDO order) {
 
     }
 

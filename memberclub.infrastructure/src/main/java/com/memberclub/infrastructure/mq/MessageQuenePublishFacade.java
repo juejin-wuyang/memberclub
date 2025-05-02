@@ -18,4 +18,5 @@ public interface MessageQuenePublishFacade {
      * @param message
      */
     public void publish(MQTopicEnum event, String message);
+    
 }

@@ -72,6 +72,11 @@ public class InfrastructureImplChecker {
     private AssetCenterEnum asset;
 
     /**
+     * 支付相關
+     */
+    private PaymentEnum payment;
+
+    /**
      * 缓存
      */
     private DistributedCacheEnum cache;
@@ -87,18 +92,6 @@ public class InfrastructureImplChecker {
 
     @NestedConfigurationProperty()
     private Feign feign;
-
-
-    @Data
-    class Feign {
-
-        /**
-         * 是否开启 feign
-         */
-
-        private Boolean enabled;
-    }
-
 
     @PostConstruct
     public void init() {
@@ -124,5 +117,15 @@ public class InfrastructureImplChecker {
         } catch (NoSuchBeanDefinitionException e) {
             throw new RuntimeException(msg, e);
         }
+    }
+
+    @Data
+    class Feign {
+
+        /**
+         * 是否开启 feign
+         */
+
+        private Boolean enabled;
     }
 }

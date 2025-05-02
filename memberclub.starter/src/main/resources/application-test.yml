@@ -249,6 +249,7 @@ memberclub:
     sku: local
     cache: redis
     usertag: redis
+    payment: local
   extension:
     bootcheck: true
 apollo:

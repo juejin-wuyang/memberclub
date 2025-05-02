@@ -17,6 +17,12 @@ public enum MQQueueEnum {
             MQContants.TRADE_EVENT_QUEUE_ON_PRE_FINANCE,
             MQContants.TRADE_EVENT_TOPIC,
             5000),
+
+    TRADE_PAY_EXPIRE_CHECK_QUEUE(2,
+            MQContants.TRADE_PAY_EXPIRE_CHECK_QUEUE,
+            MQContants.TRADE_PAY_EXPIRE_CHECK, -1),
+
+
     ;
 
     private int code;
@@ -45,7 +51,6 @@ public enum MQQueueEnum {
         return null;
     }
 
-
     @Override
     public String toString() {
         return this.queneName;
@@ -59,13 +64,13 @@ public enum MQQueueEnum {
         return queneName;
     }
 
-    public String getDelayQueneName() {
-        return queneName + "_delay";
-    }
-
     public MQQueueEnum setQueneName(String queneName) {
         this.queneName = queneName;
         return this;
+    }
+
+    public String getDelayQueneName() {
+        return queneName + "_delay";
     }
 
     public String getTopicName() {

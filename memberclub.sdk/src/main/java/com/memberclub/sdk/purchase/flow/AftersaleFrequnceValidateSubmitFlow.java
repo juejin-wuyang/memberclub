@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AftersaleFrequnceValidateFlow extends FlowNode<PurchaseSubmitContext> {
+public class AftersaleFrequnceValidateSubmitFlow extends FlowNode<PurchaseSubmitContext> {
 
     @Autowired
     private AftersaleQuotaDomainService aftersaleQuotaDomainService;

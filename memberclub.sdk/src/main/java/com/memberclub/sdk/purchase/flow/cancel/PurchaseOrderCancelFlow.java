@@ -8,7 +8,7 @@ package com.memberclub.sdk.purchase.flow.cancel;
 
 import com.memberclub.common.flow.FlowNode;
 import com.memberclub.domain.context.purchase.cancel.PurchaseCancelContext;
-import com.memberclub.sdk.memberorder.MemberOrderBuildFactory;
+import com.memberclub.sdk.memberorder.MemberOrderDataObjectBuildFactory;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class PurchaseOrderCancelFlow extends FlowNode<PurchaseCancelContext> {
     private MemberOrderDomainService memberOrderDomainService;
 
     @Autowired
-    private MemberOrderBuildFactory memberOrderBuildFactory;
+    private MemberOrderDataObjectBuildFactory memberOrderDataObjectBuildFactory;
 
     @Override
     public void process(PurchaseCancelContext context) {
@@ -31,8 +31,7 @@ public class PurchaseOrderCancelFlow extends FlowNode<PurchaseCancelContext> {
 
     @Override
     public void success(PurchaseCancelContext context) {
-
-        memberOrderBuildFactory.onSubmitCancel(context);
+        memberOrderDataObjectBuildFactory.onSubmitCancel(context);
         memberOrderDomainService.onSubmitCancel(context, context.getMemberOrder());
     }
 }

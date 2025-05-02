@@ -9,6 +9,8 @@ package com.memberclub.domain.context.purchase;
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.dataobject.CommonUserInfo;
+import com.memberclub.domain.dataobject.payment.PaymentDO;
+import com.memberclub.domain.dataobject.payment.PrePayResult;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.dataobject.sku.SkuInfoDO;
 import com.memberclub.domain.exception.MemberException;
@@ -39,9 +41,14 @@ public class PurchaseSubmitContext {
     //模型数据
 
     private MemberOrderDO memberOrder;
+
+    private PrePayResult prePayResult;
+
     private List<SkuInfoDO> skuInfos;
 
     private Long startTime;
+
+    private long payExpireTime;
 
     /***
      * 待生效或生效中订单
@@ -74,5 +81,16 @@ public class PurchaseSubmitContext {
         // TODO: 2025/1/4 补充监控
     }
 
+    public PaymentDO initPayment() {
+        PaymentDO paymentInfo = new PaymentDO();
+        getMemberOrder().setPaymentInfo(paymentInfo);
+        return paymentInfo;
+    }
 
+    public void handlePrePayResult(PrePayResult prePayResult) {
+        this.prePayResult = prePayResult;
+        PaymentDO paymentDO = this.getMemberOrder().getPaymentInfo();
+        paymentDO.setPayAmountFen(prePayResult.getPayAmountFen());
+        paymentDO.setPayTradeNo(prePayResult.getTradeNo());
+    }
 }

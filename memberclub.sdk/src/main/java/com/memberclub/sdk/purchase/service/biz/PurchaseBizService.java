@@ -7,9 +7,13 @@
 package com.memberclub.sdk.purchase.service.biz;
 
 import com.memberclub.common.extension.ExtensionManager;
+import com.memberclub.common.log.CommonLog;
 import com.memberclub.common.log.LogDomainEnum;
 import com.memberclub.common.log.UserLog;
+import com.memberclub.common.retry.Retryable;
+import com.memberclub.common.util.TimeUtil;
 import com.memberclub.domain.common.BizScene;
+import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.context.purchase.PurchaseSubmitCmd;
 import com.memberclub.domain.context.purchase.PurchaseSubmitContext;
@@ -17,8 +21,11 @@ import com.memberclub.domain.context.purchase.PurchaseSubmitResponse;
 import com.memberclub.domain.context.purchase.cancel.PurchaseCancelCmd;
 import com.memberclub.domain.context.purchase.cancel.PurchaseCancelContext;
 import com.memberclub.domain.context.purchase.common.MemberOrderStatusEnum;
+import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.exception.MemberException;
 import com.memberclub.domain.exception.ResultCode;
+import com.memberclub.infrastructure.payment.context.PayExpireCheckMessage;
+import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.purchase.extension.PurchaseExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +38,8 @@ public class PurchaseBizService {
 
     @Autowired
     private ExtensionManager extensionManager;
+    @Autowired
+    private MemberOrderDomainService memberOrderDomainService;
 
     public void cancel(PurchaseCancelCmd cmd) {
         PurchaseCancelContext context = new PurchaseCancelContext();
@@ -90,5 +99,46 @@ public class PurchaseBizService {
         // TODO: 2025/1/4 补充返回值
     }
 
+    @Retryable(throwException = false)
+    @UserLog(domain = LogDomainEnum.PURCHASE)
+    public void payTimeoutCheck(PayExpireCheckMessage message) {
+        MemberOrderDO memberOrderDO = memberOrderDomainService.getMemberOrderDO(message.getUserId(), message.getTradeId());
+        if (memberOrderDO == null) {
+            CommonLog.error("收到支付过期事件，未查询到MemberOrder message:{}", message);
+            return;
+        }
+        if (memberOrderDO.getPaymentInfo() == null) {
+            CommonLog.error("收到支付过期事件，未查询到MemberOrder.payment message:{}", message);
+            return;
+        }
+
+        if (memberOrderDO.getPaymentInfo().getPayStatus().isPaid()) {
+            CommonLog.warn("收到支付过期事件，MemberOrder 已支付 payStatus:{}, message:{} ",
+                    memberOrderDO.getPaymentInfo().getPayStatus(), message);
+            return;
+        }
+
+        if (memberOrderDO.getStatus() != MemberOrderStatusEnum.SUBMITED) {
+            CommonLog.error("收到支付过期事件，MemberOrder 状态不合法，跳过不处理 status:{}, message:{} ",
+                    memberOrderDO.getStatus(), message);
+            return;
+        }
+
+        if (TimeUtil.now() > message.getPayExpireTime()) {
+            CommonLog.error("未到支付超时时间，收到支付超时事件:{}", message);
+            //继续处理
+        }
+
+        CommonLog.warn("收到支付超时检查，开始取消订单 msg:{}", message);
+        cancelOrder(message);
+    }
+
+    private void cancelOrder(PayExpireCheckMessage message) {
+        PurchaseCancelCmd cancelCmd = new PurchaseCancelCmd();
+        cancelCmd.setBizType(BizTypeEnum.findByCode(message.getBizType()));
+        cancelCmd.setTradeId(message.getTradeId());
+        cancelCmd.setUserId(message.getUserId());
+        cancel(cancelCmd);
+    }
 
 }

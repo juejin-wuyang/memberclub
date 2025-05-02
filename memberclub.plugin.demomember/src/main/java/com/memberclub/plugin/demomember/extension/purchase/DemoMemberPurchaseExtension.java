@@ -22,6 +22,7 @@ import com.memberclub.sdk.purchase.flow.aftersale.PurchaseInventoryOperateRevers
 import com.memberclub.sdk.purchase.flow.aftersale.PurchaseMemberQuotaReverseFlow;
 import com.memberclub.sdk.purchase.flow.aftersale.PurchaseNewMemberReverseFlow;
 import com.memberclub.sdk.purchase.flow.cancel.*;
+import com.memberclub.sdk.purchase.flow.payment.PrePaySubmitFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -49,10 +50,11 @@ public class DemoMemberPurchaseExtension implements PurchaseExtension {
                 .addNode(PurchaseUserQuotaSubmitFlow.class)           //检查限额
                 //.addNode(PurchaseRenewValidateFlow.class)         //检查续费
                 .addNode(PurchaseInventoryValidateSubmitFlow.class)   //检查库存
-                .addNode(MemberOrderSubmitFlow.class)           // 会员提单
+                .addNode(PurchaseMemberOrderSubmitFlow.class)           // 会员提单
                 .addNode(PurchaseNewMemberSubmitFlow.class)         //新会员标记
                 .addNode(PurchaseInventoryOperateSubmitFlow.class)    //扣减库存
                 .addNode(CommonOrderSubmitFlow.class)               //订单系统提单
+                .addNode(PrePaySubmitFlow.class)
         ;
 
         purchaseReverseChain = FlowChain.newChain(AfterSaleApplyContext.class)

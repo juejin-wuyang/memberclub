@@ -72,4 +72,13 @@ public class DefaultMemberOrderDomainExtension implements MemberOrderDomainExten
         }
         CommonLog.info("更新主单的履约状态为逆向履约完成 status:{} cnt:{}", memberOrderDO.getPerformStatus(), cnt);
     }
+    
+    @Override
+    public void onPrePay(MemberOrderDO memberOrderDO, LambdaUpdateWrapper<MemberOrder> wrapper) {
+        int cnt = memberOrderDao.update(null, wrapper);
+        if (cnt < 1) {
+            throw ResultCode.DATA_UPDATE_ERROR.newException("MemberOrder onPrePay 更新异常");
+        }
+        CommonLog.info("更新主单的支付状态为待支付 status:{} cnt:{}", memberOrderDO.getPaymentInfo().getPayStatus().getCode(), cnt);
+    }
 }

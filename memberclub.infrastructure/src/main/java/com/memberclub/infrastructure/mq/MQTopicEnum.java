@@ -15,7 +15,9 @@ public enum MQTopicEnum {
 
     TRADE_EVENT(1, MQContants.TRADE_EVENT_TOPIC),
 
-    PRE_FINANCE_EVENT(2, MQContants.PRE_FINANCE_EVENT_TOPIC);
+    PRE_FINANCE_EVENT(2, MQContants.PRE_FINANCE_EVENT_TOPIC),
+
+    TRADE_PAY_EXPIRE_CHECK(3, MQContants.TRADE_PAY_EXPIRE_CHECK);
 
     private int code;
 

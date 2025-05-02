@@ -45,6 +45,29 @@ public class MemberOrder {
 
     private int performStatus;
 
+    /***********支付信息**********/
+
+    private int payStatus;
+
+    private String payAccount;
+
+    private long payTime;
+
+    private String payAccountType;
+
+    private String payChannelType;
+
+    private String merchantId;
+
+    private String payTradeNo;
+
+    private Integer payAmountFen;
+
+    private String payOnlineType;
+
+    private String payNodeType;
+    /***********支付信息**********/
+
     private long stime;
 
     private long etime;

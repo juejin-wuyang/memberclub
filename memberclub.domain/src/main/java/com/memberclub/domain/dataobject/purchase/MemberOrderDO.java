@@ -22,6 +22,8 @@ import com.memberclub.domain.dataobject.order.LocationInfo;
 import com.memberclub.domain.dataobject.order.MemberOrderExtraInfo;
 import com.memberclub.domain.dataobject.order.MemberOrderFinanceInfo;
 import com.memberclub.domain.dataobject.order.MemberOrderSaleInfo;
+import com.memberclub.domain.dataobject.payment.PayStatusEnum;
+import com.memberclub.domain.dataobject.payment.PaymentDO;
 import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
 import com.memberclub.domain.exception.ResultCode;
 import lombok.Data;
@@ -60,6 +62,8 @@ public class MemberOrderDO {
 
     private Integer salePriceFen;
 
+    private PaymentDO paymentInfo;
+
     private MemberOrderStatusEnum status;
 
     private com.memberclub.domain.context.perform.common.MemberOrderPerformStatusEnum performStatus;
@@ -83,6 +87,10 @@ public class MemberOrderDO {
         for (MemberSubOrderDO subOrder : subOrders) {
             subOrder.setStatus(SubOrderStatusEnum.SUBMITED);
         }
+    }
+
+    public void onPrePay(PurchaseSubmitContext context) {
+        paymentInfo.setPayStatus(PayStatusEnum.WAIT_PAY);
     }
 
     public void onSubmitFail(PurchaseSubmitContext context) {

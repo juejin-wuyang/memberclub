@@ -7,19 +7,29 @@ USE member_db;
 
 
 CREATE TABLE IF NOT EXISTS member_order_0 (
-    id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
+                                            id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
     biz_type INT(11)  NOT NULL COMMENT '产品线',
     user_id BIGINT(20)  NOT NULL COMMENT 'userId',
     order_system_type INT(11)  NULL COMMENT '订单系统类型',
     order_id VARCHAR(128)  NULL COMMENT '订单  id',
     trade_id VARCHAR(128)  NOT NULL COMMENT '交易 id',
     renew_type INT(11)  NOT NULL COMMENT '续费类型 0 无续费,1 用户续费 2 系统自动续费',
-    act_price_fen INT(11)  NULL COMMENT '实付金额',
+    act_price_fen INT(11)  NULL COMMENT '订单金额',
+    pay_amount_fen INT(11)  NULL COMMENT '实际支付金额',
     origin_price_fen INT(11)  NOT NULL COMMENT '原价金额',
     sale_price_fen INT(11)  NOT NULL COMMENT '原价金额',
     source INT(11)  NOT NULL COMMENT '开通来源',
     status INT(11)  NOT NULL COMMENT '主状态',
     perform_status INT(11)  NOT NULL COMMENT '履约状态',
+    pay_status INT(11)  NOT NULL COMMENT '支付状态',
+    pay_account VARCHAR(128)  NOT NULL COMMENT '支付账户',
+    pay_account_type VARCHAR(32)  NOT NULL COMMENT '支付账户类型',
+    pay_channel_type VARCHAR(128)  NOT NULL COMMENT '支付渠道类型',
+    pay_online_type VARCHAR(32)  NOT NULL COMMENT '支付账户类型',
+    pay_node_type VARCHAR(32)  NOT NULL COMMENT '支付渠道类型',
+    merchant_id VARCHAR(128)  NOT NULL COMMENT '商户ID',
+    pay_trade_no VARCHAR(128)  NOT NULL COMMENT '支付单号',
+    pay_time BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '支付时间',
     extra TEXT NOT NULL COMMENT '扩展属性',
     stime BIGINT(20)  NULL DEFAULT '0' COMMENT '开始时间',
     etime BIGINT(20)  NULL DEFAULT '0' COMMENT '截止时间',
@@ -27,7 +37,7 @@ CREATE TABLE IF NOT EXISTS member_order_0 (
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     UNIQUE KEY uniq_member_order (user_id, trade_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 
 CREATE TABLE IF NOT EXISTS member_order_1 (
@@ -38,12 +48,22 @@ CREATE TABLE IF NOT EXISTS member_order_1 (
     order_id VARCHAR(128)  NULL COMMENT '订单  id',
     trade_id VARCHAR(128)  NOT NULL COMMENT '交易 id',
     renew_type INT(11)  NOT NULL COMMENT '续费类型 0 无续费,1 用户续费 2 系统自动续费',
-    act_price_fen INT(11)  NULL COMMENT '实付金额',
+    act_price_fen INT(11)  NULL COMMENT '订单金额',
+    pay_amount_fen INT(11)  NULL COMMENT '实际支付金额',
     origin_price_fen INT(11)  NOT NULL COMMENT '原价金额',
     sale_price_fen INT(11)  NOT NULL COMMENT '原价金额',
     source INT(11)  NOT NULL COMMENT '开通来源',
     status INT(11)  NOT NULL COMMENT '主状态',
     perform_status INT(11)  NOT NULL COMMENT '履约状态',
+    pay_status INT(11)  NOT NULL COMMENT '支付状态',
+    pay_account VARCHAR(128)  NOT NULL COMMENT '支付账户',
+    pay_account_type VARCHAR(32)  NOT NULL COMMENT '支付账户类型',
+    pay_channel_type VARCHAR(128)  NOT NULL COMMENT '支付渠道类型',
+    pay_online_type VARCHAR(32)  NOT NULL COMMENT '支付账户类型',
+    pay_node_type VARCHAR(32)  NOT NULL COMMENT '支付渠道类型',
+    merchant_id VARCHAR(128)  NOT NULL COMMENT '商户ID',
+    pay_trade_no VARCHAR(128)  NOT NULL COMMENT '支付单号',
+    pay_time BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '支付时间',
     extra TEXT NOT NULL COMMENT '扩展属性',
     stime BIGINT(20)  NULL DEFAULT '0' COMMENT '开始时间',
     etime BIGINT(20)  NULL DEFAULT '0' COMMENT '截止时间',
@@ -51,8 +71,7 @@ CREATE TABLE IF NOT EXISTS member_order_1 (
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     UNIQUE KEY uniq_member_order (user_id, trade_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
-
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 CREATE TABLE IF NOT EXISTS member_sub_order_0 (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
     biz_type INT(11)  NOT NULL COMMENT '产品线',

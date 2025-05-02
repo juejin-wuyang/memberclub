@@ -65,6 +65,7 @@ memberclub:
     sku: local
     cache: local
     usertag: local
+    payment: local
   extension:
     bootcheck: true
 
