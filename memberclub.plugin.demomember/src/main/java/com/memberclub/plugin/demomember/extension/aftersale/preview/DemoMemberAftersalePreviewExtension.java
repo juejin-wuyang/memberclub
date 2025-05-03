@@ -39,7 +39,7 @@ public class DemoMemberAftersalePreviewExtension implements AftersalePreviewExte
                 .addNode(AftersalePreviewDegradeFlow.class)
                 // TODO: 2025/1/1  //增加售后单 进行中校验,当前存在生效中受理单,不允许预览(数据处于不一致状态,无法获得准确的预览结果),返回特殊错误码
                 .addNode(AftersaleOrderMainStatusValidatePreviewFlow.class)
-                .addNode(AftersalePeriodValidateFlow.class)
+//                .addNode(AftersalePeriodValidateFlow.class)
                 .addNode(AftersaleTimesValidateFlow.class)
                 //.addNode(AftersaleValidateLastOrderFlow.class)      //优先退最后一笔订单
                 //.addNode(AftersaleGetUsageFlow.class)               //售后获取使用情况

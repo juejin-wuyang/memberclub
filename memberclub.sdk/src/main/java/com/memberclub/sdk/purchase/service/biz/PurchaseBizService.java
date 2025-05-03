@@ -24,7 +24,7 @@ import com.memberclub.domain.context.purchase.common.MemberOrderStatusEnum;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.exception.MemberException;
 import com.memberclub.domain.exception.ResultCode;
-import com.memberclub.infrastructure.payment.context.PayExpireCheckMessage;
+import com.memberclub.infrastructure.payment.context.PaymentTimeoutMessage;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.purchase.extension.PurchaseExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +101,7 @@ public class PurchaseBizService {
 
     @Retryable(throwException = false)
     @UserLog(domain = LogDomainEnum.PURCHASE)
-    public void paymentTimeoutCallback(PayExpireCheckMessage message) {
+    public void paymentTimeoutValidate(PaymentTimeoutMessage message) {
         MemberOrderDO memberOrderDO = memberOrderDomainService.getMemberOrderDO(message.getUserId(), message.getTradeId());
         if (memberOrderDO == null) {
             CommonLog.error("收到支付过期事件，未查询到MemberOrder message:{}", message);
@@ -133,7 +133,7 @@ public class PurchaseBizService {
         cancelOrder(message);
     }
 
-    private void cancelOrder(PayExpireCheckMessage message) {
+    private void cancelOrder(PaymentTimeoutMessage message) {
         PurchaseCancelCmd cancelCmd = new PurchaseCancelCmd();
         cancelCmd.setBizType(BizTypeEnum.findByCode(message.getBizType()));
         cancelCmd.setTradeId(message.getTradeId());

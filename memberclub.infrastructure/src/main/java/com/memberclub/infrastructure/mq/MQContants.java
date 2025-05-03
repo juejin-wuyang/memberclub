@@ -13,9 +13,9 @@ public class MQContants {
 
     public static final String TRADE_EVENT_TOPIC = "com.memberclub.trade.event";
 
-    public static final String TRADE_PAY_EXPIRE_CHECK = "com.memberclub.trade.pay.expire.check";
+    public static final String TRADE_PAYMENT_TIMEOUT_EVENT = "com.memberclub.trade.payment.timeout.event";
 
-    public static final String TRADE_PAY_EXPIRE_CHECK_QUEUE = "com.memberclub.trade.pay.expire.check.consumer";
+    public static final String TRADE_PAYMENT_TIMEOUT_EVENT_QUEUE = "com.memberclub.trade.payment.timeout.event.consumer";
 
     public static final String PRE_FINANCE_EVENT_TOPIC = "com.memberclub.prefinance.event";
 

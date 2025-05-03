@@ -36,4 +36,10 @@ public interface MemberOrderDomainExtension extends BaseExtension {
 
     @Transactional
     void onPaySuccess(MemberOrderDO memberOrderDO, LambdaUpdateWrapper<MemberOrder> wrapper);
+
+    @Transactional
+    void onPaySuccess4OrderTimeout(MemberOrderDO memberOrderDO, LambdaUpdateWrapper<MemberOrder> wrapper);
+
+    @Transactional
+    void onRefund4OrderTimeout(MemberOrderDO memberOrderDO, LambdaUpdateWrapper<MemberOrder> wrapper);
 }

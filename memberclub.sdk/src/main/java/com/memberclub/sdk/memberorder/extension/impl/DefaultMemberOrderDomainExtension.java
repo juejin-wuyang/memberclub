@@ -95,4 +95,24 @@ public class DefaultMemberOrderDomainExtension implements MemberOrderDomainExten
         }
         CommonLog.info("更新主单的支付状态为支付成功 status:{} cnt:{}", memberOrderDO.getPaymentInfo().getPayStatus().getCode(), cnt);
     }
+
+    @Transactional
+    @Override
+    public void onPaySuccess4OrderTimeout(MemberOrderDO memberOrderDO, LambdaUpdateWrapper<MemberOrder> wrapper) {
+        int cnt = memberOrderDao.update(null, wrapper);
+        if (cnt < 1) {
+            throw ResultCode.DATA_UPDATE_ERROR.newException("MemberOrder onPaySuccess4OrderTimeout 更新异常");
+        }
+        CommonLog.info("更新主单的支付状态为支付成功 status:{} cnt:{}", memberOrderDO.getPaymentInfo().getPayStatus().getCode(), cnt);
+    }
+
+    @Transactional
+    @Override
+    public void onRefund4OrderTimeout(MemberOrderDO memberOrderDO, LambdaUpdateWrapper<MemberOrder> wrapper) {
+        int cnt = memberOrderDao.update(null, wrapper);
+        if (cnt < 1) {
+            throw ResultCode.DATA_UPDATE_ERROR.newException("MemberOrder onRefund4OrderTimeout 更新异常");
+        }
+        CommonLog.info("更新主单的支付状态为退款 status:{} cnt:{}", memberOrderDO.getPaymentInfo().getPayStatus().getCode(), cnt);
+    }
 }

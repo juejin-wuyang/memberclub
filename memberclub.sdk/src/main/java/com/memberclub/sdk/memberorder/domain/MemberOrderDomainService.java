@@ -178,9 +178,50 @@ public class MemberOrderDomainService {
                 MemberOrderDomainExtension.class).onPrePay(order, wrapper);
     }
 
+
+    @Retryable(throwException = false)
+    public void onRefund4OrderTimeout(PaymentNotifyContext context, MemberOrderDO order) {
+        order.onRefund4OrderTimeout(context);
+
+        //更新数据库
+        LambdaUpdateWrapper<MemberOrder> wrapper = new LambdaUpdateWrapper<>();
+
+        wrapper.eq(MemberOrder::getUserId, order.getUserId())
+                .eq(MemberOrder::getTradeId, order.getTradeId())
+                .set(MemberOrder::getPayStatus, order.getPaymentInfo().getPayStatus().getCode())
+                .set(MemberOrder::getUtime, order.getUtime())
+        ;
+
+        MemberOrderDomainExtension extension = extensionManager.getExtension(BizScene.of(context.getBizType()), MemberOrderDomainExtension.class);
+        extension.onRefund4OrderTimeout(order, wrapper);
+    }
+
+    @Retryable(throwException = false)
+    public void onPaySuccess4OrderTimeout(PaymentNotifyContext context, MemberOrderDO order) {
+        order.onPaySuccessOnPayment(context);
+
+        //更新数据库
+        LambdaUpdateWrapper<MemberOrder> wrapper = new LambdaUpdateWrapper<>();
+
+        wrapper.eq(MemberOrder::getUserId, order.getUserId())
+                .eq(MemberOrder::getTradeId, order.getTradeId())
+                .set(MemberOrder::getPayStatus, order.getPaymentInfo().getPayStatus().getCode())
+                .set(MemberOrder::getPayAccount, order.getPaymentInfo().getPayAccount())
+                .set(MemberOrder::getPayAccountType, order.getPaymentInfo().getPayAccountType())
+                .set(MemberOrder::getPayChannelType, order.getPaymentInfo().getPayChannelType())
+                .set(MemberOrder::getPayTime, order.getPaymentInfo().getPayTime())
+                .set(MemberOrder::getPayAmountFen, order.getPaymentInfo().getPayAmountFen())
+                .set(MemberOrder::getUtime, order.getUtime())
+        ;
+
+        MemberOrderDomainExtension extension = extensionManager.getExtension(BizScene.of(context.getBizType()), MemberOrderDomainExtension.class);
+        extension.onPaySuccess4OrderTimeout(order, wrapper);
+    }
+
     @Retryable(throwException = false)
     public void onPaySuccess(PaymentNotifyContext context, MemberOrderDO order) {
-        order.onPaySuccess(context);
+        order.onPaySuccessOnPayment(context);
+        order.onPaySuccessOnStatus(context);
 
         //更新数据库
         LambdaUpdateWrapper<MemberOrder> wrapper = new LambdaUpdateWrapper<>();

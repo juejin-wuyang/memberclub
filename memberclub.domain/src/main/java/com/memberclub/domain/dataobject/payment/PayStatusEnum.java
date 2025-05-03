@@ -4,11 +4,11 @@ public enum PayStatusEnum {
 
     INIT(0, "初始化"),
 
-    WAIT_PAY(1, "初始化"),
+    WAIT_PAY(1, "待支付"),
 
-    PAY_SUCCESS(2, "初始化"),
+    PAY_SUCCESS(2, "支付成功"),
 
-    PAY_REFUND(3, "初始化"),
+    PAY_REFUND(3, "退款"),
 
     ;
 

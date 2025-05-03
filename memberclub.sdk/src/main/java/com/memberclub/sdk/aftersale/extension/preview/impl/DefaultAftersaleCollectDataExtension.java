@@ -47,7 +47,7 @@ public class DefaultAftersaleCollectDataExtension implements AftersaleCollectDat
 
         List<MemberPerformItemDO> items = performDomainService.queryByTradeId(cmd.getUserId(), cmd.getTradeId());
         context.setPerformItems(items);
-        context.setPayPriceFen(memberOrder.getActPriceFen());
+        context.setPayPriceFen(memberOrder.getPaymentInfo().getPayAmountFen());
         context.setDigestVersion(cmd.getDigestVersion());
 
         return context;

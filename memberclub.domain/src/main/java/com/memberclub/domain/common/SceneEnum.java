@@ -7,6 +7,7 @@
 package com.memberclub.domain.common;
 
 import com.memberclub.domain.contants.StringContants;
+import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
 import com.memberclub.domain.context.purchase.common.SubmitSourceEnum;
 
 import static com.memberclub.domain.contants.StringContants.DISCOUNT_COUPON_RIGHT_TYPE;
@@ -41,6 +42,7 @@ public enum SceneEnum {
 
     SCENE_AFTERSALE_RENEW("304"),//售后续费
 
+    SCENE_SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT(AftersaleSourceEnum.SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT.getCode() + ""),
 
     /*****************************************/
     //提单部分

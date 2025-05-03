@@ -6,6 +6,7 @@
  */
 package com.memberclub.sdk.perform.service.domain;
 
+import com.google.common.collect.Lists;
 import com.memberclub.common.log.CommonLog;
 import com.memberclub.common.util.JsonUtils;
 import com.memberclub.common.util.TimeUtil;
@@ -27,6 +28,7 @@ import com.memberclub.domain.entity.trade.MemberPerformItem;
 import com.memberclub.domain.entity.trade.OnceTask;
 import com.memberclub.infrastructure.mapstruct.PerformConvertor;
 import com.memberclub.infrastructure.mapstruct.PerformCustomConvertor;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -64,6 +66,9 @@ public class PerformDataObjectBuildFactory {
     }
 
     public List<MemberPerformItemDO> toMemberPerformItemDOs(List<MemberPerformItem> items) {
+        if (CollectionUtils.isEmpty(items)) {
+            return Lists.newArrayList();
+        }
         return items.stream().map(this::toMemberPerformItemDO).collect(Collectors.toList());
     }
 

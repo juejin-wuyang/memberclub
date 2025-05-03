@@ -9,6 +9,7 @@ import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.dataobject.aftersale.AftersaleOrderDO;
 import com.memberclub.sdk.aftersale.extension.apply.AfterSaleApplyExtension;
+import com.memberclub.sdk.aftersale.extension.apply.BaseAfterSaleApplyExtension;
 import com.memberclub.sdk.aftersale.flow.apply.*;
 import com.memberclub.sdk.aftersale.flow.doapply.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import javax.annotation.PostConstruct;
 @ExtensionProvider(desc = "示例会员售后受理扩展点", bizScenes = {
         @Route(bizType = BizTypeEnum.DOUYIN_COUPON_PACKAGE, scenes = {SceneEnum.SCENE_AFTERSALE_MONTH_CARD})
 })
-public class DouyinPkgAfterSaleApplyExtension implements AfterSaleApplyExtension {
+public class DouyinPkgAfterSaleApplyExtension extends BaseAfterSaleApplyExtension implements AfterSaleApplyExtension {
 
 
     FlowChain<AfterSaleApplyContext> applyFlowChain = null;
@@ -35,6 +36,7 @@ public class DouyinPkgAfterSaleApplyExtension implements AfterSaleApplyExtension
 
     @PostConstruct
     public void init() {
+        super.init();
         applyFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
                 .addNode(AftersaleResourceLockFlow.class)     //加锁
                 .addNode(AftersaleApplyPreviewFlow.class)       //售后预览

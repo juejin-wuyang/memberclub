@@ -42,7 +42,7 @@ public class RabbitRegisterConfiguration {
 
     @Bean
     public FanoutExchange payExpireCheckExchange() {
-        return newFanoutExchange(MQContants.TRADE_PAY_EXPIRE_CHECK);
+        return newFanoutExchange(MQContants.TRADE_PAYMENT_TIMEOUT_EVENT);
     }
 
     @Bean
@@ -52,26 +52,26 @@ public class RabbitRegisterConfiguration {
 
 
     @Configuration
-    static class TradePayExpireCheckQueueConfiguration extends DelayQueueConfiguration {
+    static class TradePaymentTimeoutEventDelayQueueConfiguration extends DelayQueueConfiguration {
 
         @Override
         public MQQueueEnum getQueue() {
-            return MQQueueEnum.TRADE_PAY_EXPIRE_CHECK_QUEUE;
+            return MQQueueEnum.TRADE_PAYMENT_TIMEOUT_EVENT_QUEUE;
         }
 
-        @Bean("TRADE_PAY_EXPIRE_CHECK_QUEUE")
+        @Bean("TRADE_PAYMENT_TIMEOUT_EVENT_QUEUE")
         @Override
         public Queue newNormalQueue() {
             return super.newNormalQueue();
         }
 
-        @Bean("TRADE_PAY_EXPIRE_CHECK_QUEUE_BINDING_DEAD_EXCHANGE")
+        @Bean("TRADE_PAYMENT_TIMEOUT_EVENT_QUEUE_BINDING_DEAD_EXCHANGE")
         @Override
         public Binding normalQueueBindingDeadExchange() {
             return super.normalQueueBindingDeadExchange();
         }
 
-        @Bean("TRADE_PAY_EXPIRE_CHECK_DELAY_QUEUE")
+        @Bean("TRADE_PAYMENT_TIMEOUT_EVENT_DELAY_QUEUE")
         public Queue delayQueue() {
             DynamicConfig config = ApplicationContextUtils.getContext().getBean(DynamicConfig.class);
             int waitTime = config.getInt("wait_pay_time_seconds", MQContants.WAIT_PAY_EXPIRE_SECONDS) * 1000;
@@ -79,7 +79,7 @@ public class RabbitRegisterConfiguration {
             return super.delayQueue(waitTime);
         }
 
-        @Bean("TRADE_PAY_EXPIRE_CHECK_DELAY_QUEUE_BINDING_NORMAL_EXCHANGE")
+        @Bean("TRADE_PAYMENT_TIMEOUT_EVENT_DELAY_QUEUE_BINDING_NORMAL_EXCHANGE")
         @Override
         public Binding delayQueueBindingNormalExchange() {
             return super.delayQueueBindingNormalExchange();

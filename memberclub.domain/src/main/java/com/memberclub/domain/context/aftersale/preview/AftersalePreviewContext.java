@@ -49,11 +49,9 @@ public class AftersalePreviewContext {
      */
     private UsageTypeCalculateTypeEnum usageTypeCalculateType;
 
-
     private UsageTypeEnum usageType;
 
     private int usedPriceFen;
-
 
     private Map<String, ItemUsage> batchCode2ItemUsage = Maps.newHashMap();
 

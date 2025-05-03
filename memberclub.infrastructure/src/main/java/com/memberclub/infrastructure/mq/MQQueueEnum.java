@@ -18,9 +18,9 @@ public enum MQQueueEnum {
             MQContants.TRADE_EVENT_TOPIC,
             5000),
 
-    TRADE_PAY_EXPIRE_CHECK_QUEUE(2,
-            MQContants.TRADE_PAY_EXPIRE_CHECK_QUEUE,
-            MQContants.TRADE_PAY_EXPIRE_CHECK, -1),
+    TRADE_PAYMENT_TIMEOUT_EVENT_QUEUE(2,
+            MQContants.TRADE_PAYMENT_TIMEOUT_EVENT_QUEUE,
+            MQContants.TRADE_PAYMENT_TIMEOUT_EVENT, -1),
 
 
     ;

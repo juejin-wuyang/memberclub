@@ -106,6 +106,40 @@ public class AftersaleBizService {
         return context;
     }
 
+    @UserLog(domain = LogDomainEnum.AFTER_SALE)
+    public AftersaleApplyResponse apply4RefundOnly(AftersaleApplyCmd cmd) {
+        AfterSaleApplyContext context = new AfterSaleApplyContext();
+        context.setCmd(cmd);
+
+        BizSceneBuildExtension bizSceneBuildExtension = extensionManager.getSceneExtension(BizScene.of(cmd.getBizType().getCode()));
+        String applyExtensionScene = bizSceneBuildExtension.buildAftersaleApplyScene(context);
+        context.setScene(applyExtensionScene);
+        AftersaleApplyResponse response = new AftersaleApplyResponse();
+        try {
+            //调用受理方法
+            AfterSaleApplyExtension extension = extensionManager.getExtension(BizScene.of(cmd.getBizType().getCode(),
+                    applyExtensionScene), AfterSaleApplyExtension.class);
+            extension.apply4OnlyRefundMoney(context);
+            
+            response.setSuccess(true);
+            //response.setRefundWay();
+            // TODO: 2025/1/1 处理返回值
+        } catch (Exception e) {
+            if (extractException(e) != null) {
+                Throwable t = extractException(e);
+                CommonLog.warn("售后受理前验证流程返回不可退", e);
+                response.setUnableCode(((AfterSaleUnableException) t).getUnableCode());
+                response.setSuccess(false);
+                response.setUnableTip(e.getMessage());
+            } else {
+                CommonLog.error("售后受理流程异常", e);
+                response.setSuccess(false);
+                response.setUnableCode(AftersaleUnableCode.INTERNAL_ERROR.getCode());
+                response.setUnableTip(AftersaleUnableCode.INTERNAL_ERROR.toString());
+            }
+        }
+        return response;
+    }
 
     @UserLog(domain = LogDomainEnum.AFTER_SALE)
     public AftersaleApplyResponse apply(AftersaleApplyCmd cmd) {

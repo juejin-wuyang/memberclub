@@ -14,7 +14,9 @@ public enum AftersaleSourceEnum {
     User(1, "用户退"),
     Customer_Service(2, "人工客服退"),
     Admin(3, "管理员退"),
-    System_Expire(4, "系统过期退");
+    System_Expire(4, "系统过期退"),
+    SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT(5, "订单支付超时退款"),//用户支付成功后，但订单已经超时，需要原路退款
+    ;
 
     private int value;
 

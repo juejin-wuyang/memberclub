@@ -3,7 +3,7 @@ package com.memberclub.infrastructure.payment.context;
 import lombok.Data;
 
 @Data
-public class PayExpireCheckMessage {
+public class PaymentTimeoutMessage {
 
     private int bizType;
 

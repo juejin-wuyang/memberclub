@@ -8,6 +8,7 @@ package com.memberclub.common.extension;
 
 import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
+import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
 import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
 import com.memberclub.domain.context.perform.PerformCmd;
 import com.memberclub.domain.context.perform.PerformContext;
@@ -36,6 +37,10 @@ public interface BizSceneBuildExtension extends BaseExtension {
     }
 
     default String buildAftersalePreviewScene(AftersalePreviewContext context) {
+        if (context.getCmd().getSource() == AftersaleSourceEnum.SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT) {
+            return SceneEnum.SCENE_SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT.getValue();
+        }
+
         return SceneEnum.SCENE_AFTERSALE_MONTH_CARD.getValue();
     }
 

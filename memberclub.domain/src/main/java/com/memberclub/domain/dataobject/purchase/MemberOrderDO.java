@@ -94,9 +94,16 @@ public class MemberOrderDO {
         paymentInfo.setPayStatus(PayStatusEnum.WAIT_PAY);
     }
 
-    public void onPaySuccess(PaymentNotifyContext context) {
-        paymentInfo.setPayStatus(PayStatusEnum.PAY_SUCCESS);
+    public void onRefund4OrderTimeout(PaymentNotifyContext context) {
+        paymentInfo.setPayStatus(PayStatusEnum.PAY_REFUND);
+    }
+
+    public void onPaySuccessOnStatus(PaymentNotifyContext context) {
         status = MemberOrderStatusEnum.PAYED;
+    }
+
+    public void onPaySuccessOnPayment(PaymentNotifyContext context) {
+        paymentInfo.setPayStatus(PayStatusEnum.PAY_SUCCESS);
         utime = System.currentTimeMillis();
 
         paymentInfo.setPayTime(context.getCmd().getPayTime());

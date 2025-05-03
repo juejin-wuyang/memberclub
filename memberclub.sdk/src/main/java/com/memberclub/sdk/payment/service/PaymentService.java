@@ -4,8 +4,13 @@ import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.log.CommonLog;
 import com.memberclub.common.log.LogDomainEnum;
 import com.memberclub.common.log.UserLog;
+import com.memberclub.common.retry.Retryable;
 import com.memberclub.common.util.JsonUtils;
 import com.memberclub.domain.common.BizScene;
+import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
+import com.memberclub.domain.context.aftersale.apply.AftersaleApplyCmd;
+import com.memberclub.domain.context.aftersale.apply.AftersaleApplyResponse;
+import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
 import com.memberclub.domain.context.purchase.PurchaseSubmitContext;
 import com.memberclub.domain.context.purchase.common.MemberOrderStatusEnum;
 import com.memberclub.domain.dataobject.payment.PrePayResult;
@@ -17,9 +22,10 @@ import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.mq.MQTopicEnum;
 import com.memberclub.infrastructure.mq.MessageQuenePublishFacade;
 import com.memberclub.infrastructure.payment.PaymentFacadeSPI;
-import com.memberclub.infrastructure.payment.context.PayExpireCheckMessage;
+import com.memberclub.infrastructure.payment.context.PaymentTimeoutMessage;
 import com.memberclub.infrastructure.payment.context.PrePayRequestDTO;
 import com.memberclub.infrastructure.payment.context.PrePayResponseDTO;
+import com.memberclub.sdk.aftersale.service.AftersaleBizService;
 import com.memberclub.sdk.event.trade.service.domain.TradeEventDomainService;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.payment.PaymentDataObjectFactory;
@@ -47,6 +53,8 @@ public class PaymentService {
 
     @Autowired
     private TradeEventDomainService tradeEventDomainService;
+    @Autowired
+    private AftersaleBizService aftersaleBizService;
 
     private static PaymentNotifyContext buildNotifyContext(PaymentNotifyCmd cmd, MemberOrderDO memberOrderDO) {
         PaymentNotifyContext context = new PaymentNotifyContext();
@@ -58,7 +66,13 @@ public class PaymentService {
         return context;
     }
 
+    public void paymentRefund(AfterSaleApplyContext context) {
+        //todo 补充调用支付原路退款
+        CommonLog.warn("已成功调用支付退款");
+    }
+
     @UserLog(domain = LogDomainEnum.PURCHASE)
+    @Retryable(throwException = false)
     public void paymentNotify(PaymentNotifyCmd cmd) {
         MemberOrderDO memberOrderDO = memberOrderDomainService.getMemberOrderDO(cmd.getUserId(), cmd.getTradeId());
         if (memberOrderDO == null) {
@@ -67,8 +81,10 @@ public class PaymentService {
         }
         PaymentNotifyContext context = buildNotifyContext(cmd, memberOrderDO);
         if (context.isOrderCancel()) {
+            memberOrderDomainService.onPaySuccess4OrderTimeout(context, memberOrderDO);
             CommonLog.warn("收到支付成功事件，订单状态已取消，需要原路退款");
             //调用售后仅退款
+            refund(context, memberOrderDO);
             return;
         }
         if (context.isOrderRefund()) {
@@ -95,6 +111,30 @@ public class PaymentService {
 
         //修改数据库,内部有重试
         memberOrderDomainService.onPaySuccess(context, memberOrderDO);
+    }
+
+    private void refund(PaymentNotifyContext context, MemberOrderDO memberOrderDO) {
+        PaymentNotifyCmd cmd = context.getCmd();
+        AftersaleApplyCmd applyCmd = new AftersaleApplyCmd();
+        applyCmd.setReason("支付成功时，订单已经超时退款，因此原路退款");
+        applyCmd.setOperator("system");
+        applyCmd.setUserId(cmd.getUserId());
+        applyCmd.setSource(AftersaleSourceEnum.SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT);
+        applyCmd.setBizType(memberOrderDO.getBizType());
+        applyCmd.setTradeId(cmd.getTradeId());
+        AftersaleApplyResponse response = aftersaleBizService.apply4RefundOnly(applyCmd);
+        if (!response.isSuccess()) {
+            ResultCode resultCode = ResultCode.findByCode(response.getUnableCode());
+            if (resultCode != null && resultCode.isNeedRetry()) {
+                CommonLog.error("调用售后退款失败，需要重试 response:{}", response);
+                throw resultCode.newException();
+            } else {
+                CommonLog.warn("调用售后退款失败，不需要重试 response:{}", response);
+            }
+            return;
+        }
+        memberOrderDomainService.onRefund4OrderTimeout(context, memberOrderDO);
+        CommonLog.warn("调用售后退款成功response:{}", response);
     }
 
     public void prePay(PurchaseSubmitContext context) {
@@ -134,12 +174,12 @@ public class PaymentService {
     }
 
     public void registerPaymentTimeoutValidator(PurchaseSubmitContext context) {
-        PayExpireCheckMessage message = new PayExpireCheckMessage();
+        PaymentTimeoutMessage message = new PaymentTimeoutMessage();
         message.setBizType(context.getBizType().getCode());
         message.setTradeId(context.getMemberOrder().getTradeId());
         message.setUserId(context.getMemberOrder().getUserId());
         message.setPayExpireTime(context.getPayExpireTime());
         //创建延迟消息，检查支付状态
-        messageQuenePublishFacade.publish(MQTopicEnum.TRADE_PAY_EXPIRE_CHECK, JsonUtils.toJson(message));
+        messageQuenePublishFacade.publish(MQTopicEnum.TRADE_PAYMENT_TIMEOUT_EVENT, JsonUtils.toJson(message));
     }
 }

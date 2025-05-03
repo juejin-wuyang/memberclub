@@ -8,7 +8,7 @@ package com.memberclub.starter.mq.rabbitmq;
 
 import com.memberclub.common.util.JsonUtils;
 import com.memberclub.infrastructure.mq.MQQueueEnum;
-import com.memberclub.infrastructure.payment.context.PayExpireCheckMessage;
+import com.memberclub.infrastructure.payment.context.PaymentTimeoutMessage;
 import com.memberclub.sdk.common.SwitchEnum;
 import com.memberclub.sdk.purchase.service.biz.PurchaseBizService;
 import com.rabbitmq.client.Channel;
@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import java.io.IOException;
 
 import static com.memberclub.infrastructure.mq.MQContants.TRADE_EVENT_QUEUE_ON_PRE_FINANCE;
-import static com.memberclub.infrastructure.mq.MQContants.TRADE_PAY_EXPIRE_CHECK_QUEUE;
+import static com.memberclub.infrastructure.mq.MQContants.TRADE_PAYMENT_TIMEOUT_EVENT_QUEUE;
 
 /**
  * author: 掘金五阳
@@ -43,11 +43,11 @@ public class RabbitmqConsumerConfiguration extends AbstractRabbitmqConsumerConfi
                 MQQueueEnum.TRADE_EVENT_FOR_PRE_FINANCE);
     }
 
-    @RabbitListener(queues = {TRADE_PAY_EXPIRE_CHECK_QUEUE})
+    @RabbitListener(queues = {TRADE_PAYMENT_TIMEOUT_EVENT_QUEUE})
     @RabbitHandler
     public void consumePayTimeoutCheckQueue(String value, Channel channel, Message message) throws IOException {
         try {
-            purchaseBizService.paymentTimeoutCallback(JsonUtils.fromJson(value, PayExpireCheckMessage.class));
+            purchaseBizService.paymentTimeoutValidate(JsonUtils.fromJson(value, PaymentTimeoutMessage.class));
         } finally {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         }
