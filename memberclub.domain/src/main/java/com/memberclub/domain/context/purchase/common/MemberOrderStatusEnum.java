@@ -46,7 +46,6 @@ public enum MemberOrderStatusEnum {
         return status == MemberOrderStatusEnum.COMPLETE_REFUNDED.getCode();
     }
 
-
     public static MemberOrderStatusEnum findByCode(int value) throws IllegalArgumentException {
         for (MemberOrderStatusEnum item : MemberOrderStatusEnum.values()) {
             if (item.value == value) {
@@ -55,6 +54,10 @@ public enum MemberOrderStatusEnum {
         }
 
         return null;
+    }
+
+    public boolean isPaid() {
+        return this.getCode() >= MemberOrderStatusEnum.PAYED.getCode();
     }
 
     @Override

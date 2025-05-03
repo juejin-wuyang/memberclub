@@ -47,7 +47,7 @@ public class RabbitmqConsumerConfiguration extends AbstractRabbitmqConsumerConfi
     @RabbitHandler
     public void consumePayTimeoutCheckQueue(String value, Channel channel, Message message) throws IOException {
         try {
-            purchaseBizService.payTimeoutCheck(JsonUtils.fromJson(value, PayExpireCheckMessage.class));
+            purchaseBizService.paymentTimeoutCallback(JsonUtils.fromJson(value, PayExpireCheckMessage.class));
         } finally {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         }

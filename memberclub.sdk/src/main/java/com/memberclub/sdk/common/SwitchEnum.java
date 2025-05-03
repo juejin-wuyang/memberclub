@@ -96,6 +96,8 @@ public enum SwitchEnum {
     SELF_MERCHANT_ID("self_merchant_id", "888888"),
 
     WAIT_PAY_TIME_SECONDS("wait_pay_time_seconds", MQContants.WAIT_PAY_EXPIRE_SECONDS),
+
+    PAY_AMOUNT_STRICT_VALIDATE("pay_amount_strict_validate", false),
     ;
 
 

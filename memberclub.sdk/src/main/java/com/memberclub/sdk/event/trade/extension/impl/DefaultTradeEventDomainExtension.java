@@ -21,6 +21,7 @@ import com.memberclub.domain.context.purchase.cancel.PurchaseCancelContext;
 import com.memberclub.domain.dataobject.event.trade.TradeEvent;
 import com.memberclub.domain.dataobject.event.trade.TradeEventDO;
 import com.memberclub.domain.dataobject.event.trade.TradeEventDetail;
+import com.memberclub.domain.dataobject.payment.context.PaymentNotifyContext;
 import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.infrastructure.mapstruct.CommonConvertor;
@@ -63,6 +64,11 @@ public class DefaultTradeEventDomainExtension implements TradeEventDomainExtensi
 
     @Override
     public String onRefundSuccessForSubOrder(AfterSaleApplyContext context, MemberSubOrderDO subOrder, TradeEventDO event) {
+        return toEventValue(event);
+    }
+
+    @Override
+    public String onPaySuccess(PaymentNotifyContext context, TradeEventDO event) {
         return toEventValue(event);
     }
 

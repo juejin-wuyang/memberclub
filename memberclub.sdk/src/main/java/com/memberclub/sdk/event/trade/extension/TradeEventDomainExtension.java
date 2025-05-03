@@ -17,6 +17,7 @@ import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
 import com.memberclub.domain.context.perform.reverse.SubOrderReversePerformContext;
 import com.memberclub.domain.context.purchase.cancel.PurchaseCancelContext;
 import com.memberclub.domain.dataobject.event.trade.TradeEventDO;
+import com.memberclub.domain.dataobject.payment.context.PaymentNotifyContext;
 import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 
@@ -45,4 +46,6 @@ public interface TradeEventDomainExtension extends BaseExtension {
     public String onRefundSuccessForSubOrder(AfterSaleApplyContext context,
                                              MemberSubOrderDO subOrder,
                                              TradeEventDO event);
+
+    String onPaySuccess(PaymentNotifyContext context, TradeEventDO event);
 }

@@ -101,7 +101,7 @@ public class PurchaseBizService {
 
     @Retryable(throwException = false)
     @UserLog(domain = LogDomainEnum.PURCHASE)
-    public void payTimeoutCheck(PayExpireCheckMessage message) {
+    public void paymentTimeoutCallback(PayExpireCheckMessage message) {
         MemberOrderDO memberOrderDO = memberOrderDomainService.getMemberOrderDO(message.getUserId(), message.getTradeId());
         if (memberOrderDO == null) {
             CommonLog.error("收到支付过期事件，未查询到MemberOrder message:{}", message);
@@ -113,7 +113,7 @@ public class PurchaseBizService {
         }
 
         if (memberOrderDO.getPaymentInfo().getPayStatus().isPaid()) {
-            CommonLog.warn("收到支付过期事件，MemberOrder 已支付 payStatus:{}, message:{} ",
+            CommonLog.warn("收到支付过期事件，MemberOrder 已支付无需处理， payStatus:{}, message:{} ",
                     memberOrderDO.getPaymentInfo().getPayStatus(), message);
             return;
         }

@@ -44,6 +44,7 @@ public enum ResultCode {
     REDEEM_INVALID_ERROR(34, "无效的兑换码", false),
     AFTERSALE_FREQUNCE_EXCEED(35, "售后频率过高，禁止购买", false, false),
     PRE_PAY_EXCEPTION(36, "创建预支付单异常", false, false),
+    PAY_EXCEPTION(37, "支付异常", false, false),
     ;
 
     private int value;

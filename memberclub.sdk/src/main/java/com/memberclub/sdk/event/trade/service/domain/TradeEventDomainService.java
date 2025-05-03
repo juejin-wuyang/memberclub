@@ -25,6 +25,7 @@ import com.memberclub.domain.context.purchase.cancel.PurchaseCancelContext;
 import com.memberclub.domain.dataobject.event.trade.TradeEventDO;
 import com.memberclub.domain.dataobject.event.trade.TradeEventDetailDO;
 import com.memberclub.domain.dataobject.event.trade.TradeEventEnum;
+import com.memberclub.domain.dataobject.payment.context.PaymentNotifyContext;
 import com.memberclub.domain.dataobject.perform.MemberPerformItemDO;
 import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
@@ -49,9 +50,9 @@ public class TradeEventDomainService {
     @Autowired
     private ExtensionManager extensionManager;
 
-    public void onPurchaseCancelSuccessForSubOrder(PurchaseCancelContext cancelContext,
-                                                   MemberOrderDO memberOrderDO,
-                                                   MemberSubOrderDO subOrder) {
+    public void publishEventOnPurchaseCancelSuccessForSubOrder(PurchaseCancelContext cancelContext,
+                                                               MemberOrderDO memberOrderDO,
+                                                               MemberSubOrderDO subOrder) {
         TradeEventDO event = buildTradeEvent(subOrder,
                 Lists.newArrayList(),
                 TradeEventEnum.SUB_ORDER_CANCEL_SUCCESS,
@@ -67,9 +68,9 @@ public class TradeEventDomainService {
     }
 
 
-    public void onPerformSuccessForSubOrder(PerformContext performContext,
-                                            SubOrderPerformContext subOrderPerformContext,
-                                            MemberSubOrderDO subOrder) {
+    public void publishEventOnPerformSuccessForSubOrder(PerformContext performContext,
+                                                        SubOrderPerformContext subOrderPerformContext,
+                                                        MemberSubOrderDO subOrder) {
         TradeEventDO event = buildTradeEvent(subOrder,
                 CollectionUtilEx.mapToList(subOrderPerformContext.getImmediatePerformItems(), MemberPerformItemDO::getItemToken),
                 TradeEventEnum.SUB_ORDER_PERFORM_SUCCESS,
@@ -84,7 +85,17 @@ public class TradeEventDomainService {
         CommonLog.info("发送 TradeEvent:{}", value);
     }
 
-    public void onPeriodPerformSuccess(PeriodPerformContext context) {
+    public void publishEventOnPaySuccess(PaymentNotifyContext context) {
+        TradeEventDO event = buildTradeEvent4PaySuccess(context);
+
+        String value = extensionManager.getExtension(BizScene.of(context.getMemberOrderDO().getBizType()),
+                TradeEventDomainExtension.class).onPaySuccess(context, event);
+
+        messageQuenePublishFacade.publish(MQTopicEnum.TRADE_EVENT, value);
+        CommonLog.info("发送 TradeEvent:{}", value);
+    }
+
+    public void publishEventOnPeriodPerformSuccess(PeriodPerformContext context) {
         TradeEventDO event = new TradeEventDO();
         event.setEventType(TradeEventEnum.SUB_ORDER_PERIOD_PERFORM_SUCCESS);
         TradeEventDetailDO detail = new TradeEventDetailDO();
@@ -109,9 +120,9 @@ public class TradeEventDomainService {
     }
 
 
-    public void onReversePerformSuccessForSubOrder(ReversePerformContext context,
-                                                   SubOrderReversePerformContext subOrderReversePerformContext,
-                                                   MemberSubOrderDO subOrder) {
+    public void publishOnReversePerformSuccessForSubOrder(ReversePerformContext context,
+                                                          SubOrderReversePerformContext subOrderReversePerformContext,
+                                                          MemberSubOrderDO subOrder) {
         TradeEventDO event = buildTradeEvent(subOrder,
                 CollectionUtilEx.mapToList(subOrderReversePerformContext.getItems(), PerformItemReverseInfo::getItemToken),
                 TradeEventEnum.SUB_ORDER_RERVERSE_PERFORM_SUCCESS,
@@ -124,8 +135,8 @@ public class TradeEventDomainService {
         CommonLog.info("发送 TradeEvent:{}", value);
     }
 
-    public void onRefundSuccessForSubOrder(AfterSaleApplyContext context,
-                                           MemberSubOrderDO subOrder) {
+    public void publishOnRefundSuccessForSubOrder(AfterSaleApplyContext context,
+                                                  MemberSubOrderDO subOrder) {
         List<String> itemTokens = CollectionUtilEx.filterAndMap(
                 context.getPreviewContext().getPerformItems(),
                 (item) -> StringUtils.equals(String.valueOf(subOrder.getSubTradeId()), item.getSubTradeId()),
@@ -143,8 +154,8 @@ public class TradeEventDomainService {
         CommonLog.info("发送 TradeEvent:{}", value);
     }
 
-    public void onFreezeSuccessForSubOrder(AfterSaleApplyContext context,
-                                           MemberSubOrderDO subOrder) {
+    public void publishOnFreezeSuccessForSubOrder(AfterSaleApplyContext context,
+                                                  MemberSubOrderDO subOrder) {
         List<String> itemTokens = CollectionUtilEx.filterAndMap(
                 context.getPreviewContext().getPerformItems(),
                 (item) -> StringUtils.equals(String.valueOf(subOrder.getSubTradeId()), item.getSubTradeId()),
@@ -162,6 +173,21 @@ public class TradeEventDomainService {
         CommonLog.info("发送 TradeEvent:{}", value);
     }
 
+
+    private TradeEventDO buildTradeEvent4PaySuccess(PaymentNotifyContext context) {
+        MemberOrderDO orderDO = context.getMemberOrderDO();
+        TradeEventDO event = new TradeEventDO();
+        event.setEventType(TradeEventEnum.MAIN_ORDER_PAY_SUCCESS);
+        TradeEventDetailDO detail = new TradeEventDetailDO();
+        detail.setEventTime(context.getCmd().getPayTime());
+        detail.setTradeId(orderDO.getTradeId());
+        detail.setBizType(orderDO.getBizType());
+        detail.setUserId(orderDO.getUserId());
+        detail.setPerformStatus(SubOrderPerformStatusEnum.INIT);
+        detail.setPayAmountFen(orderDO.getPaymentInfo().getPayAmountFen());
+        event.setDetail(detail);
+        return event;
+    }
 
     private TradeEventDO buildTradeEvent(MemberSubOrderDO subOrder, List<String> itemTokens, TradeEventEnum eventType, Integer periodIndex) {
         TradeEventDO event = new TradeEventDO();

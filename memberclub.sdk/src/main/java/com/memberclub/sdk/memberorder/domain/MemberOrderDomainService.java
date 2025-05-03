@@ -22,6 +22,7 @@ import com.memberclub.domain.context.perform.common.MemberOrderPerformStatusEnum
 import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
 import com.memberclub.domain.context.purchase.PurchaseSubmitContext;
 import com.memberclub.domain.context.purchase.cancel.PurchaseCancelContext;
+import com.memberclub.domain.dataobject.payment.context.PaymentNotifyContext;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.entity.trade.MemberOrder;
 import com.memberclub.domain.entity.trade.MemberSubOrder;
@@ -175,6 +176,29 @@ public class MemberOrderDomainService {
 
         extensionManager.getExtension(BizScene.of(context.getBizType()),
                 MemberOrderDomainExtension.class).onPrePay(order, wrapper);
+    }
+
+    @Retryable(throwException = false)
+    public void onPaySuccess(PaymentNotifyContext context, MemberOrderDO order) {
+        order.onPaySuccess(context);
+
+        //更新数据库
+        LambdaUpdateWrapper<MemberOrder> wrapper = new LambdaUpdateWrapper<>();
+
+        wrapper.eq(MemberOrder::getUserId, order.getUserId())
+                .eq(MemberOrder::getTradeId, order.getTradeId())
+                .set(MemberOrder::getPayStatus, order.getPaymentInfo().getPayStatus().getCode())
+                .set(MemberOrder::getStatus, order.getStatus().getCode())
+                .set(MemberOrder::getPayAccount, order.getPaymentInfo().getPayAccount())
+                .set(MemberOrder::getPayAccountType, order.getPaymentInfo().getPayAccountType())
+                .set(MemberOrder::getPayChannelType, order.getPaymentInfo().getPayChannelType())
+                .set(MemberOrder::getPayTime, order.getPaymentInfo().getPayTime())
+                .set(MemberOrder::getPayAmountFen, order.getPaymentInfo().getPayAmountFen())
+                .set(MemberOrder::getUtime, order.getUtime())
+        ;
+
+        MemberOrderDomainExtension extension = extensionManager.getExtension(BizScene.of(context.getBizType()), MemberOrderDomainExtension.class);
+        extension.onPaySuccess(order, wrapper);
     }
 
     public void onPayTimeoutCheck(MemberOrderDO order) {

@@ -43,6 +43,8 @@ public class MemberSubOrderDomainService {
 
     @Autowired
     private ExtensionManager extensionManager;
+    @Autowired
+    private TradeEventDomainService tradeEventDomainService;
 
     public void onSubmitSuccess(MemberOrderDO memberOrderDO) {
         for (MemberSubOrderDO subOrder : memberOrderDO.getSubOrders()) {
@@ -73,7 +75,7 @@ public class MemberSubOrderDomainService {
                     MemberSubOrderDomainExtension.class).onSubmitCancel(subOrder, subOrderWrapper);
 
             TransactionHelper.afterCommitExecute(() -> {
-                tradeEventDomainService.onPurchaseCancelSuccessForSubOrder(context, memberOrderDO, subOrder);
+                tradeEventDomainService.publishEventOnPurchaseCancelSuccessForSubOrder(context, memberOrderDO, subOrder);
             });
         }
     }
@@ -97,9 +99,6 @@ public class MemberSubOrderDomainService {
                 .onStartPerform(performContext, subOrderPerformContext, subOrder, subOrderWrapper);
     }
 
-    @Autowired
-    private TradeEventDomainService tradeEventDomainService;
-
     @Transactional(rollbackFor = Exception.class)
     public void onPerformSuccess(PerformContext performContext,
                                  SubOrderPerformContext subOrderPerformContext,
@@ -120,7 +119,7 @@ public class MemberSubOrderDomainService {
                 .onPerformSuccess(performContext, subOrderPerformContext, subOrder, subOrderWrapper);
 
         TransactionHelper.afterCommitExecute(() -> {
-            tradeEventDomainService.onPerformSuccessForSubOrder(performContext, subOrderPerformContext, subOrder);
+            tradeEventDomainService.publishEventOnPerformSuccessForSubOrder(performContext, subOrderPerformContext, subOrder);
         });
     }
 
@@ -177,7 +176,7 @@ public class MemberSubOrderDomainService {
                 .onReversePerformSuccess(context, subOrderReversePerformContext, subOrder, subOrderWrapper);
 
         TransactionHelper.afterCommitExecute(() -> {
-            tradeEventDomainService.onReversePerformSuccessForSubOrder(context, subOrderReversePerformContext, subOrder);
+            tradeEventDomainService.publishOnReversePerformSuccessForSubOrder(context, subOrderReversePerformContext, subOrder);
         });
     }
 
@@ -194,13 +193,13 @@ public class MemberSubOrderDomainService {
                 .onRefundSuccess(context, subOrder, subOrderWrapper);
 
         TransactionHelper.afterCommitExecute(() -> {
-            tradeEventDomainService.onRefundSuccessForSubOrder(context, subOrder);
+            tradeEventDomainService.publishOnRefundSuccessForSubOrder(context, subOrder);
         });
     }
 
     public void onJustFreezeSuccess(AfterSaleApplyContext context,
                                     MemberSubOrderDO subOrder) {
-        tradeEventDomainService.onFreezeSuccessForSubOrder(context, subOrder);
+        tradeEventDomainService.publishOnFreezeSuccessForSubOrder(context, subOrder);
     }
 
 }

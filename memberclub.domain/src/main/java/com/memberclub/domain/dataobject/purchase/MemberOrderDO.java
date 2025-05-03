@@ -24,6 +24,7 @@ import com.memberclub.domain.dataobject.order.MemberOrderFinanceInfo;
 import com.memberclub.domain.dataobject.order.MemberOrderSaleInfo;
 import com.memberclub.domain.dataobject.payment.PayStatusEnum;
 import com.memberclub.domain.dataobject.payment.PaymentDO;
+import com.memberclub.domain.dataobject.payment.context.PaymentNotifyContext;
 import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
 import com.memberclub.domain.exception.ResultCode;
 import lombok.Data;
@@ -91,6 +92,18 @@ public class MemberOrderDO {
 
     public void onPrePay(PurchaseSubmitContext context) {
         paymentInfo.setPayStatus(PayStatusEnum.WAIT_PAY);
+    }
+
+    public void onPaySuccess(PaymentNotifyContext context) {
+        paymentInfo.setPayStatus(PayStatusEnum.PAY_SUCCESS);
+        status = MemberOrderStatusEnum.PAYED;
+        utime = System.currentTimeMillis();
+
+        paymentInfo.setPayTime(context.getCmd().getPayTime());
+        paymentInfo.setPayAccount(context.getCmd().getPayAccount());
+        paymentInfo.setPayAccountType(context.getCmd().getPayAccountType());
+        paymentInfo.setPayChannelType(context.getCmd().getPayChannelType());
+        paymentInfo.setPayAmountFen(context.getCmd().getPayAmountFen());
     }
 
     public void onSubmitFail(PurchaseSubmitContext context) {

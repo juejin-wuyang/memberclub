@@ -14,6 +14,7 @@ import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.entity.trade.MemberOrder;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * author: 掘金五阳
@@ -32,4 +33,7 @@ public interface MemberOrderDomainExtension extends BaseExtension {
     public void onReversePerformSuccess(ReversePerformContext context, MemberOrderDO memberOrderDO, LambdaUpdateWrapper<MemberOrder> wrapper);
 
     public void onPrePay(MemberOrderDO memberOrderDO, LambdaUpdateWrapper<MemberOrder> wrapper);
+
+    @Transactional
+    void onPaySuccess(MemberOrderDO memberOrderDO, LambdaUpdateWrapper<MemberOrder> wrapper);
 }

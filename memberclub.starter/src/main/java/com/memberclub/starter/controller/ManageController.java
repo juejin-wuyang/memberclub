@@ -7,12 +7,11 @@
 package com.memberclub.starter.controller;
 
 import com.google.common.collect.Lists;
+import com.memberclub.common.log.CommonLog;
 import com.memberclub.common.util.CollectionUtilEx;
 import com.memberclub.common.util.TimeUtil;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.context.oncetask.trigger.OnceTaskTriggerCmd;
-import com.memberclub.domain.context.perform.PerformCmd;
-import com.memberclub.domain.context.perform.PerformResp;
 import com.memberclub.domain.context.perform.common.ShipTypeEnum;
 import com.memberclub.domain.context.purchase.PurchaseSkuSubmitCmd;
 import com.memberclub.domain.context.purchase.PurchaseSubmitCmd;
@@ -23,11 +22,15 @@ import com.memberclub.domain.dataobject.CommonUserInfo;
 import com.memberclub.domain.dataobject.aftersale.ClientInfo;
 import com.memberclub.domain.dataobject.membership.MemberShipUnionDO;
 import com.memberclub.domain.dataobject.order.LocationInfo;
+import com.memberclub.domain.dataobject.payment.PayAcccountTypeEnum;
+import com.memberclub.domain.dataobject.payment.PayChannelTypeEnum;
+import com.memberclub.domain.dataobject.payment.context.PaymentNotifyCmd;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.dataobject.sku.SkuInfoDO;
 import com.memberclub.sdk.aftersale.service.AftersaleBizService;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.membership.service.MemberShipCacheService;
+import com.memberclub.sdk.payment.service.PaymentService;
 import com.memberclub.sdk.perform.service.PerformBizService;
 import com.memberclub.sdk.purchase.service.biz.PurchaseBizService;
 import com.memberclub.sdk.sku.service.SkuDomainService;
@@ -82,6 +85,8 @@ public class ManageController {
     private AftersaleBizService aftersaleBizService;
     @Autowired
     private MemberShipCacheService memberShipCacheService;
+    @Autowired
+    private PaymentService paymentService;
 
     @ApiOperation("查询商品列表")
     @PostMapping("/sku/list")
@@ -130,7 +135,6 @@ public class ManageController {
         }
         return previewVOs;
     }
-
 
     public List<SkuPreviewVO> buildDisplaySkusForLesson() {
         List<Long> skuIds = Lists.newArrayList();
@@ -191,8 +195,8 @@ public class ManageController {
 
     @ResponseBody
     @PostMapping("/purchase/pay")
-    public PerformResp pay(HttpServletRequest servletRequest, @RequestBody TestPayRequest request) {
-        PerformCmd cmd = new PerformCmd();
+    public boolean pay(HttpServletRequest servletRequest, @RequestBody TestPayRequest request) {
+        PaymentNotifyCmd cmd = new PaymentNotifyCmd();
 
         try {
             SecurityUtil.securitySet(servletRequest);
@@ -202,11 +206,19 @@ public class ManageController {
             if (order == null) {
                 throw new RuntimeException("输入错误订单 id");
             }
-            cmd.setBizType(order.getBizType());
-            cmd.setOrderSystemType(order.getOrderInfo().getOrderSystemType());
-            cmd.setOrderId(order.getOrderInfo().getOrderId());
+            cmd.setPayAccount(RandomStringUtils.randomAscii(10));
+            cmd.setPayTime(TimeUtil.now());
+            cmd.setPayTradeNo(order.getPaymentInfo().getPayTradeNo());
+            cmd.setPayChannelType(PayChannelTypeEnum.ALIPAY.getName());
+            cmd.setPayAccountType(PayAcccountTypeEnum.THIRD_PARTY.getName());
+            cmd.setPayTime(order.getPaymentInfo().getPayTime());
+            cmd.setPayAmountFen(order.getActPriceFen());
 
-            return performBizService.perform(cmd);
+            paymentService.paymentNotify(cmd);
+            return true;
+        } catch (Exception e) {
+            CommonLog.warn("管理接口调用支付异常", e);
+            return false;
         } finally {
             SecurityUtil.clear();
         }
@@ -239,7 +251,7 @@ public class ManageController {
     }
 
     @PostMapping("/purchase/submitAndPay")
-    public PerformResp submitAndPay(HttpServletRequest servletRequest, @RequestBody PurchaseSubmitRequest request) {
+    public boolean submitAndPay(HttpServletRequest servletRequest, @RequestBody PurchaseSubmitRequest request) {
         PurchaseSubmitResponse response = submit(servletRequest, request);
         if (response.isSuccess()) {
             TestPayRequest payRequest = new TestPayRequest();

@@ -207,7 +207,7 @@ public class MemberOrderDataObjectBuildFactory {
         paymentDO.setPayAccount(memberOrder.getPayAccount());
         paymentDO.setPayTime(memberOrder.getPayTime());
         paymentDO.setPayAmountFen(memberOrder.getPayAmountFen());
-        paymentDO.setPayAcccountTypeEnum(memberOrder.getPayAccountType());
+        paymentDO.setPayAccountType(memberOrder.getPayAccountType());
         paymentDO.setPayChannelType(memberOrder.getPayChannelType());
 
         orderDo.setPaymentInfo(paymentDO);

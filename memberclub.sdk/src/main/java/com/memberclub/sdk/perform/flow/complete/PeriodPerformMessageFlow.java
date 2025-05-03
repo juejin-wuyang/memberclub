@@ -29,6 +29,6 @@ public class PeriodPerformMessageFlow extends FlowNode<PeriodPerformContext> {
 
     @Override
     public void success(PeriodPerformContext context) {
-        tradeEventDomainService.onPeriodPerformSuccess(context);
+        tradeEventDomainService.publishEventOnPeriodPerformSuccess(context);
     }
 }

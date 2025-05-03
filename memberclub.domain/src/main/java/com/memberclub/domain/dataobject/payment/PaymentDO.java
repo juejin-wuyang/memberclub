@@ -33,7 +33,7 @@ public class PaymentDO {
     private String payChannelType;
 
     //支付账户类型，为了避免 跟随支付系统升级，使用字符串承载。（其实订单系统不太关心支付的账户类型）
-    private String payAcccountTypeEnum;
+    private String payAccountType;
 
     private String productName;
 

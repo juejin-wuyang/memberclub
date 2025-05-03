@@ -29,6 +29,8 @@ public class TradeEventDetailDO {
 
     private Long skuId;
 
+    private Integer payAmountFen;
+
     private Long eventTime;
 
     private Integer periodIndex;

@@ -13,7 +13,7 @@ package com.memberclub.domain.dataobject.event.trade;
 public enum TradeEventEnum {
 
     SUB_ORDER_CANCEL_SUCCESS(19, "子单取消成功"),
-    SUB_ORDER_PAY_SUCCESS(29, "子单支付成功"),
+    MAIN_ORDER_PAY_SUCCESS(29, "主单支付成功"),
     SUB_ORDER_PERFORM_SUCCESS(35, "子单履约成功"),
     SUB_ORDER_PERIOD_PERFORM_SUCCESS(36, "子单周期履约成功"),
     SUB_ORDER_RERVERSE_PERFORM_SUCCESS(45, "子单逆向履约成功"),
