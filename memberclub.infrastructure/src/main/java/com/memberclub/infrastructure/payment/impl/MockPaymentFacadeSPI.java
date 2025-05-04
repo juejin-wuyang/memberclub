@@ -1,6 +1,8 @@
 package com.memberclub.infrastructure.payment.impl;
 
 import com.memberclub.infrastructure.payment.PaymentFacadeSPI;
+import com.memberclub.infrastructure.payment.context.PaymentRefundRequestDTO;
+import com.memberclub.infrastructure.payment.context.PaymentRefundResponseDTO;
 import com.memberclub.infrastructure.payment.context.PrePayRequestDTO;
 import com.memberclub.infrastructure.payment.context.PrePayResponseDTO;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -19,6 +21,16 @@ public class MockPaymentFacadeSPI implements PaymentFacadeSPI {
         dto.setCode(0);
         dto.setPayToken(RandomStringUtils.randomAlphanumeric(10));
         dto.setTradeNo(payTradeNo);
+        return dto;
+    }
+
+    @Override
+    public PaymentRefundResponseDTO refundPayOrder(PaymentRefundRequestDTO paymentRefundRequestDTO) {
+        PaymentRefundResponseDTO dto = new PaymentRefundResponseDTO();
+        dto.setCode(0);
+        dto.setMsg("success");
+        dto.setRefundAmountFen(paymentRefundRequestDTO.getRefundAmountFen());
+
         return dto;
     }
 }

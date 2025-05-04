@@ -7,7 +7,6 @@
 package com.memberclub.domain.context.perform;
 
 import com.memberclub.domain.common.BizTypeEnum;
-import com.memberclub.domain.common.OrderSystemTypeEnum;
 import com.memberclub.domain.common.RetryableContext;
 import lombok.Data;
 
@@ -21,9 +20,9 @@ public class PerformCmd implements RetryableContext {
 
     private long userId;
 
-    private String orderId;
+    /*private String orderId;*/
 
-    private OrderSystemTypeEnum orderSystemType;
+    /*private OrderSystemTypeEnum orderSystemType;*/
 
     private String tradeId;
 

@@ -23,6 +23,9 @@ public enum MQQueueEnum {
             MQContants.TRADE_PAYMENT_TIMEOUT_EVENT, -1),
 
 
+    TRADE_EVENT_FOR_PAY_SUCCESS(3,
+            MQContants.TRADE_EVENT_QUEUE_ON_PAY_SUCCESS,
+            MQContants.TRADE_EVENT_TOPIC, 5000),
     ;
 
     private int code;

@@ -11,7 +11,7 @@ import com.memberclub.common.log.CommonLog;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.context.aftersale.contant.RefundWayEnum;
 import com.memberclub.sdk.aftersale.service.domain.AftersaleDomainService;
-import com.memberclub.sdk.ordercenter.OrderCenterDomainService;
+import com.memberclub.sdk.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,17 +19,16 @@ import org.springframework.stereotype.Service;
  * author: 掘金五阳
  */
 @Service
-public class AftersaleOrderRefundFlow extends FlowNode<AfterSaleApplyContext> {
+public class AfterSalePayOrderRefundFlow extends FlowNode<AfterSaleApplyContext> {
 
     @Autowired
-    private AftersaleDomainService aftersaleDomainService;
-
+    private PaymentService paymentService;
     @Autowired
-    private OrderCenterDomainService orderCenterDomainService;
+    private AftersaleDomainService afterSaleDomainService;
 
     @Override
     public void process(AfterSaleApplyContext context) {
-        if (context.getAftersaleOrderDO().getStatus().isOrderRefund()) {
+        if (context.getAftersaleOrderDO().getStatus().isPayOrderRefund()) {
             CommonLog.info("当前状态已完成退款,不再重复执行");
             return;
         }
@@ -38,10 +37,10 @@ public class AftersaleOrderRefundFlow extends FlowNode<AfterSaleApplyContext> {
             return;
         }
 
+        CommonLog.info("开始支付退款流程");
+        paymentService.paymentRefund(context);
+        context.setPayOrderRefundInvokeSuccess(true);
 
-        CommonLog.info("开始订单退款流程");
-        orderCenterDomainService.refundOrder(context);
-
-        aftersaleDomainService.onOrderRefunded(context);
+        afterSaleDomainService.onOrderRefunded(context);
     }
 }

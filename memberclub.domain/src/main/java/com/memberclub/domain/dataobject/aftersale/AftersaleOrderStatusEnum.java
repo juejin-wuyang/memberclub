@@ -31,18 +31,6 @@ public enum AftersaleOrderStatusEnum {
         this.name = name;
     }
 
-    public boolean isPerformReversed() {
-        return value >= REVERSE_PERFORM_SUCCESS.getCode();
-    }
-
-    public boolean isOrderRefund() {
-        return value >= REFUND_ORDER_SUCCESS.getCode();
-    }
-
-    public boolean isPurchaseReversed() {
-        return value >= REVERSE_PURCHASE_SUCCESS.getCode();
-    }
-
     public static AftersaleOrderStatusEnum findByCode(int value) throws IllegalArgumentException {
         for (AftersaleOrderStatusEnum item : AftersaleOrderStatusEnum.values()) {
             if (item.value == value) {
@@ -51,6 +39,18 @@ public enum AftersaleOrderStatusEnum {
         }
 
         return null;
+    }
+
+    public boolean isPerformReversed() {
+        return value >= REVERSE_PERFORM_SUCCESS.getCode();
+    }
+
+    public boolean isPayOrderRefund() {
+        return value >= REFUND_ORDER_SUCCESS.getCode();
+    }
+
+    public boolean isPurchaseReversed() {
+        return value >= REVERSE_PURCHASE_SUCCESS.getCode();
     }
 
     public boolean isEquals(int status) {

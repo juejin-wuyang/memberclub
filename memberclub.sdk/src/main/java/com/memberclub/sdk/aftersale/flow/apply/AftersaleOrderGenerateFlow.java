@@ -38,7 +38,6 @@ public class AftersaleOrderGenerateFlow extends FlowNode<AfterSaleApplyContext> 
         AftersaleOrderDO orderDO = aftersaleDomainService.generateOrder(context);
         context.setAftersaleOrderDO(orderDO);
 
-
         Long aftersaleOrderId = idGenerator.generateId(IdTypeEnum.AFTERSALE_ORDER);
         orderDO.setId(aftersaleOrderId);
 

@@ -6,7 +6,6 @@
  */
 
 import com.memberclub.domain.common.BizTypeEnum;
-import com.memberclub.domain.common.OrderSystemTypeEnum;
 import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.perform.SubOrderPerformContext;
 import com.memberclub.domain.dataobject.sku.SkuInfoDO;
@@ -37,6 +36,5 @@ public class MemberSkuTest {
         SubOrderPerformContext subOrderPerformContext = new SubOrderPerformContext();
 
         context.setBizType(BizTypeEnum.DEMO_MEMBER);
-        context.setOrderSystemType(OrderSystemTypeEnum.COMMON_ORDER);
     }
 }

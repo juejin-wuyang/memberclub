@@ -8,7 +8,6 @@ package com.memberclub.domain.context.perform;
 
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.common.BizTypeEnum;
-import com.memberclub.domain.common.OrderSystemTypeEnum;
 import com.memberclub.domain.common.RetrySourceEunm;
 import com.memberclub.domain.dataobject.CommonUserInfo;
 import com.memberclub.domain.dataobject.order.MemberOrderExtraInfo;
@@ -35,11 +34,11 @@ public class PerformContext {
     private long userId;
 
     /******************订单信息****************/
-    private String orderId;
+    /*private String orderId;*/
 
     private String tradeId;
 
-    private OrderSystemTypeEnum orderSystemType;
+    /*private OrderSystemTypeEnum orderSystemType;*/
 
     private int memberOrderStartPerformUpdateCount;
 

@@ -21,10 +21,12 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 
-import static com.memberclub.infrastructure.mq.MQContants.TRADE_EVENT_QUEUE_ON_PRE_FINANCE;
-import static com.memberclub.infrastructure.mq.MQContants.TRADE_PAYMENT_TIMEOUT_EVENT_QUEUE;
+import static com.memberclub.infrastructure.mq.MQContants.*;
 
 /**
+ * Rabbitmq Topic Queue 注册
+ *
+ * @see com.memberclub.infrastructure.mq.RabbitRegisterConfiguration
  * author: 掘金五阳
  */
 @ConditionalOnProperty(name = "memberclub.infrastructure.mq", havingValue = "rabbitmq", matchIfMissing = true)
@@ -51,5 +53,13 @@ public class RabbitmqConsumerConfiguration extends AbstractRabbitmqConsumerConfi
         } finally {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         }
+    }
+
+    @RabbitListener(queues = {TRADE_EVENT_QUEUE_ON_PAY_SUCCESS})
+    @RabbitHandler
+    public void consumeTradeEvent4PaySuccessQueue(String value, Channel channel, Message message) throws IOException {
+        consumeAndFailRetry(value, channel, message,
+                SwitchEnum.TRADE_EVENT_4_PAY_SUCCESS_RETRY_TIMES,
+                MQQueueEnum.TRADE_EVENT_FOR_PAY_SUCCESS);
     }
 }

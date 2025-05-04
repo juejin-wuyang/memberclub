@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.flow.SkipException;
 import com.memberclub.domain.common.BizScene;
-import com.memberclub.domain.common.OrderSystemTypeEnum;
 import com.memberclub.domain.context.perform.PerformCmd;
 import com.memberclub.domain.context.perform.PerformResp;
 import com.memberclub.domain.context.purchase.PurchaseSubmitCmd;
@@ -86,12 +85,9 @@ public class OuterSubmitDomainService {
 
     public PerformResp perform(OuterSubmitContext context) {
         PerformCmd cmd = new PerformCmd();
-        cmd.setOrderId(context.getMemberOrder().getOrderInfo().getOrderId());
         cmd.setBizType(context.getBizType());
-        cmd.setOrderSystemType(OrderSystemTypeEnum.COMMON_ORDER);
         cmd.setUserId(context.getUserId());
         cmd.setTradeId(context.getMemberOrder().getTradeId());
-
 
         return performBizService.perform(cmd);
     }

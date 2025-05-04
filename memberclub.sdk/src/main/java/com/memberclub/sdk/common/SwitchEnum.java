@@ -54,6 +54,11 @@ public enum SwitchEnum {
      */
     TRADE_EVENT_FOR_PRE_FINANCE_RETRY_TIMES("com.memberclub.trade.event.consumer.prefinance.retryTimes", 3),
 
+    /***
+     * 支付成功消费的重试次数
+     */
+    TRADE_EVENT_4_PAY_SUCCESS_RETRY_TIMES("com.memberclub.trade.event.consumer.paysuccess.retryTimes", 3),
+
     /**
      * 任务扫描 持续的最大天数, 如每个任务的 Stime+ 35天内均需要触发(如未执行成功)
      */

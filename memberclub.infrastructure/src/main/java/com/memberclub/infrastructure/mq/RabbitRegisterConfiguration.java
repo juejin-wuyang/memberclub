@@ -120,7 +120,6 @@ public class RabbitRegisterConfiguration {
 
     }
 
-
     @Configuration
     static class TradeEventPreFinanceQueueConfiguration extends DelayRetryableQueueConfiguration {
 
@@ -193,5 +192,43 @@ public class RabbitRegisterConfiguration {
                     .with(getQueue().getDelayQueneName());
         }
 
+    }
+
+    @Configuration
+    static class TradeEvent4PaySuccessQueueConfiguration extends DelayRetryableQueueConfiguration {
+        @Override
+        public MQQueueEnum getQueue() {
+            return MQQueueEnum.TRADE_EVENT_FOR_PAY_SUCCESS;
+        }
+
+        @Bean("TRADE_EVENT_FOR_PAY_SUCCESS")
+        @Override
+        public Queue newNormalQueue() {
+            return super.newNormalQueue();
+        }
+
+        @Bean("TRADE_EVENT_FOR_PAY_SUCCESS_BINDING_NORMAL_EXCHANGE")
+        @Override
+        public Binding normalQueueBindingNormalExchange() {
+            return super.normalQueueBindingNormalExchange();
+        }
+
+        @Bean("TRADE_EVENT_FOR_PAY_SUCCESS_BINDING_DEAD_EXCHANGE")
+        @Override
+        public Binding normalQueueBindingDeadExchange() {
+            return super.normalQueueBindingDeadExchange();
+        }
+
+        @Bean("TRADE_EVENT_FOR_PAY_SUCCESS_DELAY_QUEUE")
+        @Override
+        public Queue delayQueue() {
+            return super.delayQueue();
+        }
+
+        @Bean("TRADE_EVENT_FOR_PAY_SUCCESS_DELAY_QUEUE_BINDING_DELAY_EXCHANGE")
+        @Override
+        public Binding delayQueueBindingDelayExchange() {
+            return super.delayQueueBindingDelayExchange();
+        }
     }
 }

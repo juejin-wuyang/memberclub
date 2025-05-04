@@ -22,9 +22,7 @@ import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.mq.MQTopicEnum;
 import com.memberclub.infrastructure.mq.MessageQuenePublishFacade;
 import com.memberclub.infrastructure.payment.PaymentFacadeSPI;
-import com.memberclub.infrastructure.payment.context.PaymentTimeoutMessage;
-import com.memberclub.infrastructure.payment.context.PrePayRequestDTO;
-import com.memberclub.infrastructure.payment.context.PrePayResponseDTO;
+import com.memberclub.infrastructure.payment.context.*;
 import com.memberclub.sdk.aftersale.service.AftersaleBizService;
 import com.memberclub.sdk.event.trade.service.domain.TradeEventDomainService;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
@@ -67,10 +65,36 @@ public class PaymentService {
     }
 
     public void paymentRefund(AfterSaleApplyContext context) {
-        //todo 补充调用支付原路退款
-        CommonLog.warn("已成功调用支付退款");
+        // 调用支付原路退款
+        PaymentExtension paymentExtension = extensionManager.getExtension(context.toBizScene(), PaymentExtension.class);
+        paymentExtension.initializePaymentRefundOrder(context);
+
+        PaymentRefundRequestDTO request = paymentDataObjectFactory.createPaymentRefundRequestDTO(context);
+
+        PaymentRefundResponseDTO response = null;
+        try {
+            response = paymentFacadeSPI.refundPayOrder(request);
+        } catch (Exception e) {
+            CommonLog.warn("支付单退款异常 request:{}", request, e);
+            throw ResultCode.PAY_REFUND_EXCEPTION.newException("支付单退款异常", e);
+        }
+
+        if (!response.isSuccess()) {
+            CommonLog.error("支付单退款失败 request:{}, response:{}", request, response);
+            throw ResultCode.PAY_REFUND_EXCEPTION.newException("支付单退款失败:" + response.getMsg());
+        }
+        if (response.getRefundAmountFen() != request.getRefundAmountFen()) {
+            CommonLog.error("支付单退款失败 退款金额不一致 request:{}, response:{}", request, response);
+            throw ResultCode.PAY_REFUND_EXCEPTION.newException("支付单退款失败 退款金不一致");
+        }
+        CommonLog.warn("调用支付退款成功 result:{}", response);
     }
 
+    /**
+     * 支付成功事件消费处理
+     *
+     * @param cmd
+     */
     @UserLog(domain = LogDomainEnum.PURCHASE)
     @Retryable(throwException = false)
     public void paymentNotify(PaymentNotifyCmd cmd) {

@@ -39,7 +39,7 @@ public class AfterSaleApplyContext implements RetryableContext {
 
     private Integer orderRefundPriceFen;
 
-    private Boolean orderRefundInvokeSuccess;
+    private Boolean payOrderRefundInvokeSuccess;
 
     /******************************************/
 

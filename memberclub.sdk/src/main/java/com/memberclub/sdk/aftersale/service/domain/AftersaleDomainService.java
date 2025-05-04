@@ -58,7 +58,8 @@ public class AftersaleDomainService {
 
     @Autowired
     private TradeEventDomainService tradeEventDomainService;
-
+    @Autowired
+    private MemberSubOrderDomainService memberSubOrderDomainService;
 
     public AftersaleOrderDO generateOrder(AfterSaleApplyContext context) {
         AftersaleOrderDO order = AftersaleConvertor.INSTANCE.toAftersaleOrderDO(context.getCmd());
@@ -117,7 +118,6 @@ public class AftersaleDomainService {
                 TimeUtil.now());
     }
 
-
     @Transactional
     public void onPurchaseReversed(AfterSaleApplyContext context) {
         AftersaleOrderDO order = context.getAftersaleOrderDO();
@@ -160,12 +160,9 @@ public class AftersaleDomainService {
                 AftersaleDomainExtension.class).onSuccess(context, order, wrapper);
     }
 
-    @Autowired
-    private MemberSubOrderDomainService memberSubOrderDomainService;
-
     @Transactional(rollbackFor = Exception.class)
     public void onRefundSuccessForMemberOrder(AfterSaleApplyContext context) {
-        if (!Boolean.TRUE.equals(context.getOrderRefundInvokeSuccess())) {
+        if (!Boolean.TRUE.equals(context.getPayOrderRefundInvokeSuccess())) {
             CommonLog.info("没有调用订单退款,因此不修改主状态");
             for (MemberSubOrderDO subOrder : context.getPreviewContext().getSubOrders()) {
                 memberSubOrderDomainService.onJustFreezeSuccess(context, subOrder);

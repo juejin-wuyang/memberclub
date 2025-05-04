@@ -12,7 +12,6 @@ import com.google.common.collect.Sets;
 import com.memberclub.common.log.CommonLog;
 import com.memberclub.common.util.*;
 import com.memberclub.domain.common.BizTypeEnum;
-import com.memberclub.domain.common.OrderSystemTypeEnum;
 import com.memberclub.domain.context.aftersale.apply.AftersaleApplyCmd;
 import com.memberclub.domain.context.aftersale.apply.AftersaleApplyResponse;
 import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
@@ -847,9 +846,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
     @SneakyThrows
     private PerformCmd buildCmd(MemberOrderDO memberOrder) {
         PerformCmd cmd = new PerformCmd();
-        cmd.setOrderId(memberOrder.getOrderInfo().getOrderId());
         cmd.setBizType(BizTypeEnum.DEMO_MEMBER);
-        cmd.setOrderSystemType(OrderSystemTypeEnum.COMMON_ORDER);
         cmd.setUserId(memberOrder.getUserId());
         cmd.setTradeId(memberOrder.getTradeId());
         return cmd;

@@ -57,7 +57,7 @@ public class DemoMemberAfterSaleApplyExtension extends BaseAfterSaleApplyExtensi
                 .addNode(AftersaleAsyncRollbackFlow.class)
                 .addNode(AftersaleReversePerformFlow.class)
                 .addNode(AftersaleReversePurchaseFlow.class)
-                .addNode(AftersaleOrderRefundFlow.class)
+                .addNode(AfterSalePayOrderRefundFlow.class)
         //.addNode()
         ;
     }

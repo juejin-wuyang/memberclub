@@ -1,8 +1,10 @@
 package com.memberclub.sdk.payment;
 
+import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.context.purchase.PurchaseSubmitContext;
 import com.memberclub.domain.dataobject.payment.PaymentDO;
 import com.memberclub.domain.dataobject.payment.PrePayResult;
+import com.memberclub.infrastructure.payment.context.PaymentRefundRequestDTO;
 import com.memberclub.infrastructure.payment.context.PrePayRequestDTO;
 import com.memberclub.infrastructure.payment.context.PrePayResponseDTO;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,17 @@ public class PaymentDataObjectFactory {
         prePayRequestDTO.setProductDesc(paymentDO.getProductDesc());
         prePayRequestDTO.setPayExpireTime(context.getPayExpireTime());
         return prePayRequestDTO;
+    }
+
+    public PaymentRefundRequestDTO createPaymentRefundRequestDTO(AfterSaleApplyContext context) {
+        PaymentRefundRequestDTO paymentRefundRequestDTO = new PaymentRefundRequestDTO();
+        paymentRefundRequestDTO.setTradeNo(context.getPreviewContext().getMemberOrder().getPaymentInfo().getPayTradeNo());
+        paymentRefundRequestDTO.setUserId(context.getCmd().getUserId());
+        paymentRefundRequestDTO.setRefundOuterNo(context.getAftersaleOrderDO().getId() + "");
+        paymentRefundRequestDTO.setRefundAmountFen(context.getAftersaleOrderDO().getActRefundPriceFen());
+        paymentRefundRequestDTO.setReason(context.getAftersaleOrderDO().getReason());
+        paymentRefundRequestDTO.setMerchantId(context.getPreviewContext().getMemberOrder().getPaymentInfo().getMerchantId());
+        return paymentRefundRequestDTO;
     }
 
     public PrePayResult convertPayResponse(PrePayResponseDTO prePayResponseDTO) {

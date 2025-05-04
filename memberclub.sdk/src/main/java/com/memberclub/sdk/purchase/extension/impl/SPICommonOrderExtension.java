@@ -51,6 +51,7 @@ public class SPICommonOrderExtension implements CommonOrderExtension {
         context.getMemberOrder().getOrderInfo().setOrderSystemType(OrderSystemTypeEnum.COMMON_ORDER);
     }
 
+    @Deprecated
     @Override
     public CommonOrderSubmitResult doSubmit(PurchaseSubmitContext context) {
         SubmitOrderRequestDTO request = new SubmitOrderRequestDTO();
@@ -93,6 +94,7 @@ public class SPICommonOrderExtension implements CommonOrderExtension {
         ));
     }
 
+    @Deprecated
     @Override
     public CommonOrderRefundResult refund(AfterSaleApplyContext context) {
         RefundOrderRequestDTO request = new RefundOrderRequestDTO();

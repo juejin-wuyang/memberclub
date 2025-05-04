@@ -43,7 +43,6 @@ public class ExtensionTest extends MockBaseTest {
         PerformCmd cmd = new PerformCmd();
         cmd.setBizType(BizTypeEnum.DEMO_MEMBER);
         cmd.setUserId(1000);
-        cmd.setOrderId("8342493");
         extension.execute(cmd);
     }
 
@@ -56,7 +55,6 @@ public class ExtensionTest extends MockBaseTest {
         PerformCmd cmd = new PerformCmd();
         cmd.setBizType(BizTypeEnum.DEMO_MEMBER);
         cmd.setUserId(1000);
-        cmd.setOrderId("8342493");
         extension.execute(cmd);
     }
 

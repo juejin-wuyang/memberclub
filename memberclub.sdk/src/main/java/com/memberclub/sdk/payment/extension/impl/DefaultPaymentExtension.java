@@ -3,6 +3,7 @@ package com.memberclub.sdk.payment.extension.impl;
 import com.memberclub.common.annotation.Route;
 import com.memberclub.common.extension.ExtensionProvider;
 import com.memberclub.domain.common.BizTypeEnum;
+import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.context.purchase.PurchaseSubmitContext;
 import com.memberclub.domain.dataobject.payment.PayNodeTypeEnum;
 import com.memberclub.domain.dataobject.payment.PayOnlineTypeEnum;
@@ -66,5 +67,10 @@ public class DefaultPaymentExtension implements PaymentExtension {
         initializeProductInfo(context, paymentDO);
 
         initializePayExpireTime(context);
+    }
+
+    @Override
+    public void initializePaymentRefundOrder(AfterSaleApplyContext context) {
+
     }
 }

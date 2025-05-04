@@ -206,12 +206,12 @@ public class ManageController {
             if (order == null) {
                 throw new RuntimeException("输入错误订单 id");
             }
-            cmd.setPayAccount(RandomStringUtils.randomAscii(10));
+            cmd.setPayAccount("alipay_" + RandomStringUtils.randomNumeric(10));
             cmd.setPayTime(TimeUtil.now());
             cmd.setPayTradeNo(order.getPaymentInfo().getPayTradeNo());
             cmd.setPayChannelType(PayChannelTypeEnum.ALIPAY.getName());
             cmd.setPayAccountType(PayAcccountTypeEnum.THIRD_PARTY.getName());
-            cmd.setPayTime(order.getPaymentInfo().getPayTime());
+            cmd.setPayTime(TimeUtil.now());
             cmd.setPayAmountFen(order.getActPriceFen());
 
             paymentService.paymentNotify(cmd);

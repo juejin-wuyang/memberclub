@@ -28,6 +28,8 @@ public class AftersaleApplyCmd {
 
     private AftersaleSourceEnum source;
 
+    private Long afterSaleId;
+
     /**
      * 目前不支持指定商品退
      */
