@@ -24,7 +24,6 @@ import com.memberclub.infrastructure.mq.MessageQuenePublishFacade;
 import com.memberclub.infrastructure.payment.PaymentFacadeSPI;
 import com.memberclub.infrastructure.payment.context.*;
 import com.memberclub.sdk.aftersale.service.AftersaleBizService;
-import com.memberclub.sdk.event.trade.service.domain.TradeEventDomainService;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.payment.PaymentDataObjectFactory;
 import com.memberclub.sdk.payment.extension.PaymentExtension;
@@ -49,8 +48,6 @@ public class PaymentService {
     @Autowired
     private MessageQuenePublishFacade messageQuenePublishFacade;
 
-    @Autowired
-    private TradeEventDomainService tradeEventDomainService;
     @Autowired
     private AftersaleBizService aftersaleBizService;
 
@@ -130,8 +127,7 @@ public class PaymentService {
                 return;
             }
         }
-        //发布支付事件
-        tradeEventDomainService.publishEventOnPaySuccess(context);
+
 
         //修改数据库,内部有重试
         memberOrderDomainService.onPaySuccess(context, memberOrderDO);

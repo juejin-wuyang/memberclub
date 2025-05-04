@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: @enviroment@
+    active: ut
   application:
     name: memberclub
   main:
@@ -45,8 +45,6 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka/
 
-liteflow:
-  print-execution-log: false
 logging:
   config: classpath:log/log4j2.xml
 
@@ -81,8 +79,8 @@ management:
       #对外暴露actuator的哪些监控数据，注意单词不要写错了，写错了外部是无法访问接口的
       exposure:
         include:
-        - health
-        - prometheus
+          - health
+          - prometheus
   endpoint:
     # 启用之后，才能够正常调用  /actuator/prometheus 接口
     prometheus:

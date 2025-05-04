@@ -69,21 +69,31 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>
                 <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>com.fasterxml.jackson.datatype</groupId>
                     <artifactId>jackson-datatype-jsr310</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
+
+
         <!-- lombok dependencies should not end up on classpath -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${org.projectlombok.version}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.yomahub</groupId>
-            <artifactId>liteflow-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -137,12 +147,13 @@
 
         <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
+            <artifactId>springfox-swagger-ui</artifactId>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
+            <artifactId>springfox-swagger2</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.alibaba.fastjson2</groupId>
             <artifactId>fastjson2-extension-spring5</artifactId>
@@ -156,43 +167,44 @@
             <groupId>org.apache.shardingsphere</groupId>
             <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
         </dependency>
+
         <!--  <dependency>
               <groupId>org.apache.shardingsphere</groupId>
               <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
           </dependency>-->
     </dependencies>
 
-    <profiles>
-        <profile>
-            <!-- 配置文件标识id，命令行用到，如mvn package -P ut -->
-            <id>ut</id> <!--单测环境-->
-            <!-- 设置变量 -->
-            <properties>
-                <enviroment>ut</enviroment>
-            </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>standalone</id>
-            <properties>
-                <enviroment>standalone</enviroment>
-            </properties>
-        </profile>
-        <profile>
-            <id>test</id>
-            <properties>
-                <enviroment>test</enviroment>
-            </properties>
-        </profile>
-        <profile>
-            <id>online</id>
-            <properties>
-                <enviroment>online</enviroment>
-            </properties>
-        </profile>
-    </profiles>
+    <!--    <profiles>
+            <profile>
+                &lt;!&ndash; 配置文件标识id，命令行用到，如mvn package -P ut &ndash;&gt;
+                <id>ut</id> &lt;!&ndash;单测环境&ndash;&gt;
+                &lt;!&ndash; 设置变量 &ndash;&gt;
+                <properties>
+                    <enviroment>ut</enviroment>
+                </properties>
+                <activation>
+                    <activeByDefault>true</activeByDefault>
+                </activation>
+            </profile>
+            <profile>
+                <id>standalone</id>
+                <properties>
+                    <enviroment>standalone</enviroment>
+                </properties>
+            </profile>
+            <profile>
+                <id>test</id>
+                <properties>
+                    <enviroment>test</enviroment>
+                </properties>
+            </profile>
+            <profile>
+                <id>online</id>
+                <properties>
+                    <enviroment>online</enviroment>
+                </properties>
+            </profile>
+        </profiles>-->
 
 
     <build>
@@ -251,14 +263,14 @@
                 <!-- 指定资源文件目录 -->
                 <directory>src/main/resources</directory>
                 <!-- 哪些文件需要打包，不配置就是全部进行打包 -->
-                <includes>
+                <!--<includes>
                     <include>application.yml</include>
-                    <include>application-${enviroment}.yml</include>
+                    <include>application-*.yml</include>
                     <include>sql/*.sql</include>
                     <include>log/log4j2.xml</include>
                     <include>log/log4j2-${enviroment}.xml</include>
                     <include>lua/*</include>
-                </includes>
+                </includes>-->
                 <!-- 是否需要进行变量替换，没有必要使用变量取值的，千万不要将filtering设置为true，针对于这一点官网也明确指出二进制文件一定不要过滤，例如Excel模板 -->
                 <filtering>true</filtering>
             </resource>

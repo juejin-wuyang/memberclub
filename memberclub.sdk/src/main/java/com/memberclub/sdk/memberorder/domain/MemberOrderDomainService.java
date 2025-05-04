@@ -30,8 +30,10 @@ import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.mapstruct.PurchaseConvertor;
 import com.memberclub.infrastructure.mybatis.mappers.trade.MemberOrderDao;
 import com.memberclub.infrastructure.mybatis.mappers.trade.MemberSubOrderDao;
+import com.memberclub.sdk.event.trade.service.domain.TradeEventDomainService;
 import com.memberclub.sdk.memberorder.MemberOrderDataObjectBuildFactory;
 import com.memberclub.sdk.memberorder.extension.MemberOrderDomainExtension;
+import com.memberclub.sdk.util.TransactionHelper;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +68,10 @@ public class MemberOrderDomainService {
 
     @Autowired
     private MemberOrderDataObjectBuildFactory memberOrderDataObjectBuildFactory;
+
+    @Autowired
+    private TradeEventDomainService tradeEventDomainService;
+
 
     public void createMemberOrder(MemberOrderDO memberOrderDO) {
         MemberOrder order = memberOrderDataObjectBuildFactory.buildOrder4Create(memberOrderDO);
@@ -240,6 +246,11 @@ public class MemberOrderDomainService {
 
         MemberOrderDomainExtension extension = extensionManager.getExtension(BizScene.of(context.getBizType()), MemberOrderDomainExtension.class);
         extension.onPaySuccess(order, wrapper);
+
+        TransactionHelper.afterCommitExecute(() -> {
+            //发布支付事件
+            tradeEventDomainService.publishEventOnPaySuccess(context);
+        });
     }
 
     public void onPayTimeoutCheck(MemberOrderDO order) {

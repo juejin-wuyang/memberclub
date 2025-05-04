@@ -6,7 +6,6 @@
  */
 package com.memberclub.sdk.prefinance.service.domain;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.google.common.collect.Lists;
 import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.log.CommonLog;
@@ -26,6 +25,7 @@ import com.memberclub.infrastructure.mybatis.mappers.trade.OnceTaskDao;
 import com.memberclub.sdk.prefinance.extension.PreFinanceBuildAssetsExtension;
 import com.memberclub.sdk.prefinance.extension.PreFinanceDomainExtension;
 import com.memberclub.sdk.prefinance.extension.PreFinanceMessageBuildExtension;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -89,7 +89,7 @@ public class PreFinanceDomainService {
                         performItem.getItemToken(), performItem.getBatchCode());
                 continue;
             }
-            if (CollectionUtil.isEmpty(context.getBatchCode2Assets())) {
+            if (MapUtils.isEmpty(context.getBatchCode2Assets())) {
                 continue;
             }
             details.add(

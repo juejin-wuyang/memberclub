@@ -6,12 +6,10 @@
  */
 package com.memberclub.starter.util;
 
-import com.yomahub.liteflow.slot.DefaultContext;
-
 /**
  * author: 掘金五阳
  */
-public class FlowContext extends DefaultContext {
+public class FlowContext {
 
 
 }
