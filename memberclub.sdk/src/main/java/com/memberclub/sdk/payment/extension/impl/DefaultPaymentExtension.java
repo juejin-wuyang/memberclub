@@ -11,11 +11,11 @@ import com.memberclub.domain.dataobject.payment.PayStatusEnum;
 import com.memberclub.domain.dataobject.payment.PaymentDO;
 import com.memberclub.domain.dataobject.payment.context.PaymentNotifyContext;
 import com.memberclub.domain.exception.ResultCode;
-import com.memberclub.sdk.common.SwitchEnum;
+import com.memberclub.infrastructure.dynamic_config.SwitchEnum;
 import com.memberclub.sdk.payment.extension.PaymentExtension;
 import org.apache.commons.lang3.ObjectUtils;
 
-import static com.memberclub.sdk.common.SwitchEnum.PAY_AMOUNT_STRICT_VALIDATE;
+import static com.memberclub.infrastructure.dynamic_config.SwitchEnum.PAY_AMOUNT_STRICT_VALIDATE;
 
 @ExtensionProvider(desc = "默认支付扩展点", bizScenes = {
         @Route(bizType = BizTypeEnum.DEFAULT)

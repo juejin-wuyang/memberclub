@@ -10,7 +10,7 @@ import com.memberclub.common.extension.BaseExtension;
 import com.memberclub.common.extension.ExtensionConfig;
 import com.memberclub.common.extension.ExtensionType;
 import com.memberclub.domain.context.common.LockMode;
-import com.memberclub.sdk.common.SwitchEnum;
+import com.memberclub.infrastructure.dynamic_config.SwitchEnum;
 
 /**
  * author: 掘金五阳

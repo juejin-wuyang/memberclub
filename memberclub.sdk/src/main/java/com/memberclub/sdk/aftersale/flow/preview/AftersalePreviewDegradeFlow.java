@@ -10,7 +10,7 @@ import com.memberclub.common.flow.FlowNode;
 import com.memberclub.common.log.CommonLog;
 import com.memberclub.domain.context.aftersale.contant.AftersaleUnableCode;
 import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
-import com.memberclub.sdk.common.SwitchEnum;
+import com.memberclub.infrastructure.dynamic_config.SwitchEnum;
 import org.springframework.stereotype.Service;
 
 /**

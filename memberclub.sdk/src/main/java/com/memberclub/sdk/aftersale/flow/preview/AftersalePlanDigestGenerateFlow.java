@@ -10,7 +10,7 @@ import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.flow.FlowNode;
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
-import com.memberclub.sdk.common.SwitchEnum;
+import com.memberclub.infrastructure.dynamic_config.SwitchEnum;
 import com.memberclub.sdk.aftersale.extension.preview.GenerateAfterSalePlanDigestExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

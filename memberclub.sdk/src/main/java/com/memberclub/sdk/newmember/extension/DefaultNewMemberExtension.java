@@ -15,7 +15,7 @@ import com.memberclub.domain.context.usertag.UserTagKeyEnum;
 import com.memberclub.domain.context.usertag.UserTagOpDO;
 import com.memberclub.domain.dataobject.newmember.NewMemberMarkContext;
 import com.memberclub.domain.dataobject.sku.UserTypeEnum;
-import com.memberclub.sdk.common.SwitchEnum;
+import com.memberclub.infrastructure.dynamic_config.SwitchEnum;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
@@ -27,6 +27,10 @@ import java.util.List;
         @Route(bizType = BizTypeEnum.DEFAULT)
 })
 public class DefaultNewMemberExtension implements NewMemberExtension {
+
+    public static String buildPair(UserTagKeyEnum tagKey, Object value) {
+        return String.format("%s:%s", tagKey.getName(), value.toString());
+    }
 
     @Override
     public void buildUserTagOpList(NewMemberMarkContext context) {
@@ -67,9 +71,5 @@ public class DefaultNewMemberExtension implements NewMemberExtension {
 
     private void extractAndLoadBizType(NewMemberMarkContext context, List<String> pairs) {
         pairs.add(buildPair(UserTagKeyEnum.BIZTYPE, context.getBizType().getCode()));
-    }
-
-    public static String buildPair(UserTagKeyEnum tagKey, Object value) {
-        return String.format("%s:%s", tagKey.getName(), value.toString());
     }
 }

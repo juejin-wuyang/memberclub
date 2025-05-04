@@ -6,10 +6,8 @@
  */
 package com.memberclub.starter.mq.rabbitmq;
 
-import com.memberclub.common.util.JsonUtils;
+import com.memberclub.infrastructure.dynamic_config.SwitchEnum;
 import com.memberclub.infrastructure.mq.MQQueueEnum;
-import com.memberclub.infrastructure.payment.context.PaymentTimeoutMessage;
-import com.memberclub.sdk.common.SwitchEnum;
 import com.memberclub.sdk.purchase.service.biz.PurchaseBizService;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;
@@ -48,11 +46,7 @@ public class RabbitmqConsumerConfiguration extends AbstractRabbitmqConsumerConfi
     @RabbitListener(queues = {TRADE_PAYMENT_TIMEOUT_EVENT_QUEUE})
     @RabbitHandler
     public void consumePayTimeoutCheckQueue(String value, Channel channel, Message message) throws IOException {
-        try {
-            purchaseBizService.paymentTimeoutValidate(JsonUtils.fromJson(value, PaymentTimeoutMessage.class));
-        } finally {
-            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
-        }
+        consume(value, channel, message, MQQueueEnum.TRADE_PAYMENT_TIMEOUT_EVENT_QUEUE);
     }
 
     @RabbitListener(queues = {TRADE_EVENT_QUEUE_ON_PAY_SUCCESS})

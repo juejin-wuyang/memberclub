@@ -9,11 +9,11 @@ package com.memberclub.starter.mq.rabbitmq;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.memberclub.common.util.ApplicationContextUtils;
+import com.memberclub.infrastructure.dynamic_config.SwitchEnum;
 import com.memberclub.infrastructure.mq.ConsumeStatauEnum;
 import com.memberclub.infrastructure.mq.MQQueueEnum;
 import com.memberclub.infrastructure.mq.MessageQueueConsumerFacade;
 import com.memberclub.infrastructure.mq.RabbitRegisterConfiguration;
-import com.memberclub.sdk.common.SwitchEnum;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import org.apache.commons.collections.MapUtils;
@@ -51,6 +51,32 @@ public class AbstractRabbitmqConsumerConfiguration {
                 consumerMap.get(mqQueueEnum.getQueneName()).add(entry.getValue());
             }
         }
+    }
+
+
+    protected void consume(String value, Channel channel, Message message,
+                           MQQueueEnum queue) throws IOException {
+        LOG.info("收到rabbitmq消息 queue:{}, message:{}", queue.getDelayQueneName(), value);
+
+        boolean fail = false;
+        RuntimeException exception = null;
+        for (MessageQueueConsumerFacade messageQueueConsumerFacade : consumerMap.get(queue.getQueneName())) {
+            try {
+                ConsumeStatauEnum status = messageQueueConsumerFacade.consume(value);
+                if (status == ConsumeStatauEnum.retry) {
+                    fail = true;
+                }
+            } catch (RuntimeException e) {
+                exception = e;
+                fail = true;
+            }
+        }
+        if (!fail) {
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+            return;
+        }
+
+        throw exception;
     }
 
     protected void consumeAndFailRetry(String value, Channel channel, Message message,

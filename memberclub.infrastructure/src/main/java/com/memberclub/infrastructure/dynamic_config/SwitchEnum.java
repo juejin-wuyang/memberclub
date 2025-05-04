@@ -4,10 +4,9 @@
  * Copyright 2024 memberclub.com. All rights reserved.
  * memberclub.COM PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
-package com.memberclub.sdk.common;
+package com.memberclub.infrastructure.dynamic_config;
 
 import com.memberclub.common.util.ApplicationContextUtils;
-import com.memberclub.infrastructure.dynamic_config.DynamicConfig;
 import com.memberclub.infrastructure.mq.MQContants;
 import org.springframework.util.Assert;
 

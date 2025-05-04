@@ -11,7 +11,7 @@ import com.memberclub.domain.context.usertag.UserTagKeyEnum;
 import com.memberclub.domain.context.usertag.UserTagOpDO;
 import com.memberclub.domain.context.usertag.UserTagOpTypeEnum;
 import com.memberclub.domain.dataobject.sku.UserTypeEnum;
-import com.memberclub.sdk.common.SwitchEnum;
+import com.memberclub.infrastructure.dynamic_config.SwitchEnum;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.List;

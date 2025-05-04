@@ -26,10 +26,10 @@ import com.memberclub.domain.context.oncetask.common.TaskTypeEnum;
 import com.memberclub.domain.context.oncetask.trigger.OnceTaskTriggerCmd;
 import com.memberclub.domain.context.oncetask.trigger.OnceTaskTriggerContext;
 import com.memberclub.domain.exception.AfterSaleUnableException;
+import com.memberclub.infrastructure.dynamic_config.SwitchEnum;
 import com.memberclub.sdk.aftersale.extension.apply.AfterSaleApplyExtension;
 import com.memberclub.sdk.aftersale.extension.preview.AftersaleCollectDataExtension;
 import com.memberclub.sdk.aftersale.extension.preview.AftersalePreviewExtension;
-import com.memberclub.sdk.common.SwitchEnum;
 import com.memberclub.sdk.oncetask.trigger.extension.OnceTaskTriggerExtension;
 import com.memberclub.sdk.util.PriceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.memberclub.sdk.common.SwitchEnum.ONCE_TASK_SCAN_AFTERSALE_EXPIRE_REFUND_ELASPED_DAYS;
+import static com.memberclub.infrastructure.dynamic_config.SwitchEnum.ONCE_TASK_SCAN_AFTERSALE_EXPIRE_REFUND_ELASPED_DAYS;
 
 /**
  * author: 掘金五阳
@@ -120,7 +120,7 @@ public class AftersaleBizService {
             AfterSaleApplyExtension extension = extensionManager.getExtension(BizScene.of(cmd.getBizType().getCode(),
                     applyExtensionScene), AfterSaleApplyExtension.class);
             extension.apply4OnlyRefundMoney(context);
-            
+
             response.setSuccess(true);
             //response.setRefundWay();
             // TODO: 2025/1/1 处理返回值
