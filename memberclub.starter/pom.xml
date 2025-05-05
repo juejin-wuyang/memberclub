@@ -208,7 +208,7 @@
 
 
     <build>
-        <finalName>memberclub-starter-${enviroment}</finalName>
+        <finalName>memberclub-starter</finalName>
         <!-- maven打包插件 -->
         <plugins>
             <plugin>

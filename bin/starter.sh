@@ -20,14 +20,14 @@ do
 esac done
 
 pcompile=${compile:-true}
-penv=${env:-test}
+penv=${env:-ut}
 pop=${op:-start}
 
 echo "当前环境:$penv"
 
 if [  $compile="true" ]; then
     echo "开始编译 环境:$penv"
-   (cd ../ && mvn clean package -P "$penv" -Dmaven.test.skip=true)
+   (cd ../ && mvn clean package -Dmaven.test.skip=true)
 fi
 
 if [ $penv="test" ]; then
@@ -41,6 +41,6 @@ if [ $penv="ut" ]; then
 fi
 
 if [ $pop="start" ];then
-   (cd ../ && java "$pdebug" -jar memberclub.starter/target/memberclub-starter-"$penv".jar )
+   (cd ../ && java "$pdebug" -jar memberclub.starter/target/memberclub-starter.jar --spring.profiles.active="$penv")
 fi
 

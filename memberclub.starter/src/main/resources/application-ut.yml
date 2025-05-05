@@ -80,5 +80,6 @@ junit_test_poll_config: false
 
 once_task_scan_period_perform_pre_days_1: 70
 once_task_scan_aftersale_expire_refund_pre_days_2: 16
+wait_pay_time_seconds: 30
 renewable_1: 2
 ### 业务自定义配置项 END

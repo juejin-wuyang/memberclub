@@ -445,7 +445,7 @@ cd bin && ./starter.sh -e ut
 
 ![视频演示](doc/show2.gif)
 
-## 集成测试环境下启动
+## 集成测试环境配置
 
 ### 安装 mysql
 
@@ -488,35 +488,44 @@ brew services start redis
 
 https://developer.aliyun.com/article/1369063
 
-### 启动项目
+## 启动项目
 
-#### MAC 和 Linux
+memberclub.starter是项目的启动模块
 
-memberclub项目根目录下
+### Idea启动
 
-cd bin && ./starter.sh -e test
-
-#### Windows
-
-1. mvn clean package -P test -Dmaven.test.skip=true
-2. java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -jar
-   memberclub.starter/target/memberclub-starter-test.jar
-
-# 调试单元测试
-
-## 1. 先本地编译
-
-使用mvn命令编译
-
-mvn clean package -P ut
-
-## 2 配置IDEA
+#### 配置IDEA
 
 路径 Settings -> Build, Execution, Deployment -> Compiler -> User-LOCAL VM Options
 
 添加如下
 
 -Djps.track.ap.dependencies=false
+
+#### 配置Run启动配置
+
+1. Run
+2. 编辑配置
+3. 选择添加SprignBoot
+4. 选择模块memberclub.starter
+5. 选择启动类 AppStarter
+6. 配置入参 --spring.profiles.active=ut （如果是test环境配置 --spring.profiles.active=test ）
+
+![img.png](doc/idea_run.png)
+
+### MAC 和 Linux 命令行启动
+
+memberclub项目根目录下
+
+cd bin && ./starter.sh
+
+### Windows 命令行启动
+
+1. mvn clean package -Dmaven.test.skip=true
+2. java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -jar
+   memberclub.starter/target/memberclub-starter.jar --spring.profiles.active=ut
+
+# 调试单元测试
 
 ## 3. 调试单元测试
 
