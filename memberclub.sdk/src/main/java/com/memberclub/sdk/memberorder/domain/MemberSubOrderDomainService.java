@@ -54,7 +54,7 @@ public class MemberSubOrderDomainService {
                     .set(MemberSubOrder::getStatus, subOrder.getStatus().getCode())
                     .set(MemberSubOrder::getActPriceFen, subOrder.getActPriceFen())
                     .set(MemberSubOrder::getExtra, JsonUtils.toJson(subOrder.getExtra()))
-                    .set(MemberSubOrder::getOrderId, subOrder.getOrderId())
+                    .set(MemberSubOrder::getRelatedOrderId, subOrder.getRelatedOrderId())
                     .set(MemberSubOrder::getUtime, TimeUtil.now());
 
             extensionManager.getExtension(BizScene.of(subOrder.getBizType()),

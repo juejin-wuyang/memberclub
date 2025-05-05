@@ -7,13 +7,12 @@
 package com.memberclub.domain.common;
 
 
-
 /**
  * @author wuyang
  */
 public enum OrderSystemTypeEnum {
 
-    COMMON_ORDER(1, "common_order"),//订单中台,可根据实际情况进行扩展
+    ACTUAL_ORDER(1, "actual_order"),//实物订单,可根据实际情况进行扩展
     ;
 
     private int value;
@@ -25,7 +24,10 @@ public enum OrderSystemTypeEnum {
         this.name = name;
     }
 
-    public static OrderSystemTypeEnum findByCode(int value) throws IllegalArgumentException {
+    public static OrderSystemTypeEnum findByCode(Integer value) throws IllegalArgumentException {
+        if (value == null) {
+            return null;
+        }
         for (OrderSystemTypeEnum item : OrderSystemTypeEnum.values()) {
             if (item.value == value) {
                 return item;

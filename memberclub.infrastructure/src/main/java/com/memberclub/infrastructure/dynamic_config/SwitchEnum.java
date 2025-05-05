@@ -102,6 +102,8 @@ public enum SwitchEnum {
     WAIT_PAY_TIME_SECONDS("wait_pay_time_seconds", MQContants.WAIT_PAY_EXPIRE_SECONDS),
 
     PAY_AMOUNT_STRICT_VALIDATE("pay_amount_strict_validate", false),
+
+    AMOUNT_COMPUTE_EXCEPTION_SKIP_ENABLE("amount_compute_exception_skip_enable", true),
     ;
 
 

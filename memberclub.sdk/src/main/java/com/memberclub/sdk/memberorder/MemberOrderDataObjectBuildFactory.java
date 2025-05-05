@@ -184,8 +184,8 @@ public class MemberOrderDataObjectBuildFactory {
         orderDo.setExtra(JsonUtils.fromJson(memberOrder.getExtra(), MemberOrderExtraInfo.class));
         orderDo.setLocationInfo(orderDo.getExtra().getLocationInfo());
         orderDo.setOrderInfo(new OrderInfoDO());
-        orderDo.getOrderInfo().setOrderId(memberOrder.getOrderId());
-        orderDo.getOrderInfo().setOrderSystemType(OrderSystemTypeEnum.findByCode(memberOrder.getOrderSystemType()));
+        orderDo.getOrderInfo().setRelatedOrderId(memberOrder.getRelatedOrderId());
+        orderDo.getOrderInfo().setRelatedOrderSystemType(OrderSystemTypeEnum.findByCode(memberOrder.getRelatedOrderSystemType()));
         orderDo.setOriginPriceFen(memberOrder.getOriginPriceFen());
         orderDo.setPerformStatus(MemberOrderPerformStatusEnum.findByCode(memberOrder.getPerformStatus()));
         orderDo.setSaleInfo(orderDo.getExtra().getSaleInfo());
@@ -230,8 +230,8 @@ public class MemberOrderDataObjectBuildFactory {
         subOrder.setEtime(memberSubOrder.getEtime());
         subOrder.setExtra(JsonUtils.fromJson(memberSubOrder.getExtra(), SubOrderExtraInfo.class));
         subOrder.setPerformConfig(subOrder.getExtra().getPerformConfig());
-        subOrder.setOrderId(memberSubOrder.getOrderId());
-        subOrder.setOrderSystemType(OrderSystemTypeEnum.findByCode(memberSubOrder.getOrderSystemType()));
+        subOrder.setRelatedOrderId(memberSubOrder.getRelatedOrderId());
+        subOrder.setRelatedOrderSystemType(OrderSystemTypeEnum.findByCode(memberSubOrder.getRelatedOrderSystemType()));
         subOrder.setOriginPriceFen(memberSubOrder.getOriginPriceFen());
         subOrder.setPerformStatus(SubOrderPerformStatusEnum.findByCode(memberSubOrder.getPerformStatus()));
         subOrder.setSalePriceFen(memberSubOrder.getSalePriceFen());

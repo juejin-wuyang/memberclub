@@ -100,6 +100,7 @@ public class MemberOrderDO {
 
     public void onPaySuccessOnStatus(PaymentNotifyContext context) {
         status = MemberOrderStatusEnum.PAYED;
+        actPriceFen = context.getCmd().getPayAmountFen();
     }
 
     public void onPaySuccessOnPayment(PaymentNotifyContext context) {
@@ -111,6 +112,8 @@ public class MemberOrderDO {
         paymentInfo.setPayAccountType(context.getCmd().getPayAccountType());
         paymentInfo.setPayChannelType(context.getCmd().getPayChannelType());
         paymentInfo.setPayAmountFen(context.getCmd().getPayAmountFen());
+
+
     }
 
     public void onSubmitFail(PurchaseSubmitContext context) {

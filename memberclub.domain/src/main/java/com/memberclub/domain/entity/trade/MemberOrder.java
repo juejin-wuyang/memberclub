@@ -23,9 +23,9 @@ public class MemberOrder {
 
     private long userId;
 
-    private int orderSystemType;
+    private Integer relatedOrderSystemType;
 
-    private String orderId;
+    private String relatedOrderId;
 
     private String tradeId;
 

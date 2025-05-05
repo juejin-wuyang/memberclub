@@ -101,7 +101,6 @@ public class MemberOrderDomainService {
                 .set(MemberOrder::getStatus, order.getStatus().getCode())
                 .set(MemberOrder::getActPriceFen, order.getActPriceFen())
                 .set(MemberOrder::getExtra, JsonUtils.toJson(order.getExtra()))
-                .set(MemberOrder::getOrderId, order.getOrderInfo().getOrderId())
                 .set(MemberOrder::getUtime, TimeUtil.now());
 
         extensionManager.getExtension(BizScene.of(order.getBizType()),
@@ -216,6 +215,7 @@ public class MemberOrderDomainService {
                 .set(MemberOrder::getPayAccountType, order.getPaymentInfo().getPayAccountType())
                 .set(MemberOrder::getPayChannelType, order.getPaymentInfo().getPayChannelType())
                 .set(MemberOrder::getPayTime, order.getPaymentInfo().getPayTime())
+                .set(MemberOrder::getActPriceFen, order.getActPriceFen())
                 .set(MemberOrder::getPayAmountFen, order.getPaymentInfo().getPayAmountFen())
                 .set(MemberOrder::getUtime, order.getUtime())
         ;
@@ -240,6 +240,7 @@ public class MemberOrderDomainService {
                 .set(MemberOrder::getPayAccountType, order.getPaymentInfo().getPayAccountType())
                 .set(MemberOrder::getPayChannelType, order.getPaymentInfo().getPayChannelType())
                 .set(MemberOrder::getPayTime, order.getPaymentInfo().getPayTime())
+                .set(MemberOrder::getActPriceFen, order.getActPriceFen()) //重写应付金额，保持和实付金额一致！
                 .set(MemberOrder::getPayAmountFen, order.getPaymentInfo().getPayAmountFen())
                 .set(MemberOrder::getUtime, order.getUtime())
         ;

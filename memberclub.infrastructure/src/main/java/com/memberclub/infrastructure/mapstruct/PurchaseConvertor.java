@@ -41,7 +41,7 @@ public interface PurchaseConvertor {
 
     @Mappings(value = {
             @Mapping(qualifiedByName = "toBizTypeInt", target = "bizType"),
-            @Mapping(qualifiedByName = "toOrderSystemTypeInt", target = "orderSystemType"),
+            @Mapping(qualifiedByName = "toOrderSystemTypeInt", target = "relatedOrderSystemType"),
             @Mapping(qualifiedByName = "toMemberSubOrderExtraString", target = "extra"),
             @Mapping(qualifiedByName = "toSubOrderStatusEnumInt", target = "status"),
             @Mapping(qualifiedByName = "toSubOrderPerformStatusEnumInt", target = "performStatus"),
@@ -51,8 +51,8 @@ public interface PurchaseConvertor {
 
     @Mappings(value = {
             @Mapping(qualifiedByName = "toBizTypeInt", target = "bizType"),
-            @Mapping(qualifiedByName = "toOrderSystemTypeInt", source = "orderInfo.orderSystemType", target = "orderSystemType"),
-            @Mapping(source = "orderInfo.orderId", target = "orderId"),
+            @Mapping(qualifiedByName = "toOrderSystemTypeInt", source = "orderInfo.relatedOrderSystemType", target = "relatedOrderSystemType"),
+            @Mapping(source = "orderInfo.relatedOrderId", target = "relatedOrderId"),
             @Mapping(source = "saleInfo.renewType", target = "renewType", qualifiedByName = "toRenewTypeEnumInt"),
 
             @Mapping(target = "extra", source = "extra", qualifiedByName = "toMemberOrderExtraInfoString"),

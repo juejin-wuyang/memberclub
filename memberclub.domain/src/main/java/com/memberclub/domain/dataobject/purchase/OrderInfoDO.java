@@ -14,10 +14,10 @@ import lombok.Data;
  */
 @Data
 public class OrderInfoDO {
-    private OrderSystemTypeEnum orderSystemType;
+    private OrderSystemTypeEnum relatedOrderSystemType;
 
-    private String orderId;
+    private String relatedOrderId;
 
-    private Integer orderType;
+    private Integer relatedOrderType;
 
 }

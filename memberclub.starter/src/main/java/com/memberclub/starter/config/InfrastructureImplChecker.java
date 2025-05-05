@@ -93,6 +93,11 @@ public class InfrastructureImplChecker {
     @NestedConfigurationProperty()
     private Feign feign;
 
+    /**
+     * 优惠金额计算
+     */
+    private AmountComputeEnum amountcompute;
+
     @PostConstruct
     public void init() {
         ApplicationContext applicationContext = ApplicationContextUtils.getContext();

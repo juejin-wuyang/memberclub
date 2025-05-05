@@ -8,7 +8,6 @@ package com.memberclub.sdk.purchase.flow;
 
 import com.memberclub.common.flow.FlowNode;
 import com.memberclub.domain.context.purchase.PurchaseSubmitContext;
-import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.sdk.memberorder.MemberOrderDataObjectBuildFactory;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +27,7 @@ public class PurchaseMemberOrderSubmitFlow extends FlowNode<PurchaseSubmitContex
 
     @Override
     public void process(PurchaseSubmitContext context) {
-        MemberOrderDO memberOrderDO = memberOrderDataObjectBuildFactory.build(context);
-        context.setMemberOrder(memberOrderDO);
-
-        memberOrderDomainService.createMemberOrder(memberOrderDO);
+        memberOrderDomainService.createMemberOrder(context.getMemberOrder());
     }
 
 

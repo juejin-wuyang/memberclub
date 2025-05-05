@@ -35,7 +35,9 @@ public interface LockExtension extends BaseExtension {
         if (context.getLockMode() == LockMode.LOCK_ORDER) {
             return true;
         } else if (context.getLockMode() == LockMode.LOCK_USER) {
-            CommonLog.warn("用户粒度锁, 提单成功不能释放,需在取消订单或履约成功后释放");
+            if (!LOCK_ON_USER_RELEASE_ON_FAIL) {
+                CommonLog.warn("用户粒度锁, 提单成功不能释放,需在取消订单或履约成功后释放");
+            }
             return LOCK_ON_USER_RELEASE_ON_FAIL;
         }
         return true;

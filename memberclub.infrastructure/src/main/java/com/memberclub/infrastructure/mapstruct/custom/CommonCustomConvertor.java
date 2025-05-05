@@ -38,7 +38,10 @@ public class CommonCustomConvertor {
 
 
     @Named("toOrderSystemTypeInt")
-    public int toOrderSystemTypeInt(OrderSystemTypeEnum orderSystemType) {
+    public Integer toOrderSystemTypeInt(OrderSystemTypeEnum orderSystemType) {
+        if (orderSystemType == null) {
+            return null;
+        }
         return orderSystemType.getCode();
     }
 

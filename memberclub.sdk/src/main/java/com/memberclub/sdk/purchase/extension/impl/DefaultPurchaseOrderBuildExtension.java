@@ -9,13 +9,12 @@ package com.memberclub.sdk.purchase.extension.impl;
 import com.memberclub.common.annotation.Route;
 import com.memberclub.common.extension.ExtensionProvider;
 import com.memberclub.domain.common.BizTypeEnum;
-import com.memberclub.domain.common.OrderSystemTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.purchase.PurchaseSubmitContext;
 import com.memberclub.domain.context.purchase.cancel.PurchaseCancelContext;
 import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
-import com.memberclub.domain.dataobject.sku.SkuInfoDO;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
+import com.memberclub.domain.dataobject.sku.SkuInfoDO;
 import com.memberclub.sdk.purchase.extension.PurchaseOrderBuildExtension;
 
 /**
@@ -28,13 +27,13 @@ public class DefaultPurchaseOrderBuildExtension implements PurchaseOrderBuildExt
 
     @Override
     public void buildOrder(MemberOrderDO order, PurchaseSubmitContext context) {
-        order.getOrderInfo().setOrderSystemType(OrderSystemTypeEnum.COMMON_ORDER);
+        //order.getOrderInfo().setRelatedOrderSystemType(OrderSystemTypeEnum.ACTUAL_ORDER);
     }
 
     @Override
     public void buildSubOrder(MemberOrderDO order, MemberSubOrderDO subOrder,
                               PurchaseSubmitContext context, SkuInfoDO skuInfo) {
-        subOrder.setOrderSystemType(OrderSystemTypeEnum.COMMON_ORDER);
+        //subOrder.setRelatedOrderSystemType(OrderSystemTypeEnum.ACTUAL_ORDER);
     }
 
     @Override

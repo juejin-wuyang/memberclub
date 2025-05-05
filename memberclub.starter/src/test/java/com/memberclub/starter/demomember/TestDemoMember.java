@@ -861,15 +861,15 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         MemberOrder memberOrder = new MemberOrder();
         //memberOrder.setUserId(userIdGenerator.incrementAndGet());
         memberOrder.setUserId(DEFAULT_USER_ID);
-        memberOrder.setOrderId(orderIdGenerator.incrementAndGet() + "");
-        memberOrder.setOrderSystemType(1);
+        memberOrder.setRelatedOrderId(orderIdGenerator.incrementAndGet() + "");
+        memberOrder.setRelatedOrderSystemType(1);
         memberOrder.setOriginPriceFen(3000);
         memberOrder.setActPriceFen(699);
         memberOrder.setBizType(1);
         memberOrder.setCtime(TimeUtil.now());
         memberOrder.setExtra("{}");
         memberOrder.setStatus(MemberOrderStatusEnum.PAYED.getCode());
-        memberOrder.setTradeId(String.format("%s_%s", memberOrder.getOrderSystemType(), memberOrder.getOrderId()));
+        memberOrder.setTradeId(String.format("%s_%s", memberOrder.getRelatedOrderSystemType(), memberOrder.getRelatedOrderId()));
 
         List<SkuInfoDO> skuInfoDOS = Lists.newArrayList();
 
@@ -923,8 +923,8 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         his.setEtime(timeRange.getEtime());
         his.setStime(timeRange.getStime());
         his.setSkuId(10);
-        his.setOrderId("1001");
-        his.setOrderSystemType(1);
+        his.setRelatedOrderId("1001");
+        his.setRelatedOrderSystemType(1);
         his.setBuyCount(1);
         his.setSubTradeId(RandomUtils.nextLong());
         his.setOriginPriceFen(2323);
@@ -955,8 +955,8 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         his.setEtime(timeRange.getEtime());
         his.setStime(timeRange.getStime());
         his.setSkuId(10);
-        his.setOrderId("1001");
-        his.setOrderSystemType(1);
+        his.setRelatedOrderId("1001");
+        his.setRelatedOrderSystemType(1);
         his.setTradeId("1_1001");
         his.setExtra("{}");
         his.setCtime(TimeUtil.now());

@@ -66,6 +66,7 @@ memberclub:
     cache: local
     usertag: local
     payment: local
+    amountcompute: local
   extension:
     bootcheck: true
 

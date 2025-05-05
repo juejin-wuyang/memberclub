@@ -17,6 +17,7 @@ import com.memberclub.sdk.purchase.flow.aftersale.PurchaseMemberQuotaReverseFlow
 import com.memberclub.sdk.purchase.flow.cancel.PurchaseOrderCancelFlow;
 import com.memberclub.sdk.purchase.flow.cancel.PurchaseResourceLockCancelFlow;
 import com.memberclub.sdk.purchase.flow.cancel.PurchaseUserQuotaCancelFlow;
+import com.memberclub.sdk.purchase.flow.discount.PurchaseAmountComputeSubmitFlow;
 import com.memberclub.sdk.purchase.flow.payment.PrePaySubmitFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,11 +44,12 @@ public class DouyinPkgPurchaseExtension implements PurchaseExtension {
                 .addNode(PurchaseContextInitalizeSubmitFlow.class)
                 .addNode(PurchaseSubmitCmdValidateSubmitFlow.class)
                 .addNode(PurchaseUserQuotaSubmitFlow.class)                       //检查限额
-                //.addNode(PurchaseValidateInventoryFlow.class)               //检查库存
-                .addNode(PurchaseMemberOrderSubmitFlow.class)                       // 会员提单
-                //.addNode(PurchaseMarkNewMemberFlow.class)                   //新会员标记
-                //.addNode(PurchaseOperateInventoryFlow.class)                //扣减库存
-                .addNode(CommonOrderSubmitFlow.class)                       //订单系统提单
+                //.addNode(PurchaseValidateInventoryFlow.class)                 //检查库存
+                .addNode(PurchaseMemberOrderBuildSubmitFlow.class)              //订单构建
+                .addNode(PurchaseAmountComputeSubmitFlow.class)                 //优惠计算
+                .addNode(PurchaseMemberOrderSubmitFlow.class)                   //订单创建
+                //.addNode(PurchaseMarkNewMemberFlow.class)                     //新会员标记
+                //.addNode(PurchaseOperateInventoryFlow.class)                  //扣减库存
                 .addNode(PrePaySubmitFlow.class)
         ;
 

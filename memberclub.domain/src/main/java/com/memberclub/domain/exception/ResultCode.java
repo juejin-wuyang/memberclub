@@ -46,6 +46,7 @@ public enum ResultCode {
     PRE_PAY_EXCEPTION(36, "创建预支付单异常", false, false),
     PAY_EXCEPTION(37, "支付异常", false, false),
     PAY_REFUND_EXCEPTION(38, "支付退款异常", false, false),
+    AMOUNT_COMPUTE_EXCEPTION(39, "优惠金额计算异常", false, false),
     ;
 
     private int value;

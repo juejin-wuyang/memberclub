@@ -23,9 +23,9 @@ public class MemberSubOrder {
 
     private long userId;
 
-    private int orderSystemType;
+    private Integer relatedOrderSystemType;
 
-    private String orderId;
+    private String relatedOrderId;
 
     private String tradeId;//会员单交易 ID
 
