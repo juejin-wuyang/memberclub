@@ -502,7 +502,11 @@ memberclub.starter是项目的启动模块
 
 -Djps.track.ap.dependencies=false
 
-#### 配置Run启动配置
+#### 方式1：选择AppStarter类
+
+找到AppStarter类，执行main方法启动
+
+#### 方式2：配置Run
 
 1. Run
 2. 编辑配置
