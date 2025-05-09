@@ -1,11 +1,11 @@
-## 您的star是我继续前进的动力，如果喜欢请右上角帮忙点个Star，随时感知我们的进展
+#### 您的star是我继续前进的动力，如果喜欢请右上角帮忙点个Star，随时感知我们的进展
 
 <a href='https://gitee.com/juejinwuyang/memberclub/stargazers'><img src='https://gitee.com/juejinwuyang/memberclub/badge/star.svg?theme=dark' alt='star'></img></a>
 <a href='https://gitee.com/juejinwuyang/memberclub/members'><img src='https://gitee.com/juejinwuyang/memberclub/badge/fork.svg?theme=dark' alt='fork'></img></a>
 
 # 简介
 
-memberclub 可实现一天时间快搭建一套订单交易系统。 轻量级完全开源的交易引擎，以SDK方式对外提供通用的交易能力，能让开发者像搭积木方式，从0到1，快速构建一个新的电商交易系统！
+memberclub 是面向电商C端业务的快速开发平台，借助它您可以在一天时间快速搭建一套订单交易系统，轻量级完全开源的交易引擎，以SDK方式对外提供通用的交易能力，能让开发者像搭积木方式，从0到1，快速构建一个新的电商交易系统！
 
 # 项目架构
 
