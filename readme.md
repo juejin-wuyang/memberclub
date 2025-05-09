@@ -3,11 +3,40 @@
 <a href='https://gitee.com/juejinwuyang/memberclub/stargazers'><img src='https://gitee.com/juejinwuyang/memberclub/badge/star.svg?theme=dark' alt='star'></img></a>
 <a href='https://gitee.com/juejinwuyang/memberclub/members'><img src='https://gitee.com/juejinwuyang/memberclub/badge/fork.svg?theme=dark' alt='fork'></img></a>
 
-大家我是五阳，**专注于电商交易系统架构的经验分享**，欢迎关注我的[掘金主页](https://juejin.cn/user/1732486057428952)，目前粉丝超过
-4000，文章点赞收藏量已超过30000
-
-
 # 简介
+
+memberclub 可实现一天时间快搭建一套订单交易系统。 轻量级完全开源的交易引擎，以SDK方式对外提供通用的交易能力，能让开发者像搭积木方式，从0到1，快速构建一个新的电商交易系统！
+
+# 项目架构
+
+![img_7.png](doc/img_7.png)
+
+# 可以学到什么技术？
+
+在这个项目中你可以学习到 SpringBoot 集成 以下框架或组件。
+
+1. Mybatis-plus
+2. Sharding-sphere 多数据源分库分表
+3. Redis/redisson
+4. Apollo
+5. Springcloud（feign/enreka）
+6. RabbitMQ
+7. H2 内存数据库
+8. Swagger
+9. Lombok+MapStruct
+
+同时你也可以学习到以下组件的实现原理
+
+1. [流程引擎](https://juejin.cn/post/7469330882945318922)
+7. [扩展点引擎](https://juejin.cn/post/7472678890277535770)
+1. [分布式重试组件](https://juejin.cn/post/7476352294084067338)
+2. [通用日志组件](https://juejin.cn/post/7407275971902357558)
+3. 商品库存
+4. 分布式锁组件
+5. Redis Lua的使用
+6. [Spring 上下文工具类](https://juejin.cn/post/7469272970771742759)
+
+# 解决的痛点
 
 开源平台上有很多在线商城系统，功能很全，很完善，关注者众多，然而实际业务场景非常复杂和多样化，开源的在线商城系统很难完全匹配实际业务，广泛的痛点是
 
@@ -35,35 +64,6 @@ memberclub 就是基于这样的想法而设计的。 它是开源免费的交�
 <a href='https://gitee.com/juejinwuyang/memberclub'><img src='https://gitee.com/juejinwuyang/memberclub/widgets/widget_6.svg' alt='Fork me on Gitee'></img></a>
 
 我认为这很有价值！
-
-# 项目架构
-
-![doc/img_5.png](doc/img_5.png)
-
-# 可以学到什么技术？
-
-在这个项目中你可以学习到 SpringBoot 集成 以下框架或组件。
-
-1. Mybatis-plus
-2. Sharding-sphere 多数据源分库分表
-3. Redis/redisson
-4. Apollo
-5. Springcloud（feign/enreka）
-6. RabbitMQ
-7. H2 内存数据库
-8. Swagger
-9. Lombok+MapStruct
-
-同时你也可以学习到以下组件的实现原理
-
-1. [流程引擎](https://juejin.cn/post/7469330882945318922)
-7. [扩展点引擎](https://juejin.cn/post/7472678890277535770)
-1. [分布式重试组件](https://juejin.cn/post/7476352294084067338)
-2. [通用日志组件](https://juejin.cn/post/7407275971902357558)
-3. 商品库存
-4. 分布式锁组件
-5. Redis Lua的使用
-6. [Spring 上下文工具类](https://juejin.cn/post/7469272970771742759)
 
 # 效果展示
 
@@ -445,7 +445,7 @@ cd bin && ./starter.sh -e ut
 
 ![视频演示](doc/show2.gif)
 
-## 集成测试环境下启动
+## 集成测试环境配置
 
 ### 安装 mysql
 
@@ -488,35 +488,48 @@ brew services start redis
 
 https://developer.aliyun.com/article/1369063
 
-### 启动项目
+## 启动项目
 
-#### MAC 和 Linux
+memberclub.starter是项目的启动模块
 
-memberclub项目根目录下
+### Idea启动
 
-cd bin && ./starter.sh -e test
-
-#### Windows
-
-1. mvn clean package -P test -Dmaven.test.skip=true
-2. java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -jar
-   memberclub.starter/target/memberclub-starter-test.jar
-
-# 调试单元测试
-
-## 1. 先本地编译
-
-使用mvn命令编译
-
-mvn clean package -P ut
-
-## 2 配置IDEA
+#### 配置IDEA
 
 路径 Settings -> Build, Execution, Deployment -> Compiler -> User-LOCAL VM Options
 
 添加如下
 
 -Djps.track.ap.dependencies=false
+
+#### 方式1：选择AppStarter类
+
+找到AppStarter类，执行main方法启动
+
+#### 方式2：配置Run
+
+1. Run
+2. 编辑配置
+3. 选择添加SprignBoot
+4. 选择模块memberclub.starter
+5. 选择启动类 AppStarter
+6. 配置入参 --spring.profiles.active=ut （如果是test环境配置 --spring.profiles.active=test ）
+
+![img.png](doc/idea_run.png)
+
+### MAC 和 Linux 命令行启动
+
+memberclub项目根目录下
+
+cd bin && ./starter.sh
+
+### Windows 命令行启动
+
+1. mvn clean package -Dmaven.test.skip=true
+2. java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -jar
+   memberclub.starter/target/memberclub-starter.jar --spring.profiles.active=ut
+
+# 调试单元测试
 
 ## 3. 调试单元测试
 
