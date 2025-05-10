@@ -28,7 +28,7 @@ import com.memberclub.domain.entity.trade.MemberPerformItem;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.mybatis.mappers.trade.MemberPerformItemDao;
 import com.memberclub.sdk.common.Monitor;
-import com.memberclub.sdk.perform.extension.execute.MemberPerformItemDomainExtension;
+import com.memberclub.sdk.perform.extension.execute.MemberPerformItemRepositoryExtension;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,14 +46,11 @@ import java.util.stream.Collectors;
 public class MemberPerformItemDomainService {
 
     @Autowired
+    PerformDataObjectBuildFactory performDataObjectBuildFactory;
+    @Autowired
     private ExtensionManager extensionManager;
-
     @Autowired
     private MemberPerformItemDao memberPerformItemDao;
-
-    @Autowired
-    PerformDataObjectBuildFactory performDataObjectBuildFactory;
-
 
     public List<MemberPerformItemDO> batchQueryItems(Long userId, List<String> itemTokens) {
         LambdaQueryWrapper<MemberPerformItem> wrapper = new LambdaQueryWrapper<>();
@@ -77,7 +74,7 @@ public class MemberPerformItemDomainService {
             ;
 
             extensionManager.getExtension(BizScene.of(context.getBizType()),
-                    MemberPerformItemDomainExtension.class).onPerformSuccess(item, context, wrapper);
+                    MemberPerformItemRepositoryExtension.class).onPerformSuccess(item, context, wrapper);
         }
     }
 
@@ -141,7 +138,7 @@ public class MemberPerformItemDomainService {
                     .set(MemberPerformItem::getStatus, PerformItemStatusEnum.REVEREING.getCode())
                     .set(MemberPerformItem::getUtime, TimeUtil.now())
             ;
-            extensionManager.getExtension(BizScene.of(context.getBizType()), MemberPerformItemDomainExtension.class)
+            extensionManager.getExtension(BizScene.of(context.getBizType()), MemberPerformItemRepositoryExtension.class)
                     .onStartReversePerform(context, subOrderReversePerformContext, info, wrapper);
             CommonLog.info("更新履约项状态为逆向履约中 itemToken:{}, status:{}", info.getItemToken(), PerformItemStatusEnum.REVEREING);
         }
@@ -191,7 +188,7 @@ public class MemberPerformItemDomainService {
                     .set(MemberPerformItem::getStatus, status.getCode())
                     .set(MemberPerformItem::getUtime, TimeUtil.now())
             ;
-            extensionManager.getExtension(BizScene.of(context.getBizType()), MemberPerformItemDomainExtension.class)
+            extensionManager.getExtension(BizScene.of(context.getBizType()), MemberPerformItemRepositoryExtension.class)
                     .onReversePerformSuccess(context, subOrderReversePerformContext, info, wrapper);
 
             CommonLog.info("更新履约项状态为逆向履约完成 itemToken:{}, status:{}", info.getItemToken(), status);

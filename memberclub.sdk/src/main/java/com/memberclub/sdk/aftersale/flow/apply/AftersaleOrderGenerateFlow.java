@@ -13,7 +13,7 @@ import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.dataobject.aftersale.AftersaleOrderDO;
 import com.memberclub.infrastructure.id.IdTypeEnum;
 import com.memberclub.sdk.aftersale.extension.apply.AfterSaleApplyExtension;
-import com.memberclub.sdk.aftersale.service.domain.AftersaleDomainService;
+import com.memberclub.sdk.aftersale.service.domain.AfterSaleDomainService;
 import com.memberclub.sdk.common.IdGeneratorDomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AftersaleOrderGenerateFlow extends FlowNode<AfterSaleApplyContext> {
     @Autowired
-    private AftersaleDomainService aftersaleDomainService;
+    private AfterSaleDomainService aftersaleDomainService;
 
     @Autowired
     private ExtensionManager extensionManager;

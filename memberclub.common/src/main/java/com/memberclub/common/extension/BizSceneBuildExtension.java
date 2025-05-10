@@ -9,7 +9,7 @@ package com.memberclub.common.extension;
 import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.domain.context.perform.PerformCmd;
 import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.perform.PerformItemContext;
@@ -36,7 +36,7 @@ public interface BizSceneBuildExtension extends BaseExtension {
         return SceneEnum.SCENE_MONTH_CARD.getValue();
     }
 
-    default String buildAftersalePreviewScene(AftersalePreviewContext context) {
+    default String buildAftersalePreviewScene(AfterSalePreviewContext context) {
         if (context.getCmd().getSource() == AftersaleSourceEnum.SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT) {
             return SceneEnum.SCENE_SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT.getValue();
         }

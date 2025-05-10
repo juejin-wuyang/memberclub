@@ -22,7 +22,7 @@ import com.memberclub.domain.dataobject.task.OnceTaskDO;
 import com.memberclub.domain.entity.trade.OnceTask;
 import com.memberclub.infrastructure.mapstruct.PerformConvertor;
 import com.memberclub.infrastructure.mybatis.mappers.trade.OnceTaskDao;
-import com.memberclub.sdk.oncetask.periodperform.extension.PeriodPerformTaskDomainExtension;
+import com.memberclub.sdk.oncetask.periodperform.extension.PeriodPerformTaskRepositoryExtension;
 import com.memberclub.sdk.perform.service.domain.PerformDataObjectBuildFactory;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.memberclub.domain.context.oncetask.common.OnceTaskStatusEnum.FAIL;
-import static com.memberclub.domain.context.oncetask.common.OnceTaskStatusEnum.INIT;
-import static com.memberclub.domain.context.oncetask.common.OnceTaskStatusEnum.PROCESSING;
+import static com.memberclub.domain.context.oncetask.common.OnceTaskStatusEnum.*;
 
 /**
  * author: 掘金五阳
@@ -58,7 +56,7 @@ public class PeriodPerformTaskDomainService {
                 .map(onceTaskDO -> PerformConvertor.INSTANCE.toOnceTask(onceTaskDO))
                 .collect(Collectors.toList());
         extensionManager.getExtension(BizScene.of(context.getPerformContext().getBizType()),
-                PeriodPerformTaskDomainExtension.class).onCreate(context, tasks);
+                PeriodPerformTaskRepositoryExtension.class).onCreate(context, tasks);
     }
 
     public void buildActivePeriodTasks(ReversePerformContext context,
@@ -100,7 +98,7 @@ public class PeriodPerformTaskDomainService {
                 ;
 
                 extensionManager.getExtension(BizScene.of(context.getBizType()),
-                        PeriodPerformTaskDomainExtension.class).onCancel(context, entry.getValue(), wrapper);
+                        PeriodPerformTaskRepositoryExtension.class).onCancel(context, entry.getValue(), wrapper);
 
             }
         }

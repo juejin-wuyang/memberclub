@@ -8,8 +8,8 @@ package com.memberclub.sdk.aftersale.flow.preview;
 
 import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.flow.FlowNode;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
-import com.memberclub.sdk.aftersale.extension.preview.AftersaleBasicCheckExtension;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
+import com.memberclub.sdk.aftersale.extension.preview.AftersaleBasicValidateExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,14 +17,14 @@ import org.springframework.stereotype.Service;
  * author: 掘金五阳
  */
 @Service
-public class AftersaleOrderMainStatusValidatePreviewFlow extends FlowNode<AftersalePreviewContext> {
+public class AftersaleOrderMainStatusValidatePreviewFlow extends FlowNode<AfterSalePreviewContext> {
 
     @Autowired
     private ExtensionManager extensionManager;
 
     @Override
-    public void process(AftersalePreviewContext context) {
-        extensionManager.getExtension(context.toDefaultBizScene(), AftersaleBasicCheckExtension.class)
-                .statusCheck(context);
+    public void process(AfterSalePreviewContext context) {
+        extensionManager.getExtension(context.toDefaultBizScene(), AftersaleBasicValidateExtension.class)
+                .validateStatus(context);
     }
 }

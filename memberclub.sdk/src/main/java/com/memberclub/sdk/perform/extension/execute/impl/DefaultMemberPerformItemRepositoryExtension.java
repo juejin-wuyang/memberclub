@@ -21,7 +21,7 @@ import com.memberclub.domain.dataobject.perform.MemberPerformItemDO;
 import com.memberclub.domain.entity.trade.MemberPerformItem;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.mybatis.mappers.trade.MemberPerformItemDao;
-import com.memberclub.sdk.perform.extension.execute.MemberPerformItemDomainExtension;
+import com.memberclub.sdk.perform.extension.execute.MemberPerformItemRepositoryExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -30,7 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @ExtensionProvider(desc = "默认 MemberPerformItem 数据库层扩展点", bizScenes = {
         @Route(bizType = BizTypeEnum.DEFAULT, scenes = SceneEnum.DEFAULT_SCENE)
 })
-public class DefaultMemberPerformItemDomainExtension implements MemberPerformItemDomainExtension {
+public class DefaultMemberPerformItemRepositoryExtension implements MemberPerformItemRepositoryExtension {
 
     @Autowired
     private MemberPerformItemDao memberPerformItemDao;

@@ -23,8 +23,8 @@ import com.memberclub.infrastructure.mq.MQTopicEnum;
 import com.memberclub.infrastructure.mq.MessageQuenePublishFacade;
 import com.memberclub.infrastructure.mybatis.mappers.trade.OnceTaskDao;
 import com.memberclub.sdk.prefinance.extension.PreFinanceBuildAssetsExtension;
-import com.memberclub.sdk.prefinance.extension.PreFinanceDomainExtension;
 import com.memberclub.sdk.prefinance.extension.PreFinanceMessageBuildExtension;
+import com.memberclub.sdk.prefinance.extension.PreFinanceRepositoryExtension;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -151,6 +151,6 @@ public class PreFinanceDomainService {
             taskDOList.add(task);
         }
         extensionManager.getExtension(BizScene.of(context.getBizType()),
-                PreFinanceDomainExtension.class).onCreateExpiredTask(context, taskDOList);
+                PreFinanceRepositoryExtension.class).onCreateExpiredTask(context, taskDOList);
     }
 }

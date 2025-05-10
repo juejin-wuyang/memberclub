@@ -25,7 +25,7 @@ import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.entity.trade.MemberSubOrder;
 import com.memberclub.infrastructure.mybatis.mappers.trade.MemberSubOrderDao;
 import com.memberclub.sdk.event.trade.service.domain.TradeEventDomainService;
-import com.memberclub.sdk.memberorder.extension.MemberSubOrderDomainExtension;
+import com.memberclub.sdk.memberorder.extension.MemberSubOrderRepositoryExtension;
 import com.memberclub.sdk.util.TransactionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,7 +58,7 @@ public class MemberSubOrderDomainService {
                     .set(MemberSubOrder::getUtime, TimeUtil.now());
 
             extensionManager.getExtension(BizScene.of(subOrder.getBizType()),
-                    MemberSubOrderDomainExtension.class).onSubmitSuccess(subOrder, subOrderWrapper);
+                    MemberSubOrderRepositoryExtension.class).onSubmitSuccess(subOrder, subOrderWrapper);
         }
     }
 
@@ -72,7 +72,7 @@ public class MemberSubOrderDomainService {
                     .set(MemberSubOrder::getUtime, TimeUtil.now());
 
             extensionManager.getExtension(BizScene.of(subOrder.getBizType()),
-                    MemberSubOrderDomainExtension.class).onSubmitCancel(subOrder, subOrderWrapper);
+                    MemberSubOrderRepositoryExtension.class).onSubmitCancel(subOrder, subOrderWrapper);
 
             TransactionHelper.afterCommitExecute(() -> {
                 tradeEventDomainService.publishEventOnPurchaseCancelSuccessForSubOrder(context, memberOrderDO, subOrder);
@@ -95,7 +95,7 @@ public class MemberSubOrderDomainService {
                 .set(MemberSubOrder::getExtra, JsonUtils.toJson(subOrder.getExtra()))
                 .set(MemberSubOrder::getUtime, TimeUtil.now());
 
-        extensionManager.getExtension(BizScene.of(subOrder.getBizType()), MemberSubOrderDomainExtension.class)
+        extensionManager.getExtension(BizScene.of(subOrder.getBizType()), MemberSubOrderRepositoryExtension.class)
                 .onStartPerform(performContext, subOrderPerformContext, subOrder, subOrderWrapper);
     }
 
@@ -115,7 +115,7 @@ public class MemberSubOrderDomainService {
                 .set(MemberSubOrder::getExtra, JsonUtils.toJson(subOrder.getExtra()))
                 .set(MemberSubOrder::getUtime, TimeUtil.now());
 
-        extensionManager.getExtension(BizScene.of(subOrder.getBizType()), MemberSubOrderDomainExtension.class)
+        extensionManager.getExtension(BizScene.of(subOrder.getBizType()), MemberSubOrderRepositoryExtension.class)
                 .onPerformSuccess(performContext, subOrderPerformContext, subOrder, subOrderWrapper);
 
         TransactionHelper.afterCommitExecute(() -> {
@@ -135,7 +135,7 @@ public class MemberSubOrderDomainService {
                 .set(MemberSubOrder::getExtra, JsonUtils.toJson(subOrder.getExtra()))
                 .set(MemberSubOrder::getUtime, TimeUtil.now());
 
-        extensionManager.getExtension(BizScene.of(subOrder.getBizType()), MemberSubOrderDomainExtension.class)
+        extensionManager.getExtension(BizScene.of(subOrder.getBizType()), MemberSubOrderRepositoryExtension.class)
                 .onStartReversePerform(context, subOrderReversePerformContext, subOrder, subOrderWrapper);
     }
 
@@ -172,7 +172,7 @@ public class MemberSubOrderDomainService {
                 .set(MemberSubOrder::getExtra, JsonUtils.toJson(subOrder.getExtra()))
                 .set(MemberSubOrder::getUtime, TimeUtil.now());
 
-        extensionManager.getExtension(BizScene.of(subOrder.getBizType()), MemberSubOrderDomainExtension.class)
+        extensionManager.getExtension(BizScene.of(subOrder.getBizType()), MemberSubOrderRepositoryExtension.class)
                 .onReversePerformSuccess(context, subOrderReversePerformContext, subOrder, subOrderWrapper);
 
         TransactionHelper.afterCommitExecute(() -> {
@@ -189,7 +189,7 @@ public class MemberSubOrderDomainService {
                 .set(MemberSubOrder::getExtra, JsonUtils.toJson(subOrder.getExtra()))
                 .set(MemberSubOrder::getUtime, TimeUtil.now());
 
-        extensionManager.getExtension(BizScene.of(subOrder.getBizType()), MemberSubOrderDomainExtension.class)
+        extensionManager.getExtension(BizScene.of(subOrder.getBizType()), MemberSubOrderRepositoryExtension.class)
                 .onRefundSuccess(context, subOrder, subOrderWrapper);
 
         TransactionHelper.afterCommitExecute(() -> {

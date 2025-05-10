@@ -11,7 +11,7 @@ import com.memberclub.common.extension.ExtensionProvider;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewCmd;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.domain.dataobject.perform.MemberPerformItemDO;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.sdk.aftersale.extension.preview.AftersaleCollectDataExtension;
@@ -37,15 +37,15 @@ public class DefaultAftersaleCollectDataExtension implements AftersaleCollectDat
     private PerformDomainService performDomainService;
 
     @Override
-    public AftersalePreviewContext collect(AfterSalePreviewCmd cmd) {
-        AftersalePreviewContext context = new AftersalePreviewContext();
+    public AfterSalePreviewContext collect(AfterSalePreviewCmd cmd) {
+        AfterSalePreviewContext context = new AfterSalePreviewContext();
 
         MemberOrderDO memberOrder = memberOrderDomainService.getMemberOrderDO(cmd.getUserId(), cmd.getTradeId());
 
         context.setMemberOrder(memberOrder);
         context.setSubOrders(memberOrder.getSubOrders());
 
-        List<MemberPerformItemDO> items = performDomainService.queryByTradeId(cmd.getUserId(), cmd.getTradeId());
+        List<MemberPerformItemDO> items = performDomainService.queryItemsByTradeId(cmd.getUserId(), cmd.getTradeId());
         context.setPerformItems(items);
         context.setPayPriceFen(memberOrder.getActPriceFen());
         context.setDigestVersion(cmd.getDigestVersion());

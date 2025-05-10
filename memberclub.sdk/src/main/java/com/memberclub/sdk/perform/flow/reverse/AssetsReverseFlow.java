@@ -8,7 +8,6 @@ package com.memberclub.sdk.perform.flow.reverse;
 
 import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.flow.FlowNode;
-import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.context.perform.reverse.PerformItemReverseInfo;
 import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
 import com.memberclub.sdk.perform.extension.reverse.RightsReverseExtension;
@@ -17,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.memberclub.common.extension.ExtensionManager.extension;
+
 /**
  * author: 掘金五阳
  */
@@ -24,7 +25,7 @@ import java.util.List;
 public class AssetsReverseFlow extends FlowNode<ReversePerformContext> {
 
     @Autowired
-    private ExtensionManager extensionManager;
+    private ExtensionManager em;
 
     @Override
     public void process(ReversePerformContext context) {
@@ -32,7 +33,7 @@ public class AssetsReverseFlow extends FlowNode<ReversePerformContext> {
 
 
         String scene = String.valueOf(context.getCurrentSubOrderReversePerformContext().getCurrentRightType());
-        extensionManager.getExtension(BizScene.of(context.getBizType(), scene), RightsReverseExtension.class)
-                .reverse(context, context.getCurrentSubOrderReversePerformContext(), items);
+        RightsReverseExtension rightsReverseExtension = extension(context.getBizType().toBizScene(scene), RightsReverseExtension.class);
+        rightsReverseExtension.reverse(context, context.getCurrentSubOrderReversePerformContext(), items);
     }
 }

@@ -2,7 +2,7 @@ package com.memberclub.sdk.aftersale.flow.preview;
 
 import com.memberclub.common.flow.FlowNode;
 import com.memberclub.domain.context.aftersale.contant.AftersaleUnableCode;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.sdk.purchase.service.RenewDomainService;
 import jodd.util.StringUtil;
@@ -15,13 +15,13 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
-public class AftersaleLastOrderValidate4PreviewFlow extends FlowNode<AftersalePreviewContext> {
+public class AftersaleLastOrderValidate4PreviewFlow extends FlowNode<AfterSalePreviewContext> {
 
     @Autowired
     private RenewDomainService renewDomainService;
 
     @Override
-    public void process(AftersalePreviewContext context) {
+    public void process(AfterSalePreviewContext context) {
         List<MemberOrderDO> orders = renewDomainService.getNonExpiredMemberOrders(context.getCmd().getUserId(),
                 context.getCmd().getBizType().getCode());
         if (CollectionUtils.isEmpty(orders)) {

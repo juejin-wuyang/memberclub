@@ -9,7 +9,7 @@ package com.memberclub.sdk.aftersale.flow.preview;
 import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.flow.FlowNode;
 import com.memberclub.domain.common.BizScene;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.infrastructure.dynamic_config.SwitchEnum;
 import com.memberclub.sdk.aftersale.extension.preview.GenerateAfterSalePlanDigestExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +20,13 @@ import org.springframework.stereotype.Service;
  * 生成售后计划摘要
  */
 @Service
-public class AftersalePlanDigestGenerateFlow extends FlowNode<AftersalePreviewContext> {
+public class AftersalePlanDigestGenerateFlow extends FlowNode<AfterSalePreviewContext> {
 
     @Autowired
     private ExtensionManager extensionManager;
 
     @Override
-    public void process(AftersalePreviewContext context) {
+    public void process(AfterSalePreviewContext context) {
         if (context.getDigestVersion() == null) {
             int version = SwitchEnum.AFTERSALE_PLAN_GENERATE_DIGEST_VERSION.getInt(context.getCmd().getBizType().getCode());
             context.setDigestVersion(version);

@@ -7,17 +7,17 @@
 package com.memberclub.sdk.aftersale.flow.preview;
 
 import com.memberclub.common.flow.FlowNode;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import org.springframework.stereotype.Service;
 
 /**
  * author: 掘金五阳
  */
 @Service
-public class AftersaleTimesValidateFlow extends FlowNode<AftersalePreviewContext> {
+public class AftersaleTimesValidateFlow extends FlowNode<AfterSalePreviewContext> {
 
     @Override
-    public void process(AftersalePreviewContext context) {
+    public void process(AfterSalePreviewContext context) {
         // TODO : 2024/12/22 补充售后次数
     }
 }

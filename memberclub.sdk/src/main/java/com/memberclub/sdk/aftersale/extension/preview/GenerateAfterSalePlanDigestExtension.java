@@ -9,7 +9,7 @@ package com.memberclub.sdk.aftersale.extension.preview;
 import com.memberclub.common.extension.BaseExtension;
 import com.memberclub.common.extension.ExtensionConfig;
 import com.memberclub.common.extension.ExtensionType;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 
 /**
  * author: 掘金五阳
@@ -17,6 +17,6 @@ import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
 @ExtensionConfig(desc = "构建售后计算摘要扩展点", type = ExtensionType.AFTERSALE, must = true)
 public interface GenerateAfterSalePlanDigestExtension extends BaseExtension {
 
-    public void generateDigest(AftersalePreviewContext context);
+    public void generateDigest(AfterSalePreviewContext context);
 
 }

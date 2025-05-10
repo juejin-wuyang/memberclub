@@ -22,7 +22,7 @@ import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
 import com.memberclub.domain.entity.trade.MemberSubOrder;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.mybatis.mappers.trade.MemberSubOrderDao;
-import com.memberclub.sdk.memberorder.extension.MemberSubOrderDomainExtension;
+import com.memberclub.sdk.memberorder.extension.MemberSubOrderRepositoryExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -31,7 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @ExtensionProvider(desc = "默认 MemberSubOrder数据库层扩展点", bizScenes = {
         @Route(bizType = BizTypeEnum.DEFAULT, scenes = SceneEnum.DEFAULT_SCENE)
 })
-public class DefaultMemberSubOrderDomainExtension implements MemberSubOrderDomainExtension {
+public class DefaultMemberSubOrderRepositoryExtension implements MemberSubOrderRepositoryExtension {
 
     @Autowired
     private MemberSubOrderDao memberSubOrderDao;

@@ -19,7 +19,7 @@ import com.memberclub.domain.entity.trade.OnceTask;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.mybatis.mappers.trade.OnceTaskDao;
 import com.memberclub.sdk.common.Monitor;
-import com.memberclub.sdk.oncetask.periodperform.extension.PeriodPerformTaskDomainExtension;
+import com.memberclub.sdk.oncetask.periodperform.extension.PeriodPerformTaskRepositoryExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @ExtensionProvider(desc = "默认周期履约任务扩展点实现", bizScenes = {
         @Route(bizType = BizTypeEnum.DEMO_MEMBER)
 })
-public class DefaultPeriodPerformTaskDomainExtension implements PeriodPerformTaskDomainExtension {
+public class DefaultPeriodPerformTaskRepositoryExtension implements PeriodPerformTaskRepositoryExtension {
 
     @Autowired
     private OnceTaskDao onceTaskDao;

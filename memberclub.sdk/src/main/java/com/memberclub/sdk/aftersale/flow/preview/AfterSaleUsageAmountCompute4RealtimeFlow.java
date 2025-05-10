@@ -6,13 +6,11 @@
  */
 package com.memberclub.sdk.aftersale.flow.preview;
 
-import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.flow.FlowNode;
 import com.memberclub.domain.context.aftersale.contant.UsageTypeCalculateTypeEnum;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.domain.context.aftersale.preview.ItemUsage;
-import com.memberclub.sdk.aftersale.service.domain.AftersaleAmountService;
-import com.memberclub.sdk.aftersale.service.domain.AftersaleUsageService;
+import com.memberclub.sdk.aftersale.service.domain.AfterSaleAmountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,30 +21,24 @@ import java.util.Map;
  * 实时计算使用类型
  */
 @Service
-public class AftersaleUsageAmountCompute4RealtimeCalculateFlow extends FlowNode<AftersalePreviewContext> {
+public class AfterSaleUsageAmountCompute4RealtimeFlow extends FlowNode<AfterSalePreviewContext> {
 
     @Autowired
-    private ExtensionManager extensionManager;
-
-    @Autowired
-    private AftersaleUsageService aftersaleUsageService;
-
-    @Autowired
-    private AftersaleAmountService aftersaleAmountService;
+    private AfterSaleAmountService afterSaleAmountService;
 
     @Override
-    public void process(AftersalePreviewContext context) {
+    public void process(AfterSalePreviewContext context) {
         if (context.getCurrentSubOrderDO() == null) {
             context.setCurrentSubOrderDO(context.getSubOrders().get(0));
         }
         context.setUsageTypeCalculateType(UsageTypeCalculateTypeEnum.USE_AMOUNT);
 
-        Map<String, ItemUsage> batchCode2ItemUsage = aftersaleUsageService.buildUsageMap(context);
+        Map<String, ItemUsage> batchCode2ItemUsage = afterSaleAmountService.buildUsage(context);
         context.setCurrentBatchCode2ItemUsage(batchCode2ItemUsage);
         context.getBatchCode2ItemUsage().putAll(batchCode2ItemUsage);
 
         int recommendRefundPrice = context.getRecommendRefundPrice();
-        recommendRefundPrice += aftersaleAmountService.recommendRefundPrice(context);
+        recommendRefundPrice += afterSaleAmountService.recommendRefundPrice(context);
 
         context.setRecommendRefundPrice(recommendRefundPrice);
     }

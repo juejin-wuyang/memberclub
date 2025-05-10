@@ -3,7 +3,7 @@ package com.memberclub.sdk.memberorder.biz;
 import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewCmd;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
-import com.memberclub.sdk.aftersale.service.AftersaleBizService;
+import com.memberclub.sdk.aftersale.service.AfterSaleBizService;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class MemberOrderBizService {
     private MemberOrderDomainService memberOrderDomainService;
 
     @Autowired
-    private AftersaleBizService aftersaleBizService;
+    private AfterSaleBizService aftersaleBizService;
 
     //TODO 应该实现分页
     public List<MemberOrderAftersalePreviewDO> queryPayedOrders(long userId, AftersaleSourceEnum source) {

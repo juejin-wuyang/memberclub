@@ -32,7 +32,7 @@ import com.memberclub.infrastructure.mybatis.mappers.trade.MemberOrderDao;
 import com.memberclub.infrastructure.mybatis.mappers.trade.MemberSubOrderDao;
 import com.memberclub.sdk.event.trade.service.domain.TradeEventDomainService;
 import com.memberclub.sdk.memberorder.MemberOrderDataObjectBuildFactory;
-import com.memberclub.sdk.memberorder.extension.MemberOrderDomainExtension;
+import com.memberclub.sdk.memberorder.extension.MemberOrderRepositoryExtension;
 import com.memberclub.sdk.util.TransactionHelper;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -104,7 +104,7 @@ public class MemberOrderDomainService {
                 .set(MemberOrder::getUtime, TimeUtil.now());
 
         extensionManager.getExtension(BizScene.of(order.getBizType()),
-                MemberOrderDomainExtension.class).onSubmitSuccess(order, wrapper);
+                MemberOrderRepositoryExtension.class).onSubmitSuccess(order, wrapper);
 
         memberSubOrderDomainService.onSubmitSuccess(order);
     }
@@ -120,7 +120,7 @@ public class MemberOrderDomainService {
                 .set(MemberOrder::getUtime, TimeUtil.now());
 
         extensionManager.getExtension(BizScene.of(order.getBizType()),
-                MemberOrderDomainExtension.class).onSubmitCancel(order, wrapper);
+                MemberOrderRepositoryExtension.class).onSubmitCancel(order, wrapper);
 
         memberSubOrderDomainService.onSubmitCancel(context, order);
     }
@@ -135,7 +135,7 @@ public class MemberOrderDomainService {
                 .set(MemberOrder::getUtime, TimeUtil.now());
 
         int cnt = extensionManager.getExtension(BizScene.of(context.getBizType()),
-                MemberOrderDomainExtension.class).onStartPerform(context, wrapper);
+                MemberOrderRepositoryExtension.class).onStartPerform(context, wrapper);
         return cnt;
     }
 
@@ -154,7 +154,7 @@ public class MemberOrderDomainService {
         ;
 
         extensionManager.getExtension(BizScene.of(context.getBizType()),
-                MemberOrderDomainExtension.class).onPerformSuccess(context, order, wrapper);
+                MemberOrderRepositoryExtension.class).onPerformSuccess(context, order, wrapper);
     }
 
 
@@ -180,7 +180,7 @@ public class MemberOrderDomainService {
         ;
 
         extensionManager.getExtension(BizScene.of(context.getBizType()),
-                MemberOrderDomainExtension.class).onPrePay(order, wrapper);
+                MemberOrderRepositoryExtension.class).onPrePay(order, wrapper);
     }
 
 
@@ -197,7 +197,7 @@ public class MemberOrderDomainService {
                 .set(MemberOrder::getUtime, order.getUtime())
         ;
 
-        MemberOrderDomainExtension extension = extensionManager.getExtension(BizScene.of(context.getBizType()), MemberOrderDomainExtension.class);
+        MemberOrderRepositoryExtension extension = extensionManager.getExtension(BizScene.of(context.getBizType()), MemberOrderRepositoryExtension.class);
         extension.onRefund4OrderTimeout(order, wrapper);
     }
 
@@ -220,7 +220,7 @@ public class MemberOrderDomainService {
                 .set(MemberOrder::getUtime, order.getUtime())
         ;
 
-        MemberOrderDomainExtension extension = extensionManager.getExtension(BizScene.of(context.getBizType()), MemberOrderDomainExtension.class);
+        MemberOrderRepositoryExtension extension = extensionManager.getExtension(BizScene.of(context.getBizType()), MemberOrderRepositoryExtension.class);
         extension.onPaySuccess4OrderTimeout(order, wrapper);
     }
 
@@ -245,7 +245,7 @@ public class MemberOrderDomainService {
                 .set(MemberOrder::getUtime, order.getUtime())
         ;
 
-        MemberOrderDomainExtension extension = extensionManager.getExtension(BizScene.of(context.getBizType()), MemberOrderDomainExtension.class);
+        MemberOrderRepositoryExtension extension = extensionManager.getExtension(BizScene.of(context.getBizType()), MemberOrderRepositoryExtension.class);
         extension.onPaySuccess(order, wrapper);
 
         TransactionHelper.afterCommitExecute(() -> {
@@ -271,7 +271,7 @@ public class MemberOrderDomainService {
         ;
 
         extensionManager.getExtension(BizScene.of(context.getBizType()),
-                MemberOrderDomainExtension.class).onReversePerformSuccess(context, order, wrapper);
+                MemberOrderRepositoryExtension.class).onReversePerformSuccess(context, order, wrapper);
     }
 
     public MemberOrderDO getMemberOrderDO(long userId, String tradeId) {

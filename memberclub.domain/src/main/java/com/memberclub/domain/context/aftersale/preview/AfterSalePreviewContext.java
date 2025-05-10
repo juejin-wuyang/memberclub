@@ -21,7 +21,7 @@ import java.util.Map;
  * author: 掘金五阳
  */
 @Data
-public class AftersalePreviewContext {
+public class AfterSalePreviewContext {
 
     List<MemberSubOrderDO> subOrders;
     List<MemberPerformItemDO> performItems;

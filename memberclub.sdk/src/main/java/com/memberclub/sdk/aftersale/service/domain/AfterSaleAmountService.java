@@ -6,16 +6,21 @@
  */
 package com.memberclub.sdk.aftersale.service.domain;
 
+import com.google.common.collect.Maps;
 import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.domain.common.BizScene;
+import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.aftersale.contant.AftersaleUnableCode;
 import com.memberclub.domain.context.aftersale.contant.RefundTypeEnum;
 import com.memberclub.domain.context.aftersale.contant.RefundWayEnum;
 import com.memberclub.domain.context.aftersale.contant.UsageTypeEnum;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.domain.context.aftersale.preview.ItemUsage;
+import com.memberclub.domain.context.perform.common.RightTypeEnum;
+import com.memberclub.domain.dataobject.perform.MemberPerformItemDO;
 import com.memberclub.domain.facade.AssetDO;
 import com.memberclub.sdk.aftersale.extension.preview.AftersaleAmountExtension;
+import com.memberclub.sdk.aftersale.extension.preview.RealtimeCalculateUsageExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,15 +33,35 @@ import java.util.stream.Collectors;
  * author: 掘金五阳
  */
 @Service
-public class AftersaleAmountService {
+public class AfterSaleAmountService {
 
     @Autowired
     private ExtensionManager extensionManager;
 
-    public Integer recommendRefundPrice(AftersalePreviewContext context) {
+    public Map<String, ItemUsage> buildUsage(AfterSalePreviewContext context) {
+        Map<RightTypeEnum, List<MemberPerformItemDO>> rightType2Items = context.getPerformItems()
+                .stream().filter(p -> p.getSkuId() == context.getCurrentSubOrderDO().getSkuId())
+                .collect(Collectors.groupingBy(MemberPerformItemDO::getRightType));
+        Map<String, ItemUsage> batchCode2ItemUsage = Maps.newHashMap();
+
+        for (Map.Entry<RightTypeEnum, List<MemberPerformItemDO>> entry : rightType2Items.entrySet()) {
+            context.setCurrentPerformItemsGroupByRightType(entry.getValue());
+            context.setCurrentRightType(entry.getKey().getCode());
+
+            String scene = SceneEnum.buildRightTypeScene(entry.getKey().getCode());
+            Map<String, ItemUsage> tempBatchCode2ItemUsage =
+                    extensionManager.getExtension(context.getCmd().getBizType().toBizScene(scene),
+                            RealtimeCalculateUsageExtension.class).calculateItemUsage(context);
+            batchCode2ItemUsage.putAll(tempBatchCode2ItemUsage);
+        }
+        return batchCode2ItemUsage;
+    }
+
+
+    public Integer recommendRefundPrice(AfterSalePreviewContext context) {
         int recommendRefundPrice = extensionManager.getExtension(
                         BizScene.of(context.getCmd().getBizType().getCode()), AftersaleAmountExtension.class)
-                .calculteRecommendRefundPrice(context, context.getBatchCode2ItemUsage());
+                .computeRefundPrice(context, context.getBatchCode2ItemUsage());
         return recommendRefundPrice;
     }
 
@@ -102,7 +127,7 @@ public class AftersaleAmountService {
     }
 
 
-    public void calculateUsageTypeByAmount(AftersalePreviewContext context) {
+    public void calculateUsageTypeByAmount(AfterSalePreviewContext context) {
         if (context.getRecommendRefundPrice() < 0) {
             throw AftersaleUnableCode.INTERNAL_ERROR.newException("退款金额内部计算错误", null);
         } else if (context.getRecommendRefundPrice() == 0) {
@@ -119,14 +144,14 @@ public class AftersaleAmountService {
         }
     }
 
-    public RefundWayEnum calculateRefundWaySupportPortionRefund(AftersalePreviewContext context) {
+    public RefundWayEnum computeRefundWaySupportPortionRefund(AfterSalePreviewContext context) {
         if (context.getUsageType() == UsageTypeEnum.USED || context.getUsageType() == UsageTypeEnum.UNUSE) {
             return RefundWayEnum.ORDER_BACKSTRACK;
         }
         throw AftersaleUnableCode.INTERNAL_ERROR.newException("不应该走到这里,已用尽应在上层拦截", null);
     }
 
-    public RefundWayEnum calculateRefundWayUnSupportPortionRefund(AftersalePreviewContext context) {
+    public RefundWayEnum calculateRefundWayUnSupportPortionRefund(AfterSalePreviewContext context) {
         if (context.getUsageType() == UsageTypeEnum.UNUSE) {
             return RefundWayEnum.ORDER_BACKSTRACK;
         } else if (context.getUsageType() == UsageTypeEnum.USED) {

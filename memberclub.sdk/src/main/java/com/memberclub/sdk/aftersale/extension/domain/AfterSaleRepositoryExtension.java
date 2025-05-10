@@ -19,7 +19,7 @@ import com.memberclub.domain.entity.trade.AftersaleOrder;
  */
 
 @ExtensionConfig(desc = "售后单 Domain 层扩展点", type = ExtensionType.AFTERSALE, must = true)
-public interface AftersaleDomainExtension extends BaseExtension {
+public interface AfterSaleRepositoryExtension extends BaseExtension {
 
     public void onSuccess(AfterSaleApplyContext context, AftersaleOrderDO order, LambdaUpdateWrapper<AftersaleOrder> wrapper);
 

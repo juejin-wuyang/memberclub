@@ -22,7 +22,7 @@ import com.memberclub.domain.dataobject.membership.MemberShipUnionDO;
 import com.memberclub.domain.entity.trade.MemberShip;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.mybatis.mappers.trade.MemberShipDao;
-import com.memberclub.sdk.membership.extension.MemberShipDomainExtension;
+import com.memberclub.sdk.membership.extension.MemberShipRepositoryExtension;
 import com.memberclub.sdk.util.TransactionHelper;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +65,7 @@ public class MemberShipDomainService {
         memberShipDO.onFinish();
         MemberShip memberShip = memberShipDataObjectFactory.buildMemberShip(memberShipDO);
         extensionManager.getExtension(BizScene.of(memberShipDO.getBizType()),
-                MemberShipDomainExtension.class).onGrant(memberShipDO, memberShip);
+                MemberShipRepositoryExtension.class).onGrant(memberShipDO, memberShip);
 
         MemberShipUnionDO memberShipUnionDO = union(memberShipDO);
         if (memberShipUnionDO == null) {
@@ -134,7 +134,7 @@ public class MemberShipDomainService {
         wrapper.set(MemberShip::getUtime, memberShipDO.getUtime());
 
         extensionManager.getExtension(BizScene.of(memberShipDO.getBizType()),
-                MemberShipDomainExtension.class).onCancel(memberShipDO, wrapper);
+                MemberShipRepositoryExtension.class).onCancel(memberShipDO, wrapper);
 
         MemberShipUnionDO memberShipUnionDO = union(memberShipDO);
 

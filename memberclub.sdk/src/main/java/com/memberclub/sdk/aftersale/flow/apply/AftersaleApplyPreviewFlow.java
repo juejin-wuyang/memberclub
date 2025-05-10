@@ -10,9 +10,9 @@ import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.flow.FlowNode;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewCmd;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.infrastructure.mapstruct.AftersaleConvertor;
-import com.memberclub.sdk.aftersale.service.AftersaleBizService;
+import com.memberclub.sdk.aftersale.service.AfterSaleBizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +26,12 @@ public class AftersaleApplyPreviewFlow extends FlowNode<AfterSaleApplyContext> {
     private ExtensionManager extensionManager;
 
     @Autowired
-    private AftersaleBizService aftersaleBizService;
+    private AfterSaleBizService aftersaleBizService;
 
     @Override
     public void process(AfterSaleApplyContext context) {
         AfterSalePreviewCmd previewCmd = AftersaleConvertor.INSTANCE.toPreviewCmd(context.getCmd());
-        AftersalePreviewContext previewContext = aftersaleBizService.doPreview(previewCmd);
+        AfterSalePreviewContext previewContext = aftersaleBizService.doPreview(previewCmd);
         context.setPreviewContext(previewContext);
     }
 }

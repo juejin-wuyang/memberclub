@@ -38,7 +38,7 @@ import java.util.Map;
 @DS("tradeDataSource")
 @Service
 public class PerformDomainService {
-    
+
     @Autowired
     private MemberPerformItemDao memberPerformItemDao;
 
@@ -83,7 +83,7 @@ public class PerformDomainService {
         context.setEtime(etime);
     }
 
-    public List<MemberPerformItemDO> queryByTradeId(long userId, String tradeId) {
+    public List<MemberPerformItemDO> queryItemsByTradeId(long userId, String tradeId) {
         List<MemberPerformItem> items = memberPerformItemDao.selectByTradeId(userId, tradeId);
         return performDataObjectBuildFactory.toMemberPerformItemDOs(items);
     }

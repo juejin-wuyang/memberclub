@@ -17,7 +17,7 @@ import com.memberclub.domain.dataobject.aftersale.AftersaleOrderDO;
 import com.memberclub.domain.entity.trade.AftersaleOrder;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.mybatis.mappers.trade.AftersaleOrderDao;
-import com.memberclub.sdk.aftersale.extension.domain.AftersaleDomainExtension;
+import com.memberclub.sdk.aftersale.extension.domain.AfterSaleRepositoryExtension;
 import com.memberclub.sdk.common.Monitor;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,7 +29,7 @@ import static com.memberclub.domain.dataobject.aftersale.AftersaleOrderStatusEnu
 @ExtensionProvider(desc = "默认 AftersaleOrder 数据库层扩展点", bizScenes = {
         @Route(bizType = BizTypeEnum.DEFAULT, scenes = SceneEnum.DEFAULT_SCENE)
 })
-public class DefaultAftersaleDomainExtension implements AftersaleDomainExtension {
+public class DefaultAfterSaleRepositoryExtension implements AfterSaleRepositoryExtension {
 
     @Autowired
     private AftersaleOrderDao aftersaleOrderDao;

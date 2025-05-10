@@ -9,7 +9,7 @@ package com.memberclub.sdk.aftersale.extension.preview;
 import com.memberclub.common.extension.BaseExtension;
 import com.memberclub.common.extension.ExtensionConfig;
 import com.memberclub.common.extension.ExtensionType;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 
 /**
  * @author wuyang
@@ -17,5 +17,5 @@ import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
 @ExtensionConfig(desc = "售后预览扩展点", type = ExtensionType.AFTERSALE, must = true)
 public interface AftersalePreviewExtension extends BaseExtension {
 
-    public void preview(AftersalePreviewContext context);
+    public void preview(AfterSalePreviewContext context);
 }

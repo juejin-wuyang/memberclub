@@ -10,7 +10,7 @@ import com.memberclub.common.annotation.Route;
 import com.memberclub.common.extension.ExtensionProvider;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
-import com.memberclub.sdk.aftersale.extension.preview.AftersaleBasicCheckExtension;
+import com.memberclub.sdk.aftersale.extension.preview.AftersaleBasicValidateExtension;
 
 /**
  * author: 掘金五阳
@@ -18,7 +18,7 @@ import com.memberclub.sdk.aftersale.extension.preview.AftersaleBasicCheckExtensi
 @ExtensionProvider(desc = "默认状态验证扩展点", bizScenes = {
         @Route(bizType = BizTypeEnum.DEFAULT, scenes = {SceneEnum.DEFAULT_SCENE})
 })
-public class DefaultBasicCheckExtension implements AftersaleBasicCheckExtension {
+public class DefaultBasicValidateExtension implements AftersaleBasicValidateExtension {
 
-    
+
 }

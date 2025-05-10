@@ -23,7 +23,7 @@ import com.memberclub.infrastructure.mq.MQTopicEnum;
 import com.memberclub.infrastructure.mq.MessageQuenePublishFacade;
 import com.memberclub.infrastructure.payment.PaymentFacadeSPI;
 import com.memberclub.infrastructure.payment.context.*;
-import com.memberclub.sdk.aftersale.service.AftersaleBizService;
+import com.memberclub.sdk.aftersale.service.AfterSaleBizService;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.payment.PaymentDataObjectFactory;
 import com.memberclub.sdk.payment.extension.PaymentExtension;
@@ -49,7 +49,7 @@ public class PaymentService {
     private MessageQuenePublishFacade messageQuenePublishFacade;
 
     @Autowired
-    private AftersaleBizService aftersaleBizService;
+    private AfterSaleBizService aftersaleBizService;
 
     private static PaymentNotifyContext buildNotifyContext(PaymentNotifyCmd cmd, MemberOrderDO memberOrderDO) {
         PaymentNotifyContext context = new PaymentNotifyContext();

@@ -9,7 +9,7 @@ package com.memberclub.sdk.aftersale.flow.doapply;
 import com.memberclub.common.flow.FlowNode;
 import com.memberclub.common.log.CommonLog;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
-import com.memberclub.sdk.aftersale.service.domain.AftersaleDomainService;
+import com.memberclub.sdk.aftersale.service.domain.AfterSaleDomainService;
 import com.memberclub.sdk.perform.service.PerformBizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,13 +18,13 @@ import org.springframework.stereotype.Service;
  * author: 掘金五阳
  */
 @Service
-public class AftersaleReversePerformFlow extends FlowNode<AfterSaleApplyContext> {
+public class AfterSaleReversePerformFlow extends FlowNode<AfterSaleApplyContext> {
 
     @Autowired
     private PerformBizService performBizService;
 
     @Autowired
-    private AftersaleDomainService aftersaleDomainService;
+    private AfterSaleDomainService aftersaleDomainService;
 
     @Override
     public void process(AfterSaleApplyContext context) {

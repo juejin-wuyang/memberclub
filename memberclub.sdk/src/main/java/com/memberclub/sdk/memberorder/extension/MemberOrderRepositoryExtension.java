@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
  * author: 掘金五阳
  */
 @ExtensionConfig(desc = "MemberOrder Domain 层扩展点", type = ExtensionType.PURCHASE, must = true)
-public interface MemberOrderDomainExtension extends BaseExtension {
+public interface MemberOrderRepositoryExtension extends BaseExtension {
 
     public void onSubmitSuccess(MemberOrderDO memberOrderDO, LambdaUpdateWrapper<MemberOrder> wrapper);
 

@@ -12,7 +12,7 @@ import com.memberclub.common.extension.ExtensionProvider;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.aftersale.contant.UsageTypeEnum;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.domain.context.aftersale.preview.ItemUsage;
 import com.memberclub.domain.dataobject.membership.MemberShipDO;
 import com.memberclub.domain.dataobject.perform.MemberPerformItemDO;
@@ -36,7 +36,7 @@ public class LessonShipCalculateUsageExtension implements RealtimeCalculateUsage
     private MemberShipDomainService memberShipDomainService;
 
     @Override
-    public Map<String, ItemUsage> calculateItemUsage(AftersalePreviewContext context) {
+    public Map<String, ItemUsage> calculateItemUsage(AfterSalePreviewContext context) {
         List<String> assetBatchCodes = context.getCurrentPerformItemsGroupByRightType()
                 .stream()
                 .map(MemberPerformItemDO::getBatchCode)

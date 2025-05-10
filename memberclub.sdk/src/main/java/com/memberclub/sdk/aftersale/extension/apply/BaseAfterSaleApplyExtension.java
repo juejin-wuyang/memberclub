@@ -5,9 +5,9 @@ import com.memberclub.common.flow.FlowChainService;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.dataobject.aftersale.AftersaleOrderDO;
 import com.memberclub.sdk.aftersale.flow.apply.AfterSalePaymentRefundFlow;
+import com.memberclub.sdk.aftersale.flow.apply.AfterSaleResourceLockFlow;
 import com.memberclub.sdk.aftersale.flow.apply.AftersaleApplyPreviewFlow;
 import com.memberclub.sdk.aftersale.flow.apply.AftersaleOrderGenerateFlow;
-import com.memberclub.sdk.aftersale.flow.apply.AftersaleResourceLockFlow;
 import com.memberclub.sdk.aftersale.flow.doapply.AftersaleOrderApplyFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,7 +23,7 @@ public abstract class BaseAfterSaleApplyExtension implements AfterSaleApplyExten
     @PostConstruct
     public void init() {
         apply4OnlyRefundMoneyFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
-                .addNode(AftersaleResourceLockFlow.class)       //加锁
+                .addNode(AfterSaleResourceLockFlow.class)       //加锁
                 .addNode(AftersaleApplyPreviewFlow.class)       //售后预览
                 .addNode(AftersaleOrderGenerateFlow.class)      //生成售后单
                 .addNode(AftersaleOrderApplyFlow.class)         //调用订单退款

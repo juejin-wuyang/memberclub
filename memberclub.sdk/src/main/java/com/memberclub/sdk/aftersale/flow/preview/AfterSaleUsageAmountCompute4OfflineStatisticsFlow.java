@@ -7,7 +7,7 @@
 package com.memberclub.sdk.aftersale.flow.preview;
 
 import com.memberclub.common.flow.FlowNode;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
  * 离线统计的方式计算使用金额
  */
 @Service
-public class UsageAmountCompute4OfflineStatatisticsFlow extends FlowNode<AftersalePreviewContext> {
+public class AfterSaleUsageAmountCompute4OfflineStatisticsFlow extends FlowNode<AfterSalePreviewContext> {
 
     @Override
-    public void process(AftersalePreviewContext context) {
+    public void process(AfterSalePreviewContext context) {
 
     }
 }

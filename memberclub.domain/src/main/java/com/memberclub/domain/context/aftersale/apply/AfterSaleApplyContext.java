@@ -8,7 +8,7 @@ package com.memberclub.domain.context.aftersale.apply;
 
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.common.RetryableContext;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.domain.dataobject.aftersale.AftersaleOrderDO;
 import lombok.Data;
 
@@ -28,7 +28,7 @@ public class AfterSaleApplyContext implements RetryableContext {
 
     private AftersaleApplyCmd cmd;
 
-    private AftersalePreviewContext previewContext;
+    private AfterSalePreviewContext previewContext;
 
     private Long lockValue;//成功后释放锁
 

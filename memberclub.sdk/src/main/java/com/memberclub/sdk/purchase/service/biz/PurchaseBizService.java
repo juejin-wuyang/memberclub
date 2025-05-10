@@ -37,7 +37,7 @@ import org.springframework.stereotype.Service;
 public class PurchaseBizService {
 
     @Autowired
-    private ExtensionManager extensionManager;
+    private ExtensionManager em;
     @Autowired
     private MemberOrderDomainService memberOrderDomainService;
 
@@ -45,7 +45,7 @@ public class PurchaseBizService {
         PurchaseCancelContext context = new PurchaseCancelContext();
         context.setCmd(cmd);
         try {
-            extensionManager.getExtension(BizScene.of(context.getCmd().getBizType()),
+            em.getExtension(BizScene.of(context.getCmd().getBizType()),
                     PurchaseExtension.class).cancel(context);
         } catch (MemberException e) {
             throw e;
@@ -57,8 +57,7 @@ public class PurchaseBizService {
 
     public void reverse(AfterSaleApplyContext context) {
         try {
-            extensionManager.getExtension(
-                    BizScene.of(context.getCmd().getBizType()), PurchaseExtension.class).reverse(context);
+            em.getExtension(context.getCmd().getBizType().toBizScene(), PurchaseExtension.class).reverse(context);
         } catch (MemberException e) {
             throw e;
         } catch (Exception e) {
@@ -75,7 +74,7 @@ public class PurchaseBizService {
         PurchaseSubmitContext context = new PurchaseSubmitContext(cmd);
         PurchaseSubmitResponse response = new PurchaseSubmitResponse();
         try {
-            extensionManager.getExtension(
+            em.getExtension(
                     context.toDefaultBizScene(), PurchaseExtension.class).submit(context);
             context.monitor();
 

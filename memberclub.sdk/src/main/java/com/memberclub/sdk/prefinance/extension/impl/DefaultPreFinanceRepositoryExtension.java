@@ -15,7 +15,7 @@ import com.memberclub.domain.dataobject.task.OnceTaskDO;
 import com.memberclub.domain.entity.trade.OnceTask;
 import com.memberclub.infrastructure.mapstruct.PerformConvertor;
 import com.memberclub.infrastructure.mybatis.mappers.trade.OnceTaskDao;
-import com.memberclub.sdk.prefinance.extension.PreFinanceDomainExtension;
+import com.memberclub.sdk.prefinance.extension.PreFinanceRepositoryExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @ExtensionProvider(desc = "默认预结算 Domain扩展点", bizScenes = {
         @Route(bizType = BizTypeEnum.DEFAULT)
 })
-public class DefaultPreFinanceDomainExtension implements PreFinanceDomainExtension {
+public class DefaultPreFinanceRepositoryExtension implements PreFinanceRepositoryExtension {
 
     @Autowired
     private OnceTaskDao onceTaskDao;

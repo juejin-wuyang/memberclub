@@ -18,7 +18,7 @@ import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.entity.trade.MemberOrder;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.mybatis.mappers.trade.MemberOrderDao;
-import com.memberclub.sdk.memberorder.extension.MemberOrderDomainExtension;
+import com.memberclub.sdk.memberorder.extension.MemberOrderRepositoryExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ExtensionProvider(desc = "默认 MemberOrder数据库层扩展点", bizScenes = {
         @Route(bizType = BizTypeEnum.DEFAULT, scenes = SceneEnum.DEFAULT_SCENE)
 })
-public class DefaultMemberOrderDomainExtension implements MemberOrderDomainExtension {
+public class DefaultMemberOrderRepositoryExtension implements MemberOrderRepositoryExtension {
 
     @Autowired
     private MemberOrderDao memberOrderDao;

@@ -44,7 +44,7 @@ public class DemoMemberAfterSaleApplyExtension extends BaseAfterSaleApplyExtensi
     public void init() {
         super.init();
         applyFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
-                .addNode(AftersaleResourceLockFlow.class)     //加锁
+                .addNode(AfterSaleResourceLockFlow.class)     //加锁
                 .addNode(AftersaleApplyPreviewFlow.class)       //售后预览
                 .addNode(AfterSalePlanDigestCheckFlow.class)    //校验售后计划摘要
                 .addNode(AftersaleOrderGenerateFlow.class)      //生成售后单
@@ -55,7 +55,7 @@ public class DemoMemberAfterSaleApplyExtension extends BaseAfterSaleApplyExtensi
                 .addNode(AftersaleOrderApplyFlow.class)
                 .addNode(MemberOrderOnRefundSuccessFlow.class) //售后成功后, 更新主单子单的状态为成功
                 .addNode(AftersaleAsyncRollbackFlow.class)
-                .addNode(AftersaleReversePerformFlow.class)
+                .addNode(AfterSaleReversePerformFlow.class)
                 .addNode(AftersaleReversePurchaseFlow.class)
                 .addNode(AfterSalePayOrderRefundFlow.class)
         //.addNode()

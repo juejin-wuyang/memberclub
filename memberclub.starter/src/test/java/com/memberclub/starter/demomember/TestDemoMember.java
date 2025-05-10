@@ -58,7 +58,7 @@ import com.memberclub.infrastructure.mq.MQTopicEnum;
 import com.memberclub.infrastructure.mq.MessageQuenePublishFacade;
 import com.memberclub.infrastructure.mq.MessageQueueDebugFacade;
 import com.memberclub.infrastructure.mybatis.mappers.trade.*;
-import com.memberclub.sdk.aftersale.service.AftersaleBizService;
+import com.memberclub.sdk.aftersale.service.AfterSaleBizService;
 import com.memberclub.sdk.outer.biz.OuterSubmitBizService;
 import com.memberclub.sdk.perform.service.PerformBizService;
 import com.memberclub.starter.job.OnceTaskTriggerBizService;
@@ -92,7 +92,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
     @Autowired
     private AftersaleOrderDao aftersaleOrderDao;
     @Autowired
-    private AftersaleBizService aftersaleBizService;
+    private AfterSaleBizService aftersaleBizService;
     @Autowired
     private OnceTaskDao onceTaskDao;
     //@SpyBean(name = "localDistributedLock")

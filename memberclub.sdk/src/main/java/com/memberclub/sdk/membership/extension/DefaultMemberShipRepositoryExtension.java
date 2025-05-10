@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @ExtensionProvider(desc = "默认身份扩展点实现类", bizScenes = {
         @Route(bizType = BizTypeEnum.DEFAULT),
 })
-public class DefaultMemberShipDomainExtension implements MemberShipDomainExtension {
+public class DefaultMemberShipRepositoryExtension implements MemberShipRepositoryExtension {
 
     @Autowired
     private MemberShipDataObjectFactory memberShipDataObjectFactory;

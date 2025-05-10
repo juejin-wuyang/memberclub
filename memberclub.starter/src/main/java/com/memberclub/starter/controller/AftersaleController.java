@@ -8,7 +8,7 @@ import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewCmd;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewResponse;
 import com.memberclub.domain.exception.ResultCode;
-import com.memberclub.sdk.aftersale.service.AftersaleBizService;
+import com.memberclub.sdk.aftersale.service.AfterSaleBizService;
 import com.memberclub.sdk.memberorder.biz.MemberOrderAftersalePreviewDO;
 import com.memberclub.sdk.memberorder.biz.MemberOrderBizService;
 import com.memberclub.starter.controller.convertor.PurchaseConvertor;
@@ -34,7 +34,7 @@ public class AftersaleController {
     private MemberOrderBizService memberOrderBizService;
 
     @Autowired
-    private AftersaleBizService aftersaleBizService;
+    private AfterSaleBizService aftersaleBizService;
 
     @PostMapping("/records")
     public DataResponse<List<BuyRecordVO>> queryBuyRecords(HttpServletRequest servletRequest, @RequestBody BuyRecordsQueryVO queryVO) {

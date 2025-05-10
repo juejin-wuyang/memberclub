@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service;
 public class PerformBizService {
 
     @Autowired
-    private ExtensionManager extensionManager;
+    private ExtensionManager em;
 
     @Autowired
     private PerformDomainService performDomainService;
@@ -51,7 +51,7 @@ public class PerformBizService {
     public PerformResp periodPerform(OnceTaskDO task) {
         PeriodPerformContext context = performDataObjectBuildFactory.buildPeriodPerformContext(task);
         PeriodPerformExecuteExtension extension =
-                extensionManager.getExtension(BizScene.of(context.getBizType()), PeriodPerformExecuteExtension.class);
+                em.getExtension(BizScene.of(context.getBizType()), PeriodPerformExecuteExtension.class);
         extension.buildContext(task, context);
 
         PerformResp resp = new PerformResp();
@@ -72,8 +72,7 @@ public class PerformBizService {
     public void reversePerform(AfterSaleApplyContext context) {
         ReversePerformContext reversePerformContext = performDomainService.buildReversePerformContext(context);
 
-        extensionManager.getExtension(context.toBizScene(),
-                ReversePerformExtension.class).reverse(reversePerformContext);
+        em.getExtension(context.toBizScene(), ReversePerformExtension.class).reverse(reversePerformContext);
     }
 
 
@@ -82,10 +81,10 @@ public class PerformBizService {
     public PerformResp perform(PerformCmd cmd) {
         PerformResp resp = new PerformResp();
         try {
-            String preBuildScene = extensionManager.getSceneExtension(BizScene.of(cmd.getBizType().getCode()))
+            String preBuildScene = em.getSceneExtension(BizScene.of(cmd.getBizType().getCode()))
                     .buildPreBuildPerformContextScene(cmd);
 
-            PerformContext context = extensionManager.getExtension(BizScene.of(cmd.getBizType().getCode(), preBuildScene),
+            PerformContext context = em.getExtension(BizScene.of(cmd.getBizType().getCode(), preBuildScene),
                     PerformAcceptOrderExtension.class).acceptOrder(cmd);
 
             if (context.isSkipPerform()) {
@@ -102,15 +101,15 @@ public class PerformBizService {
                 return resp;
             }
 
-            String separtateOrderScene = extensionManager.getSceneExtension(BizScene.of(cmd.getBizType().getCode()))
+            String separtateOrderScene = em.getSceneExtension(BizScene.of(cmd.getBizType().getCode()))
                     .buildSeparateOrderScene(context);
-            extensionManager.getExtension(BizScene.of(cmd.getBizType().getCode(), separtateOrderScene),
+            em.getExtension(BizScene.of(cmd.getBizType().getCode(), separtateOrderScene),
                     PerformSeparateOrderExtension.class).separateOrder(context);
 
             //execute Context
-            String executeScene = extensionManager.getSceneExtension(BizScene.of(cmd.getBizType().getCode()))
+            String executeScene = em.getSceneExtension(BizScene.of(cmd.getBizType().getCode()))
                     .buildPerformContextExecuteScene(context);
-            extensionManager.getExtension(BizScene.of(cmd.getBizType().getCode(), executeScene),
+            em.getExtension(BizScene.of(cmd.getBizType().getCode(), executeScene),
                     PerformExecuteExtension.class).execute(context);
 
             resp.setSuccess(true);

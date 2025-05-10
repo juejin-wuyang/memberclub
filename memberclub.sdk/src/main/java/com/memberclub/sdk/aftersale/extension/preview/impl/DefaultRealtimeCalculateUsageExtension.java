@@ -12,7 +12,7 @@ import com.memberclub.common.extension.ExtensionProvider;
 import com.memberclub.common.log.CommonLog;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.domain.context.aftersale.preview.ItemUsage;
 import com.memberclub.domain.dataobject.perform.MemberPerformItemDO;
 import com.memberclub.domain.exception.ResultCode;
@@ -21,7 +21,7 @@ import com.memberclub.domain.facade.AssetFetchRequestDO;
 import com.memberclub.domain.facade.AssetFetchResponseDO;
 import com.memberclub.infrastructure.assets.facade.AssetsFacadeSPI;
 import com.memberclub.sdk.aftersale.extension.preview.RealtimeCalculateUsageExtension;
-import com.memberclub.sdk.aftersale.service.domain.AftersaleAmountService;
+import com.memberclub.sdk.aftersale.service.domain.AfterSaleAmountService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -50,10 +50,10 @@ public class DefaultRealtimeCalculateUsageExtension implements RealtimeCalculate
     private AssetsFacadeSPI assetsFacadeSPI;
 
     @Autowired
-    private AftersaleAmountService aftersaleAmountService;
+    private AfterSaleAmountService aftersaleAmountService;
 
     @Override
-    public Map<String, ItemUsage> calculateItemUsage(AftersalePreviewContext context) {
+    public Map<String, ItemUsage> calculateItemUsage(AfterSalePreviewContext context) {
         AssetFetchRequestDO request = new AssetFetchRequestDO();
         request.setUserId(context.getCmd().getUserId());
         List<String> assetBatchCodes = context.getCurrentPerformItemsGroupByRightType()

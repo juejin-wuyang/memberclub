@@ -22,7 +22,7 @@ import com.memberclub.domain.entity.trade.MemberPerformItem;
  * 数据库层扩展点
  */
 @ExtensionConfig(desc = "MemberPerformItem Domain 层扩展点", type = ExtensionType.PERFORM_MAIN, must = true)
-public interface MemberPerformItemDomainExtension extends BaseExtension {
+public interface MemberPerformItemRepositoryExtension extends BaseExtension {
 
     /**
      * @param item

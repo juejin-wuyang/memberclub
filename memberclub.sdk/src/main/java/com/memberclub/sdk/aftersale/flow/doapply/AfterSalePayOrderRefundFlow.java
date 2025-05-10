@@ -10,7 +10,7 @@ import com.memberclub.common.flow.FlowNode;
 import com.memberclub.common.log.CommonLog;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.context.aftersale.contant.RefundWayEnum;
-import com.memberclub.sdk.aftersale.service.domain.AftersaleDomainService;
+import com.memberclub.sdk.aftersale.service.domain.AfterSaleDomainService;
 import com.memberclub.sdk.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class AfterSalePayOrderRefundFlow extends FlowNode<AfterSaleApplyContext>
     @Autowired
     private PaymentService paymentService;
     @Autowired
-    private AftersaleDomainService afterSaleDomainService;
+    private AfterSaleDomainService afterSaleDomainService;
 
     @Override
     public void process(AfterSaleApplyContext context) {
@@ -41,6 +41,6 @@ public class AfterSalePayOrderRefundFlow extends FlowNode<AfterSaleApplyContext>
         paymentService.paymentRefund(context);
         context.setPayOrderRefundInvokeSuccess(true);
 
-        afterSaleDomainService.onOrderRefunded(context);
+        afterSaleDomainService.onPayRefundSuccess(context);
     }
 }

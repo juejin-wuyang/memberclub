@@ -11,6 +11,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Table;
 import com.memberclub.common.annotation.Route;
 import com.memberclub.common.log.CommonLog;
+import com.memberclub.common.util.ApplicationContextUtils;
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
@@ -41,6 +42,10 @@ public class ExtensionManager {
 
     @Getter
     private Table<BizTypeEnum, String, List<Object>> bizExtensionMeta = HashBasedTable.create();
+
+    public static <T> T extension(BizScene bizScene, Class<T> tClass) {
+        return ApplicationContextUtils.getContext().getBean(ExtensionManager.class).getExtension(bizScene, tClass);
+    }
 
     @PostConstruct
     public void init() {
@@ -118,6 +123,25 @@ public class ExtensionManager {
 
     public BizSceneBuildExtension getSceneExtension(BizScene bizScene) {
         return getExtension(bizScene, BizSceneBuildExtension.class);
-    }
+    }/*
 
+    public static class ExtensionGetter<T> {
+        private Class<T> tClass;
+
+        private BizScene bizScene;
+
+        public ExtensionGetter bizScene(BizScene bizScene) {
+            this.bizScene = bizScene;
+            return this;
+        }
+
+        public ExtensionGetter extension(Class<T> tClass) {
+            this.tClass = tClass;
+            return this;
+        }
+
+        public <T> T get() {
+            return ExtensionManager.extension(bizScene, tClass);
+        }
+    }*/
 }

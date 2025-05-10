@@ -10,7 +10,7 @@ import com.memberclub.common.extension.BaseExtension;
 import com.memberclub.common.extension.ExtensionConfig;
 import com.memberclub.common.extension.ExtensionType;
 import com.memberclub.domain.context.aftersale.contant.RefundWayEnum;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.domain.context.aftersale.preview.ItemUsage;
 
 import java.util.Map;
@@ -21,10 +21,10 @@ import java.util.Map;
 @ExtensionConfig(desc = "售后金额计算扩展点", type = ExtensionType.AFTERSALE, must = false)
 public interface AftersaleAmountExtension extends BaseExtension {
 
-    public int calculteRecommendRefundPrice(AftersalePreviewContext context, Map<String, ItemUsage> batchCode2ItemUsageMap);
+    public int computeRefundPrice(AfterSalePreviewContext context, Map<String, ItemUsage> batchCode2ItemUsageMap);
 
-    public void calculateUsageTypeByAmount(AftersalePreviewContext context);
+    public void computeUsageTypeByAmount(AfterSalePreviewContext context);
 
-    public RefundWayEnum calculateRefundWay(AftersalePreviewContext context);
+    public RefundWayEnum computeRefundWay(AfterSalePreviewContext context);
 
 }

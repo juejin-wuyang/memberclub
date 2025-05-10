@@ -45,6 +45,14 @@ public enum BizTypeEnum {
         return this.code == bizType;
     }
 
+    public BizScene toBizScene() {
+        return BizScene.of(code);
+    }
+
+    public BizScene toBizScene(String sceneName) {
+        return BizScene.of(code, sceneName);
+    }
+
     @Override
     public String toString() {
         return this.name;

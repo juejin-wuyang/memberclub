@@ -18,7 +18,7 @@ import java.util.List;
  * author: 掘金五阳
  */
 @ExtensionConfig(desc = "预结算 Domain层扩展点", must = false, type = ExtensionType.PRE_FINANCE)
-public interface PreFinanceDomainExtension extends BaseExtension {
+public interface PreFinanceRepositoryExtension extends BaseExtension {
 
     public void onCreateExpiredTask(PreFinanceContext context, List<OnceTaskDO> taskList);
 }

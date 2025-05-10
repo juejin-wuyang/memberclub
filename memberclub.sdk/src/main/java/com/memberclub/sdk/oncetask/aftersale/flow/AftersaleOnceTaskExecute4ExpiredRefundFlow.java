@@ -12,7 +12,7 @@ import com.memberclub.domain.context.aftersale.apply.AftersaleApplyCmd;
 import com.memberclub.domain.context.aftersale.apply.AftersaleApplyResponse;
 import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
 import com.memberclub.domain.context.oncetask.execute.OnceTaskExecuteContext;
-import com.memberclub.sdk.aftersale.service.AftersaleBizService;
+import com.memberclub.sdk.aftersale.service.AfterSaleBizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 public class AftersaleOnceTaskExecute4ExpiredRefundFlow extends FlowNode<OnceTaskExecuteContext> {
 
     @Autowired
-    private AftersaleBizService aftersaleBizService;
+    private AfterSaleBizService aftersaleBizService;
 
     @Override
     public void process(OnceTaskExecuteContext context) {

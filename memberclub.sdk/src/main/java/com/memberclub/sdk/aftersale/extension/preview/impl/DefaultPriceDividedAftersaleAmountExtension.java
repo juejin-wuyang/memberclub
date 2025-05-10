@@ -11,10 +11,10 @@ import com.memberclub.common.extension.ExtensionProvider;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.aftersale.contant.RefundWayEnum;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.domain.context.aftersale.preview.ItemUsage;
 import com.memberclub.sdk.aftersale.extension.preview.AftersaleAmountExtension;
-import com.memberclub.sdk.aftersale.service.domain.AftersaleAmountService;
+import com.memberclub.sdk.aftersale.service.domain.AfterSaleAmountService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
@@ -28,21 +28,21 @@ import java.util.Map;
 public class DefaultPriceDividedAftersaleAmountExtension implements AftersaleAmountExtension {
 
     @Autowired
-    private AftersaleAmountService aftersaleAmountService;
+    private AfterSaleAmountService aftersaleAmountService;
 
     @Override
-    public int calculteRecommendRefundPrice(AftersalePreviewContext context, Map<String, ItemUsage> batchCode2ItemUsageMap) {
+    public int computeRefundPrice(AfterSalePreviewContext context, Map<String, ItemUsage> batchCode2ItemUsageMap) {
         return aftersaleAmountService.unusePriceDividePayPriceToCacluateRefundPrice(
                 context.getCurrentSubOrderDO().getActPriceFen(), batchCode2ItemUsageMap);
     }
 
     @Override
-    public void calculateUsageTypeByAmount(AftersalePreviewContext context) {
+    public void computeUsageTypeByAmount(AfterSalePreviewContext context) {
         aftersaleAmountService.calculateUsageTypeByAmount(context);
     }
 
     @Override
-    public RefundWayEnum calculateRefundWay(AftersalePreviewContext context) {
-        return aftersaleAmountService.calculateRefundWaySupportPortionRefund(context);
+    public RefundWayEnum computeRefundWay(AfterSalePreviewContext context) {
+        return aftersaleAmountService.computeRefundWaySupportPortionRefund(context);
     }
 }

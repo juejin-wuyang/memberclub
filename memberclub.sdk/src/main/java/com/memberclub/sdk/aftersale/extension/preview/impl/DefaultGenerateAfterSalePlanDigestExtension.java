@@ -6,21 +6,14 @@
  */
 package com.memberclub.sdk.aftersale.extension.preview.impl;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
 import com.memberclub.common.annotation.Route;
 import com.memberclub.common.extension.ExtensionProvider;
-import com.memberclub.common.log.CommonLog;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.sdk.aftersale.extension.preview.GenerateAfterSalePlanDigestExtension;
+import com.memberclub.sdk.aftersale.service.domain.AfterSaleDomainService;
 import lombok.SneakyThrows;
-import org.apache.commons.lang.StringUtils;
-
-import java.security.MessageDigest;
-import java.util.Base64;
-import java.util.List;
 
 /**
  * author: 掘金五阳
@@ -33,23 +26,7 @@ public class DefaultGenerateAfterSalePlanDigestExtension implements GenerateAfte
 
     @SneakyThrows
     @Override
-    public void generateDigest(AftersalePreviewContext context) {
-        List<Object> keys = Lists.newArrayList();
-        keys.add(context.getCmd().getTradeId());
-        keys.add(context.getRecommendRefundPrice());
-        keys.add(context.getRefundType().getCode());
-        keys.add(context.getRefundWay().getCode());
-
-        String value = StringUtils.join(keys, ",");
-
-
-        MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-        String digest = Base64.getUrlEncoder().encodeToString(
-                messageDigest.digest(value.getBytes(Charsets.UTF_8)));
-        context.setDigests(digest);
-        context.setDigestVersion(1);
-        CommonLog.info("生成售后计划摘要 版本:{},{}", context.getDigestVersion(), context.getDigests());
-
-        return;
+    public void generateDigest(AfterSalePreviewContext context) {
+        AfterSaleDomainService.generateDigest(context);
     }
 }

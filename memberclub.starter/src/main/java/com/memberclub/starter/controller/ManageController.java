@@ -27,7 +27,7 @@ import com.memberclub.domain.dataobject.payment.PayChannelTypeEnum;
 import com.memberclub.domain.dataobject.payment.context.PaymentNotifyCmd;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.dataobject.sku.SkuInfoDO;
-import com.memberclub.sdk.aftersale.service.AftersaleBizService;
+import com.memberclub.sdk.aftersale.service.AfterSaleBizService;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.membership.service.MemberShipCacheService;
 import com.memberclub.sdk.payment.service.PaymentService;
@@ -82,7 +82,7 @@ public class ManageController {
     @Autowired
     private OnceTaskTriggerBizService onceTaskTriggerBizService;
     @Autowired
-    private AftersaleBizService aftersaleBizService;
+    private AfterSaleBizService aftersaleBizService;
     @Autowired
     private MemberShipCacheService memberShipCacheService;
     @Autowired

@@ -6,7 +6,7 @@ import com.memberclub.common.extension.ExtensionProvider;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.aftersale.contant.UsageTypeEnum;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.domain.context.aftersale.preview.ItemUsage;
 import com.memberclub.domain.dataobject.perform.MemberPerformItemDO;
 
@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
         @Route(bizType = BizTypeEnum.DEMO_MEMBER, scenes = {SceneEnum.RIGHT_TYPE_SCENE_MEMBER_DISCOUNT_PRICE})
 })
 public class DefaultQualificationRealtimeCalculateUsageExtension implements RealtimeCalculateUsageExtension {
-    
+
     @Override
-    public Map<String, ItemUsage> calculateItemUsage(AftersalePreviewContext context) {
+    public Map<String, ItemUsage> calculateItemUsage(AfterSalePreviewContext context) {
         List<String> assetBatchCodes = context.getCurrentPerformItemsGroupByRightType()
                 .stream()
                 .map(MemberPerformItemDO::getBatchCode)

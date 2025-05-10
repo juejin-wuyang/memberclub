@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @ExtensionProvider(desc = "抖音券包 任务过期退任务 Domain 层扩展点", bizScenes =
         {@Route(bizType = BizTypeEnum.DEFAULT, scenes = {SceneEnum.DEFAULT_SCENE})})
-public class DefaultOnceTaskDomainExtension implements OnceTaskDomainExtension {
+public class DefaultOnceTaskRepositoryExtension implements OnceTaskRepositoryExtension {
 
     @Autowired
     private OnceTaskDao onceTaskDao;

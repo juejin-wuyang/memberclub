@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  * author: 掘金五阳
  */
 @Service
-public class AftersaleResourceLockFlow extends FlowNode<AfterSaleApplyContext> {
+public class AfterSaleResourceLockFlow extends FlowNode<AfterSaleApplyContext> {
 
     @Autowired
     private MemberTradeLockService memberTradeLockService;

@@ -7,7 +7,7 @@ import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.dataobject.task.OnceTaskDO;
 
 @ExtensionConfig(desc = "onceTask Domain层扩展点", must = false, type = ExtensionType.AFTERSALE)
-public interface OnceTaskDomainExtension extends BaseExtension {
+public interface OnceTaskRepositoryExtension extends BaseExtension {
 
     public void onCreatedExpireRefundTask(PerformContext context, OnceTaskDO onceTaskDO);
 }

@@ -8,7 +8,7 @@ import com.memberclub.domain.common.SceneEnum;
 import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
 import com.memberclub.domain.context.aftersale.contant.RefundTypeEnum;
 import com.memberclub.domain.context.aftersale.contant.RefundWayEnum;
-import com.memberclub.domain.context.aftersale.preview.AftersalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.domain.dataobject.payment.PayStatusEnum;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.sdk.aftersale.extension.preview.AftersalePreviewExtension;
@@ -20,7 +20,7 @@ import com.memberclub.sdk.aftersale.extension.preview.AftersalePreviewExtension;
 public class AfterSale4OnlyRefundPreviewExtension implements AftersalePreviewExtension {
 
     @Override
-    public void preview(AftersalePreviewContext context) {
+    public void preview(AfterSalePreviewContext context) {
         if (context.getCmd().getSource() == AftersaleSourceEnum.SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT) {
             MemberOrderDO memberOrderDO = context.getMemberOrder();
             if (memberOrderDO.getPaymentInfo().getPayStatus() != PayStatusEnum.PAY_SUCCESS) {
