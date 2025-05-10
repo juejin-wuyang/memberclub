@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * author: 掘金五阳
  */
 @Service
-public class InventoryFilteredByRecordsFlow extends FlowNode<InventoryOpContext> {
+public class InventoryIdemValidateFlow extends FlowNode<InventoryOpContext> {
 
     @Autowired
     private InventoryDomainService inventoryDomainService;

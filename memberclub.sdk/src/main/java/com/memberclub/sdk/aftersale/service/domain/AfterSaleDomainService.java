@@ -102,8 +102,7 @@ public class AfterSaleDomainService {
         keys.add(context.getRefundWay().getCode());
 
         String value = StringUtils.join(keys, ",");
-
-
+        
         MessageDigest messageDigest = MessageDigest.getInstance("MD5");
         String digest = Base64.getUrlEncoder().encodeToString(
                 messageDigest.digest(value.getBytes(Charsets.UTF_8)));

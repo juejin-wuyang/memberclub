@@ -38,6 +38,7 @@ public class AftersaleOrderGenerateFlow extends FlowNode<AfterSaleApplyContext> 
         AftersaleOrderDO orderDO = aftersaleDomainService.generateOrder(context);
         context.setAftersaleOrderDO(orderDO);
 
+        //todo 如何不重复生成售后ID
         Long aftersaleOrderId = idGeneratorDomainService.generateId(IdTypeEnum.AFTERSALE_ORDER_ID);
         orderDO.setId(aftersaleOrderId);
 
