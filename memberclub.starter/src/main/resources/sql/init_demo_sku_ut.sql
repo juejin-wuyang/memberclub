@@ -1,3 +1,5 @@
+-- 初始化单测数据库数据
+
 use member_sku;
 INSERT INTO member_sku.member_sku_0 (id,biz_type,status,sale_info,finance_info,view_info,performance_info,restrict_info,inventory_info,extra,utime,ctime)
 VALUES

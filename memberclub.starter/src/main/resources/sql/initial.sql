@@ -1,5 +1,5 @@
 
--- 用于在 Mysql 初始化数据库
+-- 用于在 真实的Mysql 初始化数据库
 
 CREATE DATABASE IF NOT EXISTS member_db DEFAULT CHARACTER SET = utf8mb4;
 
@@ -7,7 +7,7 @@ USE member_db;
 
 
 CREATE TABLE IF NOT EXISTS member_order_0 (
-                                            id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
+    id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
     biz_type INT(11)  NOT NULL COMMENT '产品线',
     user_id BIGINT(20)  NOT NULL COMMENT 'userId',
     order_system_type INT(11)  NULL COMMENT '订单系统类型',
