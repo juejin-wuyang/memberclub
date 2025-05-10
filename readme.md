@@ -9,7 +9,7 @@ memberclub 是面向电商C端业务的快速开发平台，借助它您可以�
 
 开源不易，右上角点个 Star 鼓励一下吧！
 
-![img_8.png](doc/img_8.png)
+![img_9.png](doc/img_9.png)
 
 # 项目架构
 
