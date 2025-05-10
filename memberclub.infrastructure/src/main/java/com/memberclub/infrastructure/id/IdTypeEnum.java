@@ -11,10 +11,9 @@ package com.memberclub.infrastructure.id;
  */
 public enum IdTypeEnum {
 
-    SubOrder(1, "perform_his"),
-    AFTERSALE_ORDER(2, "aftersale_order"),
-    PURCHASE_TRADE(3, "purchase_trade"),
-    PURCHASE_SUB_TRADE(4, "purchase_sub_trade"),
+    SUB_ORDER_ID(1, "sub_order_id"),
+    AFTERSALE_ORDER_ID(2, "aftersale_order_id"),
+    ORDER_TRADE_ID(3, "order_trade_id"),
     ;
 
     private int value;

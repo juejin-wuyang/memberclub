@@ -39,9 +39,9 @@ import com.memberclub.domain.dataobject.sku.SkuInfoDO;
 import com.memberclub.domain.dataobject.sku.SkuPerformConfigDO;
 import com.memberclub.domain.entity.trade.MemberOrder;
 import com.memberclub.domain.entity.trade.MemberSubOrder;
-import com.memberclub.infrastructure.id.IdGenerator;
 import com.memberclub.infrastructure.id.IdTypeEnum;
 import com.memberclub.infrastructure.mapstruct.PurchaseConvertor;
+import com.memberclub.sdk.common.IdGeneratorDomainService;
 import com.memberclub.sdk.purchase.extension.PurchaseOrderBuildExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,7 +56,7 @@ import java.util.stream.Collectors;
 public class MemberOrderDataObjectBuildFactory {
 
     @Autowired
-    private IdGenerator idGenerator;
+    private IdGeneratorDomainService idGeneratorDomainService;
 
     @Autowired
     private ExtensionManager extensionManager;
@@ -104,7 +104,7 @@ public class MemberOrderDataObjectBuildFactory {
         order.setUtime(order.getCtime());
         order.setLocationInfo(context.getSubmitCmd().getLocationInfo());
         order.setOrderInfo(new OrderInfoDO());
-        order.setTradeId(idGenerator.generateId(IdTypeEnum.PURCHASE_TRADE).toString());
+        order.setTradeId(idGeneratorDomainService.generateOrderId(context.getUserId()).toString());
         order.setUserId(context.getUserId());
         order.setSource(context.getSubmitCmd().getSource());
         order.setUserInfo(context.getUserInfo());
@@ -154,7 +154,7 @@ public class MemberOrderDataObjectBuildFactory {
 
             subOrder.setStatus(SubOrderStatusEnum.INIT);
             subOrder.setPerformStatus(SubOrderPerformStatusEnum.INIT);
-            subOrder.setSubTradeId(idGenerator.generateId(IdTypeEnum.PURCHASE_SUB_TRADE));
+            subOrder.setSubTradeId(idGeneratorDomainService.generateId(IdTypeEnum.SUB_ORDER_ID));
             subOrder.setOriginPriceFen(skuInfo.getSaleInfo().getOriginPriceFen() * skuInfo.getBuyCount());
             subOrder.setSalePriceFen(skuInfo.getSaleInfo().getSalePriceFen() * skuInfo.getBuyCount());
             subOrder.setActPriceFen(subOrder.getActPriceFen());

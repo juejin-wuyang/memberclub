@@ -35,7 +35,7 @@ public class RedissonIdGenerator implements IdGenerator {
     public void init() {
         for (IdTypeEnum value : IdTypeEnum.values()) {
             redissonClient.getIdGenerator(value.toKey())
-                    .tryInit(RandomUtils.nextLong(100000000000000000L, 200000000000000000L), 1);
+                    .tryInit(RandomUtils.nextLong(1000000000000000L, 2000000000000000L), 1);
         }
     }
 
