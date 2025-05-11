@@ -122,6 +122,16 @@ memberclub:
     bootcheck: true
 ```
 
+# 数据库ER图
+
+[数据库ER图.md](doc/%E6%95%B0%E6%8D%AE%E5%BA%93ER%E5%9B%BE.md)
+
+# 流程图
+
+## 售后流程图
+
+[能力地图和实现.md](doc/%E8%83%BD%E5%8A%9B%E5%9C%B0%E5%9B%BE%E5%92%8C%E5%AE%9E%E7%8E%B0.md)
+
 # 交易域的领域划分和领域能力
 
 订单交易领域划分包括 购买域、履约域、售后域和结算域等。
