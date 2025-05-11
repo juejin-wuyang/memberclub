@@ -1,16 +1,16 @@
 -- 用于单测使用的 H2 数据库初始化
 
-SET MODE MYSQL;
+-- SET MODE MYSQL;
 
-
+use member_db;
 
 CREATE TABLE IF NOT EXISTS member_order (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
     biz_type INT(11)  NOT NULL COMMENT '产品线',
     user_id BIGINT(20)  NOT NULL COMMENT 'userId',
-    related_order_system_type INT(11)  NULL COMMENT '订单系统类型',
-    related_order_id VARCHAR(128)  NULL COMMENT '订单  id',
-    trade_id VARCHAR(128)  NOT NULL COMMENT '交易 id',
+    related_order_system_type INT(11)  NULL COMMENT '关联订单系统类型',
+    related_order_id VARCHAR(128)  NULL COMMENT '关联订单  id',
+    trade_id VARCHAR(128)  NOT NULL COMMENT '订单交易 id',
     renew_type INT(11)  NOT NULL COMMENT '续费类型 0 无续费,1 用户续费 2 系统自动续费',
     act_price_fen INT(11)  NULL COMMENT '订单金额',
     pay_amount_fen INT(11)  NULL COMMENT '实际支付金额',
@@ -35,15 +35,15 @@ CREATE TABLE IF NOT EXISTS member_order (
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     UNIQUE KEY uniq_member_order (user_id, trade_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '虚拟订单主单表';
 
 CREATE TABLE IF NOT EXISTS member_sub_order (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
     biz_type INT(11)  NOT NULL COMMENT '产品线',
     user_id BIGINT(20)  NOT NULL COMMENT 'userId',
-    related_order_system_type INT(11)  NULL COMMENT '订单系统类型',
-    related_order_id VARCHAR(128)  NULL COMMENT '订单  id',
-    trade_id VARCHAR(128)  NOT NULL COMMENT '交易 id',
+    related_order_system_type INT(11)  NULL COMMENT '关联订单系统类型',
+    related_order_id VARCHAR(128)  NULL COMMENT '关联订单  id',
+    trade_id VARCHAR(128)  NOT NULL COMMENT '订单交易 id',
     sub_trade_id BIGINT(20)  NOT NULL COMMENT '子单交易 id',
     sku_id BIGINT(20)  NOT NULL COMMENT 'skuId',
     act_price_fen INT(11)  NULL COMMENT '实付金额',
@@ -59,14 +59,14 @@ CREATE TABLE IF NOT EXISTS member_sub_order (
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     UNIQUE KEY uniq_sub_order (user_id, trade_id, sku_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '虚拟订单子单表';
 
 
 CREATE TABLE IF NOT EXISTS once_task (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
     biz_type INT(11)  NOT NULL COMMENT '产品线',
     task_group_id VARCHAR(128)  NOT NULL COMMENT '任务群组 id,由业务自定义',
-    task_token VARCHAR(128)  NOT NULL COMMENT 'taskToken',
+    task_token VARCHAR(128)  NOT NULL COMMENT 'taskToken唯一键',
     user_id BIGINT(20)  NOT NULL COMMENT 'userId',
     task_type INT(11)  NOT NULL COMMENT '任务类型',
     status INT(11)  NOT NULL COMMENT '状态',
@@ -78,14 +78,14 @@ CREATE TABLE IF NOT EXISTS once_task (
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     UNIQUE KEY uniq_once_task (user_id, task_token, task_type)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '通用任务表';
 
 CREATE TABLE IF NOT EXISTS member_ship (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
     biz_type INT(11)  NOT NULL COMMENT '产品线',
     ship_type INT(11)  NOT NULL COMMENT '资格类型',
     user_id BIGINT(20)  NOT NULL COMMENT 'userId',
-    trade_id VARCHAR(128)  NOT NULL COMMENT '交易 id',
+    trade_id VARCHAR(128)  NOT NULL COMMENT '主单交易 id',
     sub_trade_id VARCHAR(128)  NOT NULL COMMENT '子单交易 id',
     right_id INT(11)  NOT NULL COMMENT '权益Id',
     item_token VARCHAR(128)  NOT NULL COMMENT '履约项凭证',
@@ -103,13 +103,13 @@ CREATE TABLE IF NOT EXISTS member_ship (
     KEY key_period_stime (user_id, stime),
     KEY key_period_etime (user_id, etime),
     UNIQUE KEY uniq_grant_item (user_id, grant_code, biz_type)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT '权益资格表';
 
 CREATE TABLE IF NOT EXISTS member_perform_item (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
     biz_type INT(11)  NOT NULL COMMENT '产品线',
     user_id BIGINT(20)  NOT NULL COMMENT 'userId',
-    trade_id VARCHAR(128)  NOT NULL COMMENT '交易 id',
+    trade_id VARCHAR(128)  NOT NULL COMMENT '主单交易 id',
     sub_trade_id VARCHAR(128)  NOT NULL COMMENT '子单交易 id',
     sku_id BIGINT(20)  NOT NULL COMMENT 'skuId',
     right_id INT(11)  NOT NULL COMMENT '权益Id',
@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS member_perform_item (
     batch_code VARCHAR(128)  NULL COMMENT '发放批次码',
     provider_id INT(11)  NOT NULL COMMENT '履约方 id',
     phase INT(11)  NOT NULL COMMENT '期数',
-    cycle INT(11)  NOT NULL COMMENT '周期数',
+    `cycle` INT(11)  NOT NULL COMMENT '周期数',
     buy_index INT(11)  NOT NULL COMMENT '购买序号',
     status INT(11)  NOT NULL COMMENT '状态',
     extra TEXT NOT NULL COMMENT '扩展属性',
@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS member_perform_item (
     PRIMARY KEY (id),
     KEY key_perform_item_batch (user_id, batch_code, trade_id),
     UNIQUE KEY uniq_perform_item (user_id, item_token, biz_type)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT '履约项';
 
 
 CREATE TABLE IF NOT EXISTS aftersale_order (
@@ -139,21 +139,20 @@ CREATE TABLE IF NOT EXISTS aftersale_order (
     biz_type INT(11)  NOT NULL COMMENT '产品线',
     user_id BIGINT(20)  NOT NULL COMMENT 'userId',
     source INT(11)  NOT NULL COMMENT '售后来源',
-    trade_id VARCHAR(128)  NOT NULL COMMENT '会员单 id',
+    trade_id VARCHAR(128)  NOT NULL COMMENT '订单主单 id',
     operator VARCHAR(128)  NOT NULL COMMENT '操作人',
     act_pay_price_fen INT(11)  NOT NULL COMMENT '实付金额分',
     act_refund_price_fen INT(11)  NOT NULL COMMENT '实际退款金额分',
     recommend_refund_price_fen INT(11)  NOT NULL COMMENT '推荐的退款金额分',
     status INT(11)  NOT NULL COMMENT '售后状态',
     refund_type INT(11)  NOT NULL COMMENT '退款类型 全部退或部分退',
-    refund_way INT(11)  NOT NULL COMMENT '退款渠道',
+    refund_way INT(11)  NOT NULL COMMENT '退款方式 原路赔付、人工赔付',
     extra TEXT NOT NULL COMMENT '扩展属性',
     utime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '更新时间',
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
-    --UNIQUE KEY uniq_aftersale_order (user_id, preview_token),
     KEY tradeid_key (user_id, trade_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '售后单';
 
 CREATE TABLE IF NOT EXISTS outer_submit_record (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
@@ -169,7 +168,7 @@ CREATE TABLE IF NOT EXISTS outer_submit_record (
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     UNIQUE KEY uniq_outer (user_id, outer_id, outer_type)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT  '外部系统提单记录';
 
 
 
@@ -184,4 +183,4 @@ CREATE TABLE IF NOT EXISTS redeem (
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     UNIQUE KEY uniq_redeem (code)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '兑换码表';

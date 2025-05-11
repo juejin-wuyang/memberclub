@@ -1,31 +1,33 @@
 -- 用于单测使用的 H2 数据库初始化
 
-SET MODE MYSQL;
+-- SET MODE MYSQL;
+use member_sku;
+
 CREATE TABLE IF NOT EXISTS member_sku (
     id BIGINT(20)  NOT NULL COMMENT '表主键',
     biz_type INT(11)  NOT NULL COMMENT '产品线',
-    status INT(11)  NOT NULL COMMENT '商品状态',
-    sale_info TEXT NOT NULL COMMENT '扩展属性',
-    finance_info TEXT NOT NULL COMMENT '扩展属性',
-    view_info TEXT NOT NULL COMMENT '扩展属性',
-    performance_info TEXT NOT NULL COMMENT '扩展属性',
-    restrict_info TEXT NOT NULL COMMENT '扩展属性',
-    inventory_info TEXT NOT NULL COMMENT '扩展属性',
+    status INT(11)  NOT NULL COMMENT '商品状态 上下架',
+    sale_info TEXT NOT NULL COMMENT '售卖信息',
+    finance_info TEXT NOT NULL COMMENT '结算信息',
+    view_info TEXT NOT NULL COMMENT '展示信息',
+    performance_info TEXT NOT NULL COMMENT '履约信息',
+    restrict_info TEXT NOT NULL COMMENT '限制信息',
+    inventory_info TEXT NOT NULL COMMENT '库存信息',
     extra TEXT NOT NULL COMMENT '扩展属性',
     utime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '更新时间',
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '虚拟商品表';
 
 
 CREATE TABLE IF NOT EXISTS inventory (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表主键',
     biz_type INT(11)  NOT NULL COMMENT '产品线',
-    target_id BIGINT(20)  NOT NULL COMMENT '商品库存状态',
-    target_type INT(11)  NOT NULL COMMENT '目标库存类型',
+    target_id BIGINT(20)  NOT NULL COMMENT '目标对象ID',
+    target_type INT(11)  NOT NULL COMMENT '目标对象类型',
     sub_key VARCHAR(128) NOT NULL COMMENT '库存子 key',
     sale_count BIGINT(20)  NOT NULL COMMENT '售卖数量',
-    total_count BIGINT(20)  NOT NULL COMMENT '总量',
+    total_count BIGINT(20)  NOT NULL COMMENT '库存总量',
     status INT(11)  NOT NULL COMMENT '商品库存状态',
     stime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '开始时间',
     etime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '截止时间',
@@ -34,7 +36,7 @@ CREATE TABLE IF NOT EXISTS inventory (
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     UNIQUE KEY uniq_inventory (target_id, sub_key, target_type)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '商品库存表';
 
 
 
@@ -43,17 +45,17 @@ CREATE TABLE IF NOT EXISTS inventory_record (
     biz_type INT(11)  NOT NULL COMMENT '产品线',
     user_id BIGINT(20)  NOT NULL COMMENT 'userId',
     inventory_key VARCHAR(128) NOT NULL COMMENT '库存 ID',
-    target_id BIGINT(20)  NOT NULL COMMENT '目标库存 Id',
-    target_type INT(11)  NOT NULL COMMENT '目标库存类型',
+    target_id BIGINT(20)  NOT NULL COMMENT '目标对象 Id',
+    target_type INT(11)  NOT NULL COMMENT '目标对象类型',
     sub_key VARCHAR(128) NOT NULL COMMENT '库存子 key',
-    operate_key VARCHAR(128) NOT NULL COMMENT '库存操作 key',
+    operate_key VARCHAR(128) NOT NULL COMMENT '库存操作幂等 key',
     op_count BIGINT(20)  NOT NULL COMMENT '操作数量',
     op_type INT(11)  NOT NULL COMMENT '操作方向 1扣减, 2回补',
     utime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '更新时间',
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     UNIQUE KEY uniq_inventory_record (user_id, operate_key, inventory_key, op_type)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '库存操作记录表';
 
 use member_sku;
 INSERT INTO member_sku (id,biz_type,status,sale_info,finance_info,view_info,performance_info,restrict_info,inventory_info,extra,utime,ctime) VALUES
