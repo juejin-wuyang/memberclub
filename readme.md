@@ -13,7 +13,7 @@ memberclub 是面向电商C端业务的快速开发平台，借助它您可以�
 
 # 项目架构
 
-![img_7.png](doc/img_7.png)
+![img_12.png](doc/img_12.png)
 
 # 可以学到什么技术？
 
