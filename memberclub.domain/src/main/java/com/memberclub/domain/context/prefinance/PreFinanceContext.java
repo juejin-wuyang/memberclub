@@ -26,28 +26,17 @@ import java.util.Map;
 @Data
 public class PreFinanceContext {
 
+    Map<String, List<AssetDO>> itemToken2Assets;
     private Long userId;
-
     private BizTypeEnum bizType;
-
     private String tradeId;
-
     private String subTradeId;
-
     private Long skuId;
-
     private TradeEventDO event;
-
     private PreFinanceEventEnum preFinanceEventEnum;
-
     private MemberOrderDO memberOrder;
-
     private MemberSubOrderDO subOrder;
-
     private List<MemberPerformItemDO> performItems;
-
-    Map<String, List<AssetDO>> batchCode2Assets;
-
     private PreFinanceEvent preFinanceEvent;
 
     private PreFinanceRecordDO record;

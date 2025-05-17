@@ -6,6 +6,8 @@
  */
 package com.memberclub.domain.common;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 /**
@@ -31,6 +33,7 @@ public enum BizTypeEnum {
         this.name = name;
     }
 
+    @JsonCreator
     public static BizTypeEnum findByCode(int value) throws IllegalArgumentException {
         for (BizTypeEnum item : BizTypeEnum.values()) {
             if (item.code == value) {
@@ -58,6 +61,7 @@ public enum BizTypeEnum {
         return this.name;
     }
 
+    @JsonValue
     public int getCode() {
         return this.code;
     }

@@ -31,7 +31,6 @@ public class AssetsReverseFlow extends FlowNode<ReversePerformContext> {
     public void process(ReversePerformContext context) {
         List<PerformItemReverseInfo> items = context.getCurrentSubOrderReversePerformContext().getCurrentItems();
 
-
         String scene = String.valueOf(context.getCurrentSubOrderReversePerformContext().getCurrentRightType());
         RightsReverseExtension rightsReverseExtension = extension(context.getBizType().toBizScene(scene), RightsReverseExtension.class);
         rightsReverseExtension.reverse(context, context.getCurrentSubOrderReversePerformContext(), items);

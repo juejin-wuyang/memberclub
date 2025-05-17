@@ -9,6 +9,7 @@ import com.memberclub.sdk.aftersale.flow.apply.AfterSalePaymentRefundFlow;
 import com.memberclub.sdk.aftersale.flow.apply.AfterSaleResourceLockFlow;
 import com.memberclub.sdk.aftersale.flow.apply.AftersaleApplyPreviewFlow;
 import com.memberclub.sdk.aftersale.flow.apply.AftersaleOrderGenerateFlow;
+import com.memberclub.sdk.aftersale.flow.doapply.AftersaleCompletedFlow;
 import com.memberclub.sdk.aftersale.flow.doapply.AftersaleOrderApplyFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,6 +30,7 @@ public abstract class BaseAfterSaleApplyExtension implements AfterSaleApplyExten
                 .addNode(AftersaleOrderGenerateFlow.class)      //生成售后单
                 .addNode(AftersaleOrderApplyFlow.class)         //创建售后单
                 .addNode(AfterSalePaymentRefundFlow.class)      //调用支付原路退款
+                .addNode(AftersaleCompletedFlow.class)
         ;
     }
 
@@ -45,7 +47,7 @@ public abstract class BaseAfterSaleApplyExtension implements AfterSaleApplyExten
 
     @Override
     public boolean isPurchaseReversedEnable(AfterSaleApplyContext context) {
-        if (context.getPreviewContext().getRefundWay() == RefundWayEnum.ORDER_BACKSTRACK) {
+        if (context.getExecuteCmd().getRefundWay() == RefundWayEnum.ORDER_BACKSTRACK) {
             return true;
         }
         return false;

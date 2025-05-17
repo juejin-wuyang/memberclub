@@ -18,7 +18,7 @@ import java.util.Map;
 public class AssetFetchResponseDO {
     private int code;
 
-    private Map<String, List<AssetDO>> assetBatchCode2AssetsMap;
+    private Map<String, List<AssetDO>> itemToken2AssetsMap;
 
     public boolean isSuccess() {
         return code == 0;

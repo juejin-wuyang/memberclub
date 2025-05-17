@@ -9,21 +9,21 @@ package com.memberclub.domain.exception;
 /**
  * author: 掘金五阳
  */
-public class AftersaleDoApplyException extends MemberException {
+public class AftersaleExecuteException extends MemberException {
 
-    public AftersaleDoApplyException(ResultCode code) {
+    public AftersaleExecuteException(ResultCode code) {
         super(code);
     }
 
-    public AftersaleDoApplyException(ResultCode code, Throwable cause) {
+    public AftersaleExecuteException(ResultCode code, Throwable cause) {
         super(code, cause);
     }
 
-    public AftersaleDoApplyException(ResultCode code, String msg) {
+    public AftersaleExecuteException(ResultCode code, String msg) {
         super(code, msg);
     }
 
-    public AftersaleDoApplyException(ResultCode code, String msg, Exception e) {
+    public AftersaleExecuteException(ResultCode code, String msg, Exception e) {
         super(code, msg, e);
     }
 }

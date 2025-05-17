@@ -13,5 +13,7 @@ public class AftersaleSubmitVO {
 
     private String previewDigest;
 
+    private String previewToken;
+
     private Integer digestVersion;
 }

@@ -35,7 +35,7 @@ public class DemoMemberAfterSaleApplyExtension extends BaseAfterSaleApplyExtensi
 
     FlowChain<AfterSaleApplyContext> checkFlowChain = null;
 
-    FlowChain<AfterSaleApplyContext> doApplyFlowChain = null;
+    FlowChain<AfterSaleApplyContext> executeFlowChain = null;
 
     @Autowired
     private FlowChainService flowChainService;
@@ -48,12 +48,12 @@ public class DemoMemberAfterSaleApplyExtension extends BaseAfterSaleApplyExtensi
                 .addNode(AftersaleApplyPreviewFlow.class)       //售后预览
                 .addNode(AfterSalePlanDigestCheckFlow.class)    //校验售后计划摘要
                 .addNode(AftersaleOrderGenerateFlow.class)      //生成售后单
-                .addNode(AftersaleDoApplyFlow.class)
+                .addNode(AftersaleOrderApplyFlow.class)
+                .addNode(AfterSaleAsyncExecuteFlow.class)
         ;
 
-        doApplyFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
-                .addNode(AftersaleOrderApplyFlow.class)
-                .addNode(AftersaleAsyncRollbackFlow.class)
+        executeFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
+                .addNode(AftersaleCompletedFlow.class)
                 .addNode(AfterSaleReversePerformFlow.class)
                 .addNode(AfterSalePayOrderRefundFlow.class)
                 .addNode(AftersaleReversePurchaseFlow.class)
@@ -67,8 +67,8 @@ public class DemoMemberAfterSaleApplyExtension extends BaseAfterSaleApplyExtensi
     }
 
     @Override
-    public void doApply(AfterSaleApplyContext context) {
-        flowChainService.execute(doApplyFlowChain, context);
+    public void execute(AfterSaleApplyContext context) {
+        flowChainService.execute(executeFlowChain, context);
     }
 
     @Override

@@ -45,20 +45,20 @@ public class DefaultPreFinanceBuildAssetsExtension implements PreFinanceBuildAss
 
         Map<RightTypeEnum, List<MemberPerformItemDO>> rightType2PerformItems =
                 context.getPerformItems().stream().collect(Collectors.groupingBy(MemberPerformItemDO::getRightType));
-        Map<String, List<AssetDO>> batchCode2Assets = Maps.newHashMap();
+        Map<String, List<AssetDO>> itemToken2Assets = Maps.newHashMap();
         for (Map.Entry<RightTypeEnum, List<MemberPerformItemDO>> entry : rightType2PerformItems.entrySet()) {
-            Map<String, List<AssetDO>> tempBatchCode2Assets =
+            Map<String, List<AssetDO>> tempItemToken2Assets =
                     assetsDomainService.queryAssets(context.getUserId(), entry.getKey().getCode(),
-                            CollectionUtilEx.map(entry.getValue(), MemberPerformItemDO::getBatchCode));
-            batchCode2Assets.putAll(tempBatchCode2Assets);
+                            CollectionUtilEx.map(entry.getValue(), MemberPerformItemDO::getItemToken));
+            itemToken2Assets.putAll(tempItemToken2Assets);
         }
-        context.setBatchCode2Assets(batchCode2Assets);
+        context.setItemToken2Assets(itemToken2Assets);
         return true;
     }
 
     @Override
     public void buildOnPerform(PreFinanceContext context) {
-        for (Map.Entry<String, List<AssetDO>> entry : context.getBatchCode2Assets().entrySet()) {
+        for (Map.Entry<String, List<AssetDO>> entry : context.getItemToken2Assets().entrySet()) {
             List<AssetDO> assets = entry.getValue().stream().filter(asset -> asset.getStatus() == AssetStatusEnum.UNUSE.getCode())
                     .collect(Collectors.toList());
             entry.setValue(assets);
@@ -67,7 +67,7 @@ public class DefaultPreFinanceBuildAssetsExtension implements PreFinanceBuildAss
 
     @Override
     public void buildOnFreeze(PreFinanceContext context) {
-        for (Map.Entry<String, List<AssetDO>> entry : context.getBatchCode2Assets().entrySet()) {
+        for (Map.Entry<String, List<AssetDO>> entry : context.getItemToken2Assets().entrySet()) {
             List<AssetDO> assets = entry.getValue().stream().filter(asset -> asset.getStatus() == AssetStatusEnum.FREEZE.getCode())
                     .collect(Collectors.toList());
             entry.setValue(assets);
@@ -76,7 +76,7 @@ public class DefaultPreFinanceBuildAssetsExtension implements PreFinanceBuildAss
 
     @Override
     public void buildOnExpire(PreFinanceContext context) {
-        for (Map.Entry<String, List<AssetDO>> entry : context.getBatchCode2Assets().entrySet()) {
+        for (Map.Entry<String, List<AssetDO>> entry : context.getItemToken2Assets().entrySet()) {
             List<AssetDO> assets = CollectionUtilEx.filter(entry.getValue(), this::isExpire);
             entry.setValue(assets);
         }

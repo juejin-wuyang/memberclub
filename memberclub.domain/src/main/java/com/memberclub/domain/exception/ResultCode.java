@@ -25,7 +25,7 @@ public enum ResultCode {
     AFTERSALE_UNABLE_ERROR(15, "不能发起售后异常", false),
     CONFIG_DATA_ERROR(16, "配置数据有误", false),
     PERIOD_PERFORM_TASK_CREATE_ERROR(17, "周期履约任务创建失败", true),
-    AFTERSALE_DO_APPLY_ERROR(18, "售后受理执行失败", true),
+    AFTERSALE_EXECUTE_ERROR(18, "售后受理执行失败", true),
     EXTRACT_MESSAGE_ERROR(19, "解析消息异常", false),
     PERIOD_PERFORM_EXECUTE_ERROR(20, "周期履约任务执行失败", true),
     INVENTORY_DECREMENT_FAIL(21, "扣减库存失败", false, false),

@@ -58,7 +58,7 @@ public class PurchaseBizService {
 
     public void reverse(AfterSaleApplyContext context) {
         try {
-            em.getExtension(context.getCmd().getBizType().toBizScene(), PurchaseExtension.class).reverse(context);
+            em.getExtension(context.getApplyCmd().getBizType().toBizScene(), PurchaseExtension.class).reverse(context);
         } catch (MemberException e) {
             throw e;
         } catch (Exception e) {

@@ -35,6 +35,8 @@ public class AftersaleOrderDO {
 
     private String tradeId;
 
+    private String previewToken;
+
     private List<ApplySkuInfoDO> applySkuInfos;
 
     private AftersaleOrderExtraDO extra;

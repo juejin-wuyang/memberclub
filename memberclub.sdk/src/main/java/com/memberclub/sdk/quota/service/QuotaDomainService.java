@@ -221,8 +221,8 @@ public class QuotaDomainService {
      * @param context
      */
     public void onReverse(AfterSaleApplyContext context) {
-        long userId = context.getCmd().getUserId();
-        MemberOrderDO memberOrderDO = context.getPreviewContext().getMemberOrder();
+        long userId = context.getApplyCmd().getUserId();
+        MemberOrderDO memberOrderDO = context.getMemberOrder();
 
         UserTagOpCmd cmd = new UserTagOpCmd();
         cmd.setUniqueKey(memberOrderDO.getTradeId());

@@ -18,21 +18,28 @@ import com.memberclub.common.util.JsonUtils;
 import com.memberclub.common.util.TimeUtil;
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
+import com.memberclub.domain.context.aftersale.apply.AfterSaleExecuteCmd;
 import com.memberclub.domain.context.aftersale.contant.AftersaleUnableCode;
+import com.memberclub.domain.context.aftersale.contant.UsageTypeEnum;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.ItemUsage;
 import com.memberclub.domain.context.perform.common.MemberOrderPerformStatusEnum;
 import com.memberclub.domain.context.purchase.common.MemberOrderStatusEnum;
 import com.memberclub.domain.dataobject.aftersale.AftersaleOrderDO;
 import com.memberclub.domain.dataobject.aftersale.AftersaleOrderExtraDO;
 import com.memberclub.domain.dataobject.aftersale.AftersaleOrderStatusEnum;
+import com.memberclub.domain.dataobject.perform.MemberPerformItemDO;
+import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.entity.trade.AftersaleOrder;
+import com.memberclub.domain.exception.AftersaleExecuteException;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.mapstruct.AftersaleConvertor;
 import com.memberclub.infrastructure.mybatis.mappers.trade.AftersaleOrderDao;
-import com.memberclub.infrastructure.mybatis.mappers.trade.MemberOrderDao;
+import com.memberclub.sdk.aftersale.extension.apply.AfterSaleApplyExtension;
 import com.memberclub.sdk.aftersale.extension.domain.AfterSaleRepositoryExtension;
 import com.memberclub.sdk.common.Monitor;
-import com.memberclub.sdk.memberorder.domain.MemberSubOrderDomainService;
+import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
+import com.memberclub.sdk.perform.service.domain.PerformDomainService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +49,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.memberclub.domain.exception.ResultCode.AFTERSALE_EXECUTE_ERROR;
 
 /**
  * author: 掘金五阳
@@ -58,12 +68,10 @@ public class AfterSaleDomainService {
 
     @Autowired
     private ExtensionManager extensionManager;
-
     @Autowired
-    private MemberOrderDao memberOrderDao;
-
+    private MemberOrderDomainService memberOrderDomainService;
     @Autowired
-    private MemberSubOrderDomainService memberSubOrderDomainService;
+    private PerformDomainService performDomainService;
 
     public static void validatePeriod4ExpireRefundUnable(AfterSalePreviewContext context) {
         context.setStime(context.getMemberOrder().getStime());
@@ -93,7 +101,6 @@ public class AfterSaleDomainService {
         }
     }
 
-
     public static void generateDigest(AfterSalePreviewContext context) throws NoSuchAlgorithmException {
         List<Object> keys = Lists.newArrayList();
         keys.add(context.getCmd().getTradeId());
@@ -107,23 +114,61 @@ public class AfterSaleDomainService {
         String digest = Base64.getUrlEncoder().encodeToString(
                 messageDigest.digest(value.getBytes(Charsets.UTF_8)));
         context.setDigests(digest);
+        context.setPreviewToken(digest);
         context.setDigestVersion(1);
         CommonLog.info("生成售后计划摘要 版本:{},{}", context.getDigestVersion(), context.getDigests());
     }
 
+    @Retryable(maxTimes = 5, initialDelaySeconds = 1, maxDelaySeconds = 5, throwException = true)
+    public void execute(AfterSaleExecuteCmd cmd) {
+        AfterSaleApplyContext context = new AfterSaleApplyContext();
+        initializeApplyContext(cmd, context);
+        try {
+            extensionManager.getExtension(context.toBizScene(),
+                    AfterSaleApplyExtension.class).execute(context);
+        } catch (Exception e) {
+            CommonLog.error("售后受理执行流程异常 context:{}", context, e);
+            throw new AftersaleExecuteException(AFTERSALE_EXECUTE_ERROR, e);
+        }
+    }
+
+    public void initializeApplyContext(AfterSaleExecuteCmd cmd, AfterSaleApplyContext context) {
+        MemberOrderDO order = memberOrderDomainService.getMemberOrderDO(cmd.getApplyCmd().getUserId(), cmd.getApplyCmd().getTradeId());
+
+        List<MemberPerformItemDO> performItems = performDomainService.queryItemsByTradeId(cmd.getApplyCmd().getUserId(), cmd.getApplyCmd().getTradeId());
+
+        List<MemberPerformItemDO> reversablePerformItems = performItems.stream().filter((item) -> {
+            ItemUsage itemUsage = cmd.getItemToken2ItemUsage().get(item.getItemToken());
+            if (itemUsage.getUsageType() == UsageTypeEnum.UNUSE || itemUsage.getUsageType() == UsageTypeEnum.USED) {
+                return true;
+            }
+            return false;
+        }).collect(Collectors.toList());
+
+        AftersaleOrderDO aftersaleOrderDO = getAfterSaleOrderDO(cmd.getApplyCmd().getUserId(), cmd.getApplyCmd().getPreviewToken());
+        context.setApplyCmd(cmd.getApplyCmd());
+        context.setExecuteCmd(cmd);
+        context.setMemberOrder(order);
+        context.setAftersaleOrderDO(aftersaleOrderDO);
+        context.setScene(cmd.getScene());
+
+        context.setTotalPerformItems(performItems);
+        context.setReversablePerformItems(reversablePerformItems);
+    }
+
     public AftersaleOrderDO generateOrder(AfterSaleApplyContext context) {
-        AftersaleOrderDO order = AftersaleConvertor.INSTANCE.toAftersaleOrderDO(context.getCmd());
-        order.setActPayPriceFen(context.getPreviewContext().getPayPriceFen());
-        order.setActRefundPriceFen(context.getPreviewContext().getActRefundPrice());
-        order.setApplySkuInfos(context.getCmd().getApplySkus());
+        AftersaleOrderDO order = AftersaleConvertor.INSTANCE.toAftersaleOrderDO(context.getApplyCmd());
+        order.setActPayPriceFen(context.getMemberOrder().getPaymentInfo().getPayAmountFen());
+        order.setApplySkuInfos(context.getApplyCmd().getApplySkus());
         order.setStatus(AftersaleOrderStatusEnum.INIT);
+        order.setPreviewToken(context.getExecuteCmd().getApplyCmd().getPreviewToken());
         order.setCtime(TimeUtil.now());
         order.setExtra(new AftersaleOrderExtraDO());
-        order.getExtra().setReason(context.getCmd().getReason());
+        order.getExtra().setReason(context.getApplyCmd().getReason());
         order.getExtra().setApplySkus(order.getApplySkuInfos());
-        order.setRefundType(context.getPreviewContext().getRefundType());
-        order.setRecommendRefundPriceFen(context.getPreviewContext().getRecommendRefundPrice());
-        order.setRefundWay(context.getPreviewContext().getRefundWay());
+        order.setRefundType(context.getExecuteCmd().getRefundType());
+        order.setRecommendRefundPriceFen(context.getExecuteCmd().getRecommendRefundPrice());
+        order.setRefundWay(context.getExecuteCmd().getRefundWay());
         return order;
     }
 
@@ -148,6 +193,14 @@ public class AfterSaleDomainService {
             Monitor.AFTER_SALE_DOAPPLY.counter(order.getBizType(), "insert", "succ");
         }
         return;
+    }
+
+    public AftersaleOrderDO getAfterSaleOrderDO(long userId, String previewToken) {
+        AftersaleOrder order = aftersaleOrderDao.queryByPreviewToken(userId, previewToken);
+        if (order == null) {
+            return null;
+        }
+        return aftersaleDataObjectFactory.buildAftersaleOrderDO(order);
     }
 
     public AftersaleOrderDO queryAftersaleOrder(long userId, Long afterSaleId) {

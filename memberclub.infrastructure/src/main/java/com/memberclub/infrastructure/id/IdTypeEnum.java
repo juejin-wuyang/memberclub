@@ -14,6 +14,7 @@ public enum IdTypeEnum {
     SUB_ORDER_ID(1, "sub_order_id"),
     AFTERSALE_ORDER_ID(2, "aftersale_order_id"),
     ORDER_TRADE_ID(3, "order_trade_id"),
+    PREVIEW_TOKEN(4, "preview_token"),
     ;
 
     private int value;

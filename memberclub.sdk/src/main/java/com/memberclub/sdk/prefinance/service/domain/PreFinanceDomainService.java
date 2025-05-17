@@ -89,11 +89,11 @@ public class PreFinanceDomainService {
                         performItem.getItemToken(), performItem.getBatchCode());
                 continue;
             }
-            if (MapUtils.isEmpty(context.getBatchCode2Assets())) {
+            if (MapUtils.isEmpty(context.getItemToken2Assets())) {
                 continue;
             }
             details.add(
-                    buildBasicFinanceEventDetail(context, performItem, context.getBatchCode2Assets().get(performItem.getBatchCode()))
+                    buildBasicFinanceEventDetail(context, performItem, context.getItemToken2Assets().get(performItem.getItemToken()))
             );
         }
 

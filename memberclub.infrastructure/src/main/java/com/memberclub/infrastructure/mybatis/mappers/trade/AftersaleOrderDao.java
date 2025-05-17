@@ -35,6 +35,14 @@ public interface AftersaleOrderDao extends BaseMapper<AftersaleOrder> {
     })
     public AftersaleOrder queryById(@Param("userId") long userId, @Param("id") Long id);
 
+
+    @QueryMaster
+    @Select({
+            "SELECT * FROM ", TABLE_NAME,
+            " WHERE user_id=#{userId} AND preview_token=#{previewToken} "
+    })
+    public AftersaleOrder queryByPreviewToken(@Param("userId") long userId, @Param("previewToken") String previewToken);
+
     @QueryMaster
     @Select({
             "SELECT * FROM ", TABLE_NAME,

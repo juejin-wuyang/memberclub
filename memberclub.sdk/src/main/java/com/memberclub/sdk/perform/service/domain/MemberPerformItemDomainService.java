@@ -131,7 +131,6 @@ public class MemberPerformItemDomainService {
                                       SubOrderReversePerformContext subOrderReversePerformContext,
                                       List<PerformItemReverseInfo> infos) {
         for (PerformItemReverseInfo info : infos) {
-
             LambdaUpdateWrapper<MemberPerformItem> wrapper = new LambdaUpdateWrapper<>();
             wrapper.eq(MemberPerformItem::getUserId, context.getUserId())
                     .eq(MemberPerformItem::getItemToken, info.getItemToken())

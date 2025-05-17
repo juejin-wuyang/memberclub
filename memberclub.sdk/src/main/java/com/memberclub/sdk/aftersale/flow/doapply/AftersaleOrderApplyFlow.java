@@ -8,7 +8,6 @@ package com.memberclub.sdk.aftersale.flow.doapply;
 
 import com.memberclub.common.flow.FlowNode;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
-import com.memberclub.domain.dataobject.aftersale.AftersaleOrderDO;
 import com.memberclub.sdk.aftersale.service.domain.AfterSaleDomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,22 +23,16 @@ public class AftersaleOrderApplyFlow extends FlowNode<AfterSaleApplyContext> {
 
     @Override
     public void process(AfterSaleApplyContext context) {
-        AftersaleOrderDO orderDO = aftersaleDomainService.queryAftersaleOrder(
+        /*AftersaleOrderDO orderDO = aftersaleDomainService.queryAftersaleOrder(
                 context.getCmd().getUserId(), context.getAftersaleOrderDO().getId());
         if (orderDO != null) {
             context.setAftersaleOrderDO(orderDO);
-        } else {
-            aftersaleDomainService.createAfterSaleOrder(context.getAftersaleOrderDO());
-        }
+        } else {*/
+        aftersaleDomainService.createAfterSaleOrder(context.getAftersaleOrderDO());
     }
 
     @Override
     public void success(AfterSaleApplyContext context) {
-        aftersaleDomainService.onAftersaleSuccess(context, context.getAftersaleOrderDO());
-    }
-
-    @Override
-    public void rollback(AfterSaleApplyContext context, Exception e) {
-
+        //aftersaleDomainService.onAftersaleSuccess(context, context.getAftersaleOrderDO());
     }
 }

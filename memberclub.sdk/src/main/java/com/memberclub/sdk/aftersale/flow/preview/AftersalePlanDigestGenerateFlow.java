@@ -11,7 +11,9 @@ import com.memberclub.common.flow.FlowNode;
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.infrastructure.dynamic_config.SwitchEnum;
+import com.memberclub.infrastructure.id.IdTypeEnum;
 import com.memberclub.sdk.aftersale.extension.preview.GenerateAfterSalePlanDigestExtension;
+import com.memberclub.sdk.common.IdGeneratorDomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,9 @@ public class AftersalePlanDigestGenerateFlow extends FlowNode<AfterSalePreviewCo
     @Autowired
     private ExtensionManager extensionManager;
 
+    @Autowired
+    private IdGeneratorDomainService idGeneratorDomainService;
+
     @Override
     public void process(AfterSalePreviewContext context) {
         if (context.getDigestVersion() == null) {
@@ -35,5 +40,7 @@ public class AftersalePlanDigestGenerateFlow extends FlowNode<AfterSalePreviewCo
         extensionManager.getExtension(
                 BizScene.of(context.getCmd().getBizType().getCode(), String.valueOf(context.getDigestVersion())),
                 GenerateAfterSalePlanDigestExtension.class).generateDigest(context);
+
+        context.setPreviewToken(idGeneratorDomainService.generateId(IdTypeEnum.PREVIEW_TOKEN) + "");
     }
 }

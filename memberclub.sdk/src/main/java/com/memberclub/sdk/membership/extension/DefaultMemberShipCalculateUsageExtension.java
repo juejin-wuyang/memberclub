@@ -37,13 +37,13 @@ public class DefaultMemberShipCalculateUsageExtension implements RealtimeCalcula
 
     @Override
     public Map<String, ItemUsage> calculateItemUsage(AfterSalePreviewContext context) {
-        List<String> assetBatchCodes = context.getCurrentPerformItemsGroupByRightType()
+        List<String> itemTokens = context.getCurrentPerformItemsGroupByRightType()
                 .stream()
-                .map(MemberPerformItemDO::getBatchCode)
+                .map(MemberPerformItemDO::getItemToken)
                 .collect(Collectors.toList());
-        Map<String, ItemUsage> batchCode2ItemUsage = Maps.newHashMap();
-        for (String assetBatchCode : assetBatchCodes) {
-            MemberShipDO memberShipDO = memberShipDomainService.getMemberShipDO(context.getCmd().getUserId(), assetBatchCode);
+        Map<String, ItemUsage> itemToken2ItemUsage = Maps.newHashMap();
+        for (String itemToken : itemTokens) {
+            MemberShipDO memberShipDO = memberShipDomainService.getMemberShipDO(context.getCmd().getUserId(), itemToken);
             //若视频会员等形态,可能依据使用时间决定退款金额, 然而 优惠券优惠类会员基于资产使用状态决定退款金额,因此不计算会员身份的使用状态和使用金额
             //若其他会员需要依据身份有效期计算有效期,则单独提供扩展点实现类即可!
 
@@ -51,9 +51,9 @@ public class DefaultMemberShipCalculateUsageExtension implements RealtimeCalcula
             usage.setUsageType(UsageTypeEnum.UNUSE);
             usage.setTotalPrice(0);
             usage.setUsedPrice(0);
-            batchCode2ItemUsage.put(assetBatchCode, usage);
+            itemToken2ItemUsage.put(itemToken, usage);
         }
 
-        return batchCode2ItemUsage;
+        return itemToken2ItemUsage;
     }
 }

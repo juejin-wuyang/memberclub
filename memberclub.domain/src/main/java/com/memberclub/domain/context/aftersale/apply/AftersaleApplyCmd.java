@@ -6,9 +6,11 @@
  */
 package com.memberclub.domain.context.aftersale.apply;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
 import com.memberclub.domain.dataobject.aftersale.ApplySkuInfoDO;
+import com.memberclub.domain.exception.ResultCode;
 import lombok.Data;
 import org.springframework.lang.Nullable;
 
@@ -40,7 +42,15 @@ public class AftersaleApplyCmd {
 
     private String reason;
 
+    private String previewToken;
+
     private String digests;
 
     private Integer digestVersion;
+
+    public void isValid() {
+        if (StringUtils.isBlank(previewToken)) {
+            throw ResultCode.PARAM_VALID.newException("缺失previewToken");
+        }
+    }
 }

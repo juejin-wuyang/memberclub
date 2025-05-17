@@ -9,15 +9,7 @@ package com.memberclub.infrastructure.assets.facade;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.memberclub.common.util.TimeUtil;
-import com.memberclub.domain.facade.AssetDO;
-import com.memberclub.domain.facade.AssetFetchRequestDO;
-import com.memberclub.domain.facade.AssetFetchResponseDO;
-import com.memberclub.domain.facade.AssetReverseRequestDO;
-import com.memberclub.domain.facade.AssetReverseResponseDO;
-import com.memberclub.domain.facade.AssetStatusEnum;
-import com.memberclub.domain.facade.GrantItemDO;
-import com.memberclub.domain.facade.GrantRequestDO;
-import com.memberclub.domain.facade.GrantResponseDO;
+import com.memberclub.domain.facade.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -34,9 +26,8 @@ import java.util.concurrent.atomic.AtomicLong;
 @Service
 public class MockAssetsFacadeSPI implements AssetsFacadeSPI {
 
+    public Map<String, List<AssetDO>> itemToken2Assets = Maps.newHashMap();
     private AtomicLong couponIdGenerator = new AtomicLong(System.currentTimeMillis());
-
-    public Map<String, List<AssetDO>> assetBatchCode2Assets = Maps.newHashMap();
 
     @Override
     public GrantResponseDO grant(GrantRequestDO requestDO) {
@@ -59,7 +50,7 @@ public class MockAssetsFacadeSPI implements AssetsFacadeSPI {
                 coupon.setUserId(requestDO.getUserId());
                 coupons.add(coupon);
             }
-            assetBatchCode2Assets.put(batchCode, coupons);
+            itemToken2Assets.put(grantItem.getItemToken(), coupons);
             map.put(grantItem.getItemToken(), coupons);
         }
         responseDO.setItemToken2AssetsMap(map);
@@ -71,13 +62,13 @@ public class MockAssetsFacadeSPI implements AssetsFacadeSPI {
         AssetFetchResponseDO resp = new AssetFetchResponseDO();
 
         Map<String, List<AssetDO>> map = Maps.newHashMap();
-        for (String assetBatch : request.getAssetBatchs()) {
-            List<AssetDO> assets = assetBatchCode2Assets.get(assetBatch);
+        for (String itemTokens : request.getItemTokens()) {
+            List<AssetDO> assets = itemToken2Assets.get(itemTokens);
             if (CollectionUtils.isNotEmpty(assets)) {
-                map.put(assetBatch, assets);
+                map.put(itemTokens, assets);
             }
         }
-        resp.setAssetBatchCode2AssetsMap(map);
+        resp.setItemToken2AssetsMap(map);
         return resp;
     }
 
@@ -86,16 +77,16 @@ public class MockAssetsFacadeSPI implements AssetsFacadeSPI {
         AssetReverseResponseDO resp = new AssetReverseResponseDO();
 
         Map<String, List<AssetDO>> map = Maps.newHashMap();
-        for (String assetBatch : request.getAssetBatchs()) {
-            List<AssetDO> assets = assetBatchCode2Assets.get(assetBatch);
+        for (String itemToken : request.getItemTokens()) {
+            List<AssetDO> assets = itemToken2Assets.get(itemToken);
             for (AssetDO asset : assets) {
                 if (asset.getStatus() == AssetStatusEnum.UNUSE.getCode()) {
                     asset.setStatus(AssetStatusEnum.FREEZE.getCode());
                 }
             }
-            map.put(assetBatch, assets);
+            map.put(itemToken, assets);
         }
-        resp.setAssetBatchCode2AssetsMap(map);
+        resp.setItemToken2AssetsMap(map);
         return resp;
     }
 }

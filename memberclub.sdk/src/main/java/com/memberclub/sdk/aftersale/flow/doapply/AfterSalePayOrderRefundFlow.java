@@ -35,8 +35,8 @@ public class AfterSalePayOrderRefundFlow extends FlowNode<AfterSaleApplyContext>
             CommonLog.info("当前状态已完成退款,不再重复执行");
             return;
         }
-        CommonLog.info("当前退款渠道为:{}", context.getPreviewContext().getRefundWay());
-        if (context.getPreviewContext().getRefundWay() != RefundWayEnum.ORDER_BACKSTRACK) {
+        CommonLog.info("当前退款渠道为:{}", context.getExecuteCmd().getRefundWay());
+        if (context.getExecuteCmd().getRefundWay() != RefundWayEnum.ORDER_BACKSTRACK) {
             return;
         }
 

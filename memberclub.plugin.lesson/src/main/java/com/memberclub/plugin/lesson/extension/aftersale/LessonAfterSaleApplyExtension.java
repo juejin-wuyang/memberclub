@@ -29,10 +29,12 @@ public class LessonAfterSaleApplyExtension extends BaseAfterSaleApplyExtension i
 
     FlowChain<AfterSaleApplyContext> checkFlowChain = null;
 
-    FlowChain<AfterSaleApplyContext> doApplyFlowChain = null;
+    FlowChain<AfterSaleApplyContext> afterSaleAsyncExecuteFlowChain = null;
 
     @Autowired
     private FlowChainService flowChainService;
+    @Autowired
+    private AfterSaleAsyncExecuteFlow afterSaleAsyncExecuteFlow;
 
     @PostConstruct
     public void init() {
@@ -42,13 +44,13 @@ public class LessonAfterSaleApplyExtension extends BaseAfterSaleApplyExtension i
                 .addNode(AftersaleApplyPreviewFlow.class)       //售后预览
                 .addNode(AfterSalePlanDigestCheckFlow.class)    //校验售后计划摘要
                 .addNode(AftersaleOrderGenerateFlow.class)      //生成售后单
-                .addNode(AftersaleDoApplyFlow.class)
+                .addNode(AftersaleOrderApplyFlow.class)
+                .addNode(AfterSaleAsyncExecuteFlow.class)
         ;
 
-        doApplyFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
-                .addNode(AftersaleOrderApplyFlow.class)
+        afterSaleAsyncExecuteFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
                 .addNode(AftersaleUserQuotaFlow.class)           // 记录售后次数
-                .addNode(AftersaleAsyncRollbackFlow.class)   // 失败异步回滚
+                .addNode(AftersaleCompletedFlow.class)   // 失败异步回滚
                 .addNode(AfterSaleReversePerformFlow.class)  //逆向履约
                 .addNode(AfterSalePayOrderRefundFlow.class)     //退款
                 .addNode(AftersaleReversePurchaseFlow.class) //逆向取消订单
@@ -64,8 +66,8 @@ public class LessonAfterSaleApplyExtension extends BaseAfterSaleApplyExtension i
     }
 
     @Override
-    public void doApply(AfterSaleApplyContext context) {
-        flowChainService.execute(doApplyFlowChain, context);
+    public void execute(AfterSaleApplyContext context) {
+        flowChainService.execute(afterSaleAsyncExecuteFlowChain, context);
     }
 
     @Override

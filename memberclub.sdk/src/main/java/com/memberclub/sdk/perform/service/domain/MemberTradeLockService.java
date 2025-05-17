@@ -269,16 +269,16 @@ public class MemberTradeLockService {
 
     /************************************ 售后 ********************************************/
     public void lockOnPreAfterSale(AfterSaleApplyContext context) {
-        BizConfigTable table = configService.findConfigTable(BizScene.of(context.getCmd().getBizType()));
+        BizConfigTable table = configService.findConfigTable(BizScene.of(context.getApplyCmd().getBizType()));
 
         LockContext lockContext = LockContext.builder().
-                bizType(context.getCmd().getBizType()).
+                bizType(context.getApplyCmd().getBizType()).
                 lockScene("after_sale").
                 lockMode(table.getLockMode()).
-                userId(context.getCmd().getUserId()).
-                tradeId(context.getCmd().getTradeId()).
+                userId(context.getApplyCmd().getUserId()).
+                tradeId(context.getApplyCmd().getTradeId()).
                 build();
-        boolean lockable = getLockExtension(context.getCmd().getBizType()).buildOnAfterSale(lockContext, context);
+        boolean lockable = getLockExtension(context.getApplyCmd().getBizType()).buildOnAfterSale(lockContext, context);
 
         if (!lockable) {
             CommonLog.error("售后流程钱不加锁 lockContext:{}", lockContext);
@@ -290,17 +290,17 @@ public class MemberTradeLockService {
     }
 
     public void unlockOnAfterSaleSuccess(AfterSaleApplyContext context) {
-        BizConfigTable table = configService.findConfigTable(BizScene.of(context.getCmd().getBizType()));
+        BizConfigTable table = configService.findConfigTable(BizScene.of(context.getApplyCmd().getBizType()));
 
         LockContext lockContext = LockContext.builder().
-                bizType(context.getCmd().getBizType()).
+                bizType(context.getApplyCmd().getBizType()).
                 lockScene("after_sale").
                 lockMode(table.getLockMode()).
-                userId(context.getCmd().getUserId()).
+                userId(context.getApplyCmd().getUserId()).
                 lockValue(context.getLockValue()).
-                tradeId(context.getCmd().getTradeId()).
+                tradeId(context.getApplyCmd().getTradeId()).
                 build();
-        boolean unlockable = getLockExtension(context.getCmd().getBizType()).buildOnAfterSaleSuccess(lockContext, context);
+        boolean unlockable = getLockExtension(context.getApplyCmd().getBizType()).buildOnAfterSaleSuccess(lockContext, context);
 
         if (!unlockable) {
             CommonLog.error("售后成功不释放锁 lockContext:{}", lockContext);
@@ -311,16 +311,16 @@ public class MemberTradeLockService {
 
     public void unlockOnAfterSaleFail(AfterSaleApplyContext context, Exception e) {
         CommonLog.error("售后回滚阶段尝试解锁");
-        BizConfigTable table = configService.findConfigTable(BizScene.of(context.getCmd().getBizType()));
+        BizConfigTable table = configService.findConfigTable(BizScene.of(context.getApplyCmd().getBizType()));
 
-        LockContext lockContext = LockContext.builder().bizType(context.getCmd().getBizType())
+        LockContext lockContext = LockContext.builder().bizType(context.getApplyCmd().getBizType())
                 .lockScene("after_sale")
                 .lockMode(table.getLockMode())
-                .userId(context.getCmd().getUserId())
-                .tradeId(context.getCmd().getTradeId())
+                .userId(context.getApplyCmd().getUserId())
+                .tradeId(context.getApplyCmd().getTradeId())
                 .lockValue(context.getLockValue())
                 .build();
-        boolean unlockable = getLockExtension(context.getCmd().getBizType()).buildOnAfterSaleFail(lockContext, context, e);
+        boolean unlockable = getLockExtension(context.getApplyCmd().getBizType()).buildOnAfterSaleFail(lockContext, context, e);
         if (!unlockable) {
             CommonLog.error("售后失败不释放锁 lockContext:{}", lockContext);
             return;

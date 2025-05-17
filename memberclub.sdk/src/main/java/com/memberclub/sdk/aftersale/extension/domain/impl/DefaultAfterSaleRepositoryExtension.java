@@ -42,18 +42,15 @@ public class DefaultAfterSaleRepositoryExtension implements AfterSaleRepositoryE
             AftersaleOrder orderFromDb = aftersaleOrderDao.queryById(order.getUserId(), order.getId());
             if (orderFromDb != null && AFTERSALE_SUCCESS.getCode() == orderFromDb.getStatus()) {
                 CommonLog.warn("修改售后单为成功态,幂等成功 order:{}", order);
-                Monitor.AFTER_SALE_DOAPPLY.counter(order.getBizType(),
-                        "onAftersaleSuccess", "duplicated");
+                Monitor.AFTER_SALE_DOAPPLY.counter(order.getBizType(), "onAftersaleSuccess", "duplicated");
             } else {
                 CommonLog.warn("修改售后单为成功态, 失败 order:{}", order);
-                Monitor.AFTER_SALE_DOAPPLY.counter(order.getBizType(),
-                        "onAftersaleSuccess", "error");
+                Monitor.AFTER_SALE_DOAPPLY.counter(order.getBizType(), "onAftersaleSuccess", "error");
                 throw ResultCode.DATA_UPDATE_ERROR.newException("更新售后单为成功态异常");
             }
         } else {
             CommonLog.warn("修改售后单为成功态成功 order:{}", order);
-            Monitor.AFTER_SALE_DOAPPLY.counter(order.getBizType(),
-                    "onAftersaleSuccess", "succ");
+            Monitor.AFTER_SALE_DOAPPLY.counter(order.getBizType(), "onAftersaleSuccess", "succ");
         }
     }
 

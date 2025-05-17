@@ -6,11 +6,13 @@
  */
 package com.memberclub.domain.context.oncetask.common;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 /**
  * @author wuyang
  */
 public enum TaskTypeEnum {
-    
+
     PERIOD_PERFORM(1, "周期履约"),
     FINANCE_EXPIRE(2, "结算过期任务"),
     AFTERSALE_EXPIRE_REFUND(3, "售后过期退"),
@@ -25,6 +27,7 @@ public enum TaskTypeEnum {
         this.name = name;
     }
 
+    @JsonCreator
     public static TaskTypeEnum findByCode(int value) throws IllegalArgumentException {
         for (TaskTypeEnum item : TaskTypeEnum.values()) {
             if (item.value == value) {

@@ -24,6 +24,8 @@ public class AftersaleOrder {
 
     private String operator;
 
+    private String previewToken;
+
     private String tradeId;
 
     private String extra;

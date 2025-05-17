@@ -56,13 +56,13 @@ public class DefaultRealtimeCalculateUsageExtension implements RealtimeCalculate
     public Map<String, ItemUsage> calculateItemUsage(AfterSalePreviewContext context) {
         AssetFetchRequestDO request = new AssetFetchRequestDO();
         request.setUserId(context.getCmd().getUserId());
-        List<String> assetBatchCodes = context.getCurrentPerformItemsGroupByRightType()
+        List<String> itemTokens = context.getCurrentPerformItemsGroupByRightType()
                 .stream()
-                .map(MemberPerformItemDO::getBatchCode)
+                .map(MemberPerformItemDO::getItemToken)
                 .collect(Collectors.toList());
 
         request.setRightType(context.getCurrentRightType());
-        request.setAssetBatchs(assetBatchCodes);
+        request.setItemTokens(itemTokens);
         AssetFetchResponseDO responseDO = assetsFacadeSPI.fetch(request);
 
         CommonLog.info("调用下游查询资产状态, 结果:{}, 请求:{}", responseDO, request);
@@ -72,7 +72,7 @@ public class DefaultRealtimeCalculateUsageExtension implements RealtimeCalculate
 
         Map<String, ItemUsage> itemUsageMap = Maps.newHashMap();
 
-        for (Map.Entry<String, List<AssetDO>> entry : responseDO.getAssetBatchCode2AssetsMap().entrySet()) {
+        for (Map.Entry<String, List<AssetDO>> entry : responseDO.getItemToken2AssetsMap().entrySet()) {
             ItemUsage itemUsage = aftersaleAmountService.summingPrice(entry.getValue());
             itemUsageMap.put(entry.getKey(), itemUsage);
         }

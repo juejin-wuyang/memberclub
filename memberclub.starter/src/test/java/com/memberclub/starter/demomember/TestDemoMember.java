@@ -328,7 +328,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         //修改资产状态
 
         for (MemberPerformItem item : items) {
-            List<AssetDO> assetDos = couponGrantFacade.assetBatchCode2Assets.get(item.getBatchCode());
+            List<AssetDO> assetDos = couponGrantFacade.itemToken2Assets.get(item.getItemToken());
             for (AssetDO assetDO : assetDos) {
                 if (assetDO.getStatus() == AssetStatusEnum.UNUSE.getCode()) {
                     assetDO.setStatus(AssetStatusEnum.EXPIRE.getCode());
@@ -422,7 +422,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         Assert.assertEquals(RefundTypeEnum.ALL_REFUND, respose.getRefundType());
 
         /*******************部分使用,结果为部分退********/
-        for (Map.Entry<String, List<AssetDO>> entry : couponGrantFacade.assetBatchCode2Assets.entrySet()) {
+        for (Map.Entry<String, List<AssetDO>> entry : couponGrantFacade.itemToken2Assets.entrySet()) {
             entry.getValue().get(0).setStatus(AssetStatusEnum.USED.getCode());
         }
         respose = aftersaleBizService.preview(previewCmd);
@@ -435,6 +435,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         applyCmd.setDigests(respose.getDigests());
         applyCmd.setReason("不想要了!");
         applyCmd.setDigestVersion(respose.getDigestVersion());
+        applyCmd.setPreviewToken(respose.getPreviewToken());
         //applyCmd.setDigestVersion(0);
         AftersaleApplyResponse aftersaleApplyResponse = aftersaleBizService.apply(applyCmd);
         //waitH2();
@@ -608,7 +609,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         AftersaleApplyCmd applyCmd = AftersaleConvertor.INSTANCE.toAftersaleApplyCmd(previewCmd);
         applyCmd.setDigests(response.getDigests());
         applyCmd.setDigestVersion(response.getDigestVersion());
-
+        applyCmd.setPreviewToken(response.getPreviewToken());
         AftersaleApplyResponse applyResponse = aftersaleBizService.apply(applyCmd);
         waitH2();
 
@@ -645,6 +646,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
 
         AftersaleApplyCmd applyCmd = AftersaleConvertor.INSTANCE.toAftersaleApplyCmd(previewCmd);
         applyCmd.setDigests(response.getDigests());
+        applyCmd.setPreviewToken(response.getPreviewToken());
         applyCmd.setDigestVersion(response.getDigestVersion());
 
         AftersaleApplyResponse applyResponse = aftersaleBizService.apply(applyCmd);
@@ -678,7 +680,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         for (MemberPerformItem item : itemsAfterApply) {
             Assert.assertEquals(PerformItemStatusEnum.getReversedStatus(completeRefund),
                     item.getStatus());
-            for (Map.Entry<String, List<AssetDO>> entry : couponGrantFacade.assetBatchCode2Assets.entrySet()) {
+            for (Map.Entry<String, List<AssetDO>> entry : couponGrantFacade.itemToken2Assets.entrySet()) {
                 if (StringUtils.equals(item.getBatchCode(), entry.getKey())) {
                     boolean hasReverse = entry.getValue().stream().anyMatch(v ->
                             v.getStatus() == AssetStatusEnum.FREEZE.getCode());
@@ -734,7 +736,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         AftersaleApplyCmd applyCmd = AftersaleConvertor.INSTANCE.toAftersaleApplyCmd(previewCmd);
         applyCmd.setDigests(response.getDigests());
         applyCmd.setDigestVersion(response.getDigestVersion());
-
+        applyCmd.setPreviewToken(response.getPreviewToken());
         AftersaleApplyResponse applyResponse = aftersaleBizService.apply(applyCmd);
         waitH2();
 
@@ -771,7 +773,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         Assert.assertEquals(RefundTypeEnum.ALL_REFUND, respose.getRefundType());
 
         /*******************部分使用,结果为部分退********/
-        for (Map.Entry<String, List<AssetDO>> entry : couponGrantFacade.assetBatchCode2Assets.entrySet()) {
+        for (Map.Entry<String, List<AssetDO>> entry : couponGrantFacade.itemToken2Assets.entrySet()) {
             entry.getValue().get(0).setStatus(AssetStatusEnum.USED.getCode());
         }
         respose = aftersaleBizService.preview(previewCmd);
@@ -784,6 +786,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         applyCmd.setDigests(respose.getDigests());
         applyCmd.setReason("不想要了!");
         applyCmd.setDigestVersion(respose.getDigestVersion());
+        applyCmd.setPreviewToken(respose.getPreviewToken());
         //applyCmd.setDigestVersion(0);
         AftersaleApplyResponse aftersaleApplyResponse = aftersaleBizService.apply(applyCmd);
         //waitH2();

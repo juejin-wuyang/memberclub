@@ -23,29 +23,29 @@ public class AfterSalePlanDigestCheckFlow extends FlowNode<AfterSaleApplyContext
 
     @Override
     public void process(AfterSaleApplyContext context) {
-        if (SwitchEnum.AFTERSALE_PLAN_GENERATE_DIGEST_CHECK_DEGRADE.getBoolean(context.getCmd().getBizType().getCode())) {
+        if (SwitchEnum.AFTERSALE_PLAN_GENERATE_DIGEST_CHECK_DEGRADE.getBoolean(context.getApplyCmd().getBizType().getCode())) {
             CommonLog.info("售后摘要降级,跳过校验 preview:{}, apply:{}",
-                    context.getPreviewContext().getDigests(),
-                    context.getCmd().getDigests());
+                    context.getExecuteCmd().getApplyCmd().getDigests(),
+                    context.getApplyCmd().getDigests());
             return;
         }
-        if (context.getCmd().getSource() == AftersaleSourceEnum.System_Expire) {
+        if (context.getApplyCmd().getSource() == AftersaleSourceEnum.System_Expire) {
             CommonLog.info("售后过期退，售后摘要跳过校验 preview:{}, apply:{}",
-                    context.getPreviewContext().getDigests(),
-                    context.getCmd().getDigests());
+                    context.getExecuteCmd().getApplyCmd().getDigests(),
+                    context.getApplyCmd().getDigests());
             return;
         }
 
 
-        if (!StringUtils.equals(context.getPreviewContext().getDigests(), context.getCmd().getDigests())) {
+        if (!StringUtils.equals(context.getExecuteCmd().getApplyCmd().getDigests(), context.getApplyCmd().getDigests())) {
             CommonLog.error("售后摘要发生变化,不能发起售后 preview:{}, apply:{}",
-                    context.getPreviewContext().getDigests(),
-                    context.getCmd().getDigests());
+                    context.getExecuteCmd().getApplyCmd().getDigests(),
+                    context.getApplyCmd().getDigests());
             throw AftersaleUnableCode.CONDITION_OCCUR.newException();
         } else {
             CommonLog.info("售后摘要保持一致,可以发起售后 preview:{}, apply:{}",
-                    context.getPreviewContext().getDigests(),
-                    context.getCmd().getDigests());
+                    context.getExecuteCmd().getApplyCmd().getDigests(),
+                    context.getApplyCmd().getDigests());
 
         }
     }

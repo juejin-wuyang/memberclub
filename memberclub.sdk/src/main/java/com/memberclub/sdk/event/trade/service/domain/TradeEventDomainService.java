@@ -126,7 +126,7 @@ public class TradeEventDomainService {
         TradeEventDO event = buildTradeEvent(subOrder,
                 CollectionUtilEx.mapToList(subOrderReversePerformContext.getItems(), PerformItemReverseInfo::getItemToken),
                 TradeEventEnum.SUB_ORDER_RERVERSE_PERFORM_SUCCESS,
-                context.getAfterSaleApplyContext().getPreviewContext().getPeriodIndex());
+                context.getAfterSaleApplyContext().getExecuteCmd().getPeriodIndex());
         String value = extensionManager.getExtension(BizScene.of(subOrder.getBizType()),
                 TradeEventDomainExtension.class).onReversePerformSuccessForSubOrder(context,
                 subOrderReversePerformContext, subOrder, event);
@@ -138,7 +138,7 @@ public class TradeEventDomainService {
     public void publishOnRefundSuccessForSubOrder(AfterSaleApplyContext context,
                                                   MemberSubOrderDO subOrder) {
         List<String> itemTokens = CollectionUtilEx.filterAndMap(
-                context.getPreviewContext().getPerformItems(),
+                context.getReversablePerformItems(),
                 (item) -> StringUtils.equals(String.valueOf(subOrder.getSubTradeId()), item.getSubTradeId()),
                 MemberPerformItemDO::getItemToken
         );
@@ -146,7 +146,7 @@ public class TradeEventDomainService {
         TradeEventDO event = buildTradeEvent(subOrder,
                 itemTokens,
                 TradeEventEnum.SUB_ORDER_REFUND_SUCCESS,
-                context.getPreviewContext().getPeriodIndex());
+                context.getExecuteCmd().getPeriodIndex());
         String value = extensionManager.getExtension(BizScene.of(subOrder.getBizType()),
                 TradeEventDomainExtension.class).onRefundSuccessForSubOrder(context, subOrder, event);
 
@@ -157,7 +157,7 @@ public class TradeEventDomainService {
     public void publishOnFreezeSuccessForSubOrder(AfterSaleApplyContext context,
                                                   MemberSubOrderDO subOrder) {
         List<String> itemTokens = CollectionUtilEx.filterAndMap(
-                context.getPreviewContext().getPerformItems(),
+                context.getReversablePerformItems(),
                 (item) -> StringUtils.equals(String.valueOf(subOrder.getSubTradeId()), item.getSubTradeId()),
                 MemberPerformItemDO::getItemToken
         );
@@ -165,7 +165,7 @@ public class TradeEventDomainService {
         TradeEventDO event = buildTradeEvent(subOrder,
                 itemTokens,
                 TradeEventEnum.SUB_ORDER_FREEZE_SUCCESS,
-                context.getPreviewContext().getPeriodIndex());
+                context.getExecuteCmd().getPeriodIndex());
         String value = extensionManager.getExtension(BizScene.of(subOrder.getBizType()),
                 TradeEventDomainExtension.class).onRefundSuccessForSubOrder(context, subOrder, event);
 

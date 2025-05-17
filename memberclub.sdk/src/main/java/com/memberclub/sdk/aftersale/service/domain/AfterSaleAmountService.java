@@ -42,28 +42,38 @@ public class AfterSaleAmountService {
         Map<RightTypeEnum, List<MemberPerformItemDO>> rightType2Items = context.getPerformItems()
                 .stream().filter(p -> p.getSkuId() == context.getCurrentSubOrderDO().getSkuId())
                 .collect(Collectors.groupingBy(MemberPerformItemDO::getRightType));
-        Map<String, ItemUsage> batchCode2ItemUsage = Maps.newHashMap();
+        Map<String, ItemUsage> itemToken2ItemUsage = Maps.newHashMap();
 
         for (Map.Entry<RightTypeEnum, List<MemberPerformItemDO>> entry : rightType2Items.entrySet()) {
             context.setCurrentPerformItemsGroupByRightType(entry.getValue());
             context.setCurrentRightType(entry.getKey().getCode());
 
             String scene = SceneEnum.buildRightTypeScene(entry.getKey().getCode());
-            Map<String, ItemUsage> tempBatchCode2ItemUsage =
+            Map<String, ItemUsage> tempItemToken2ItemUsage =
                     extensionManager.getExtension(context.getCmd().getBizType().toBizScene(scene),
                             RealtimeCalculateUsageExtension.class).calculateItemUsage(context);
-            batchCode2ItemUsage.putAll(tempBatchCode2ItemUsage);
+            itemToken2ItemUsage.putAll(tempItemToken2ItemUsage);
         }
-        return batchCode2ItemUsage;
+        return itemToken2ItemUsage;
     }
 
 
     public Integer recommendRefundPrice(AfterSalePreviewContext context) {
         int recommendRefundPrice = extensionManager.getExtension(
                         BizScene.of(context.getCmd().getBizType().getCode()), AftersaleAmountExtension.class)
-                .computeRefundPrice(context, context.getBatchCode2ItemUsage());
+                .computeRefundPrice(context, context.getItemToken2ItemUsage());
         return recommendRefundPrice;
     }
+/*
+    public void buildReversablePerformItems(AfterSalePreviewContext context) {
+        List<String> reversableItemTokens = Lists.newArrayList();
+        for (Map.Entry<String, ItemUsage> entry : context.getItemToken2ItemUsage().entrySet()) {
+            if (!entry.getValue().equals(UsageTypeEnum.USEOUT)) {
+                reversableItemTokens.add(entry.getKey());
+            }
+        }
+        context.setReversablePerformItems(reversableItemTokens);
+    }*/
 
     public ItemUsage summingPrice(List<AssetDO> assets) {
         // TODO: 2024/12/22

@@ -31,7 +31,7 @@ public class PurchaseNewMemberReverseFlow extends FlowNode<AfterSaleApplyContext
 
     @Override
     public void success(AfterSaleApplyContext context) {
-        MemberOrderDO memberOrderDO = context.getPreviewContext().getMemberOrder();
+        MemberOrderDO memberOrderDO = context.getMemberOrder();
         for (MemberSubOrderDO subOrder : memberOrderDO.getSubOrders()) {
 
             NewMemberMarkContext markContext = new NewMemberMarkContext();

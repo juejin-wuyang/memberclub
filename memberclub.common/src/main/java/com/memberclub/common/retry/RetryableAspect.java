@@ -35,6 +35,16 @@ public class RetryableAspect {
     @Autowired
     private RetryService retryService;
 
+    public static String toLowerCaseFirst(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+        char firstChar = str.charAt(0);
+        char updatedFirstChar = Character.toLowerCase(firstChar);
+        String remainder = str.substring(1);
+        return updatedFirstChar + remainder;
+    }
+
     @Pointcut("@annotation(Retryable) && execution(public * *(..))")
     public void pointcut() {
     }
@@ -105,16 +115,5 @@ public class RetryableAspect {
         } else {
             return joinPoint.proceed();
         }
-    }
-
-
-    public static String toLowerCaseFirst(String str) {
-        if (str == null || str.isEmpty()) {
-            return str;
-        }
-        char firstChar = str.charAt(0);
-        char updatedFirstChar = Character.toLowerCase(firstChar);
-        String remainder = str.substring(1);
-        return updatedFirstChar + remainder;
     }
 }

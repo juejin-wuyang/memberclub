@@ -27,12 +27,12 @@ public class PaymentDataObjectFactory {
 
     public PaymentRefundRequestDTO createPaymentRefundRequestDTO(AfterSaleApplyContext context) {
         PaymentRefundRequestDTO paymentRefundRequestDTO = new PaymentRefundRequestDTO();
-        paymentRefundRequestDTO.setTradeNo(context.getPreviewContext().getMemberOrder().getPaymentInfo().getPayTradeNo());
-        paymentRefundRequestDTO.setUserId(context.getCmd().getUserId());
+        paymentRefundRequestDTO.setTradeNo(context.getMemberOrder().getPaymentInfo().getPayTradeNo());
+        paymentRefundRequestDTO.setUserId(context.getApplyCmd().getUserId());
         paymentRefundRequestDTO.setRefundOuterNo(context.getAftersaleOrderDO().getId() + "");
-        paymentRefundRequestDTO.setRefundAmountFen(context.getAftersaleOrderDO().getActRefundPriceFen());
+        paymentRefundRequestDTO.setRefundAmountFen(context.getAftersaleOrderDO().getRecommendRefundPriceFen());
         paymentRefundRequestDTO.setReason(context.getAftersaleOrderDO().getReason());
-        paymentRefundRequestDTO.setMerchantId(context.getPreviewContext().getMemberOrder().getPaymentInfo().getMerchantId());
+        paymentRefundRequestDTO.setMerchantId(context.getMemberOrder().getPaymentInfo().getMerchantId());
         return paymentRefundRequestDTO;
     }
 

@@ -43,7 +43,7 @@ public class DefaultShipRightsReverseExtension implements RightsReverseExtension
                                          List<PerformItemReverseInfo> items) {
         AssetsReverseResponse response = new AssetsReverseResponse();
         for (PerformItemReverseInfo item : items) {
-            MemberShipDO memberShip = memberShipDomainService.getMemberShipDO(context.getUserId(), item.getBatchCode());
+            MemberShipDO memberShip = memberShipDomainService.getMemberShipDO(context.getUserId(), item.getItemToken());
             memberShipDomainService.cancel(memberShip);
         }
 

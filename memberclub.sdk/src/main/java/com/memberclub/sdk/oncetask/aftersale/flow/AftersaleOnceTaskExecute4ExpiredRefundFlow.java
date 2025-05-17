@@ -13,6 +13,7 @@ import com.memberclub.domain.context.aftersale.apply.AftersaleApplyResponse;
 import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
 import com.memberclub.domain.context.oncetask.execute.OnceTaskExecuteContext;
 import com.memberclub.sdk.aftersale.service.AfterSaleBizService;
+import com.memberclub.sdk.memberorder.domain.OrderRemarkBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,10 @@ public class AftersaleOnceTaskExecute4ExpiredRefundFlow extends FlowNode<OnceTas
         cmd.setOperator("system");
         cmd.setBizType(context.getOnceTask().getBizType());
         cmd.setReason("system expire refund");
+        cmd.setPreviewToken(context.getOnceTask().getTradeId() + "_EXPIRE_REFUND");
 
+        OrderRemarkBuilder.builder(cmd.getBizType().getCode(),
+                cmd.getUserId(), cmd.getTradeId()).remark("系统触发过期自动退").save();
         AftersaleApplyResponse response = aftersaleBizService.apply(cmd);
         CommonLog.warn("过期退结果:{}", response);
     }

@@ -19,7 +19,7 @@ import com.memberclub.domain.dataobject.aftersale.AftersaleOrderDO;
 public interface AfterSaleApplyExtension extends BaseExtension {
     public void apply(AfterSaleApplyContext context);
 
-    public void doApply(AfterSaleApplyContext context);
+    public void execute(AfterSaleApplyContext context);
 
     public void customBuildAftersaleOrder(AfterSaleApplyContext context, AftersaleOrderDO aftersaleOrderDO);
 

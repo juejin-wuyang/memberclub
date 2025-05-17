@@ -33,9 +33,9 @@ public class AfterSaleUsageAmountCompute4RealtimeFlow extends FlowNode<AfterSale
         }
         context.setUsageTypeCalculateType(UsageTypeCalculateTypeEnum.USE_AMOUNT);
 
-        Map<String, ItemUsage> batchCode2ItemUsage = afterSaleAmountService.buildUsage(context);
-        context.setCurrentBatchCode2ItemUsage(batchCode2ItemUsage);
-        context.getBatchCode2ItemUsage().putAll(batchCode2ItemUsage);
+        Map<String, ItemUsage> itemToken2ItemUsage = afterSaleAmountService.buildUsage(context);
+        context.setCurrentBatchCode2ItemUsage(itemToken2ItemUsage);
+        context.getItemToken2ItemUsage().putAll(itemToken2ItemUsage);
 
         int recommendRefundPrice = context.getRecommendRefundPrice();
         recommendRefundPrice += afterSaleAmountService.recommendRefundPrice(context);

@@ -40,13 +40,13 @@ public class AftersaleReversePurchaseFlow extends FlowNode<AfterSaleApplyContext
             return;
         }
 
-        BizScene bizScene = BizScene.of(context.getCmd().getBizType(), context.getScene());
+        BizScene bizScene = BizScene.of(context.getApplyCmd().getBizType(), context.getScene());
         AfterSaleApplyExtension applyExtension = ExtensionManager.extension(bizScene, AfterSaleApplyExtension.class);
         boolean isPurchaseReverseEnable = applyExtension.isPurchaseReversedEnable(context);
 
         if (!isPurchaseReverseEnable) {
             CommonLog.info("无需执行逆向购买流程");
-            memberOrderDomainService.onJustFreezeSuccess(context, context.getPreviewContext().getMemberOrder());
+            memberOrderDomainService.onJustFreezeSuccess(context, context.getMemberOrder());
             return;
         }
 

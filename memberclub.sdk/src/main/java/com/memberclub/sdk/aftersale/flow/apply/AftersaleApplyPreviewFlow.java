@@ -6,9 +6,9 @@
  */
 package com.memberclub.sdk.aftersale.flow.apply;
 
-import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.flow.FlowNode;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
+import com.memberclub.domain.context.aftersale.apply.AfterSaleExecuteCmd;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewCmd;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.infrastructure.mapstruct.AftersaleConvertor;
@@ -23,15 +23,20 @@ import org.springframework.stereotype.Service;
 public class AftersaleApplyPreviewFlow extends FlowNode<AfterSaleApplyContext> {
 
     @Autowired
-    private ExtensionManager extensionManager;
-
-    @Autowired
     private AfterSaleBizService aftersaleBizService;
 
     @Override
     public void process(AfterSaleApplyContext context) {
-        AfterSalePreviewCmd previewCmd = AftersaleConvertor.INSTANCE.toPreviewCmd(context.getCmd());
+        AfterSalePreviewCmd previewCmd = AftersaleConvertor.INSTANCE.toPreviewCmd(context.getApplyCmd());
         AfterSalePreviewContext previewContext = aftersaleBizService.doPreview(previewCmd);
-        context.setPreviewContext(previewContext);
+
+        AfterSaleExecuteCmd executeCmd = previewContext.toExecuteCmd();
+        executeCmd.setScene(context.getScene());
+        executeCmd.setApplyCmd(context.getApplyCmd());
+
+        context.setExecuteCmd(executeCmd);
+        context.setMemberOrder(previewContext.getMemberOrder());
     }
+
+
 }

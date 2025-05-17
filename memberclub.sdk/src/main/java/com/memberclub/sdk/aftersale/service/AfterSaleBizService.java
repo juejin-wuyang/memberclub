@@ -61,6 +61,7 @@ public class AfterSaleBizService {
             respose.setRefundWay(context.getRefundWay());
             respose.setDigests(context.getDigests());
             respose.setDigestVersion(context.getDigestVersion());
+            respose.setPreviewToken(context.getPreviewToken());
         } catch (Exception e) {
             if (extractException(e) != null) {
                 Throwable t = extractException(e);
@@ -106,7 +107,7 @@ public class AfterSaleBizService {
     @UserLog(domain = LogDomainEnum.AFTER_SALE)
     public AftersaleApplyResponse apply4RefundOnly(AftersaleApplyCmd cmd) {
         AfterSaleApplyContext context = new AfterSaleApplyContext();
-        context.setCmd(cmd);
+        context.setApplyCmd(cmd);
 
         BizSceneBuildExtension bizSceneBuildExtension = em.getSceneExtension(BizScene.of(cmd.getBizType().getCode()));
         String applyExtensionScene = bizSceneBuildExtension.buildAftersaleApplyScene(context);
@@ -140,8 +141,9 @@ public class AfterSaleBizService {
 
     @UserLog(domain = LogDomainEnum.AFTER_SALE)
     public AftersaleApplyResponse apply(AftersaleApplyCmd cmd) {
+        cmd.isValid();
         AfterSaleApplyContext context = new AfterSaleApplyContext();
-        context.setCmd(cmd);
+        context.setApplyCmd(cmd);
 
         BizSceneBuildExtension bizSceneBuildExtension = em.getSceneExtension(BizScene.of(cmd.getBizType().getCode()));
         String applyExtensionScene = bizSceneBuildExtension.buildAftersaleApplyScene(context);

@@ -6,8 +6,10 @@
  */
 package com.memberclub.domain.context.aftersale.preview;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.memberclub.domain.common.BizScene;
+import com.memberclub.domain.context.aftersale.apply.AfterSaleExecuteCmd;
 import com.memberclub.domain.context.aftersale.contant.*;
 import com.memberclub.domain.dataobject.perform.MemberPerformItemDO;
 import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
@@ -26,6 +28,7 @@ public class AfterSalePreviewContext {
     List<MemberSubOrderDO> subOrders;
     List<MemberPerformItemDO> performItems;
     List<MemberPerformItemDO> currentPerformItemsGroupByRightType;
+
     int currentRightType;
     private boolean previewBeforeApply;
     /***************** 基础履约数据 *********************/
@@ -53,7 +56,9 @@ public class AfterSalePreviewContext {
 
     private int usedPriceFen;
 
-    private Map<String, ItemUsage> batchCode2ItemUsage = Maps.newHashMap();
+    private Map<String, ItemUsage> itemToken2ItemUsage = Maps.newHashMap();
+
+    private List<String> reversablePerformItems = Lists.newArrayList();
 
     /******************赔付金额相关数据****************************/
 
@@ -71,6 +76,8 @@ public class AfterSalePreviewContext {
 
     private Integer digestVersion;
 
+    private String previewToken;
+
     /*****************售后其他数据***********************************/
 
 
@@ -86,4 +93,15 @@ public class AfterSalePreviewContext {
         return BizScene.of(getCmd().getBizType().getCode());
     }
 
+
+    public AfterSaleExecuteCmd toExecuteCmd() {
+        AfterSaleExecuteCmd cmd = new AfterSaleExecuteCmd();
+        cmd.setRecommendRefundPrice(recommendRefundPrice);
+        cmd.setRefundWay(refundWay);
+        cmd.setPeriodIndex(periodIndex);
+        cmd.setItemToken2ItemUsage(itemToken2ItemUsage);
+        cmd.setRefundType(refundType);
+
+        return cmd;
+    }
 }

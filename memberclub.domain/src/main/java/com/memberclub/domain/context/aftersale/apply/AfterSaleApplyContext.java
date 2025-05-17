@@ -8,9 +8,12 @@ package com.memberclub.domain.context.aftersale.apply;
 
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.common.RetryableContext;
-import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.domain.dataobject.aftersale.AftersaleOrderDO;
+import com.memberclub.domain.dataobject.perform.MemberPerformItemDO;
+import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * author: 掘金五阳
@@ -18,18 +21,21 @@ import lombok.Data;
 @Data
 public class AfterSaleApplyContext implements RetryableContext {
 
-    private int retryTimes = 0;
 
+    private int retryTimes = 0;
     private String scene;
 
+    //private AfterSalePreviewContext previewContext;
     /******************************************/
 
     //售后预览和入参
 
-    private AftersaleApplyCmd cmd;
+    private AftersaleApplyCmd applyCmd;
+    private AfterSaleExecuteCmd executeCmd;
+    private MemberOrderDO memberOrder;
 
-    private AfterSalePreviewContext previewContext;
-
+    private List<MemberPerformItemDO> totalPerformItems;
+    private List<MemberPerformItemDO> reversablePerformItems;
     private Long lockValue;//成功后释放锁
 
     /******************************************/
@@ -50,7 +56,7 @@ public class AfterSaleApplyContext implements RetryableContext {
     /****************************************/
 
     public BizScene toBizScene() {
-        return BizScene.of(cmd.getBizType(), scene);
+        return BizScene.of(applyCmd.getBizType(), scene);
     }
 
 }

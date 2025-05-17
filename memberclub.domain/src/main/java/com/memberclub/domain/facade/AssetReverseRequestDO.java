@@ -19,5 +19,5 @@ public class AssetReverseRequestDO {
 
     private int rightType;
 
-    private List<String> assetBatchs;
+    private List<String> itemTokens;
 }

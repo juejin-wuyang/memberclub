@@ -89,19 +89,19 @@ public class AftersaleQuotaDomainService {
     }
 
     public void onApply(AfterSaleApplyContext context) {
-        long userId = context.getCmd().getUserId();
+        long userId = context.getApplyCmd().getUserId();
 
         UserTagOpCmd cmd = new UserTagOpCmd();
-        cmd.buildUniqueKey(UserTagTypeEnum.aftersalequota, context.getCmd().getBizType(), context.getCmd().getTradeId());
+        cmd.buildUniqueKey(UserTagTypeEnum.aftersalequota, context.getApplyCmd().getBizType(), context.getApplyCmd().getTradeId());
         cmd.setOpType(UserTagOpTypeEnum.ADD);
 
         AftersaleQuotaExtensionContext quotaExtensionContext = new AftersaleQuotaExtensionContext();
         quotaExtensionContext.setUserId(userId);
-        quotaExtensionContext.setBizType(context.getCmd().getBizType());
+        quotaExtensionContext.setBizType(context.getApplyCmd().getBizType());
         quotaExtensionContext.setOpType(UserTagOpTypeEnum.ADD);
-        quotaExtensionContext.setOpCount(context.getPreviewContext().getSubOrders().stream().mapToInt(MemberSubOrderDO::getBuyCount).sum());
+        quotaExtensionContext.setOpCount(context.getMemberOrder().getSubOrders().stream().mapToInt(MemberSubOrderDO::getBuyCount).sum());
 
-        extensionManager.getExtension(BizScene.of(context.getCmd().getBizType()),
+        extensionManager.getExtension(BizScene.of(context.getApplyCmd().getBizType()),
                 AftersaleQuotaExtension.class).buildUserTagOp(quotaExtensionContext);
         List<UserTagOpDO> usertagOps = quotaExtensionContext.getUserTagOpDOList();
 

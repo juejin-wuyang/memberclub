@@ -51,9 +51,9 @@ public class MemberShipDomainService {
     private MemberShipCacheService memberShipCacheService;
 
 
-    public MemberShipDO getMemberShipDO(long userId, String grantCode) {
+    public MemberShipDO getMemberShipDO(long userId, String itemToken) {
         LambdaQueryWrapper<MemberShip> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(MemberShip::getGrantCode, grantCode);
+        wrapper.eq(MemberShip::getItemToken, itemToken);
         wrapper.eq(MemberShip::getUserId, userId);
         MemberShip memberShip = memberShipDao.selectOne(wrapper);
         return memberShipDataObjectFactory.buildMemberShipDO(memberShip);

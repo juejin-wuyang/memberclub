@@ -22,6 +22,8 @@ public class AfterSalePreviewResponse {
 
     private RefundWayEnum refundWay;
 
+    private String previewToken;
+
     private String recommendRefundPriceYuan;
     private int unableCode;
     private String unableTip;

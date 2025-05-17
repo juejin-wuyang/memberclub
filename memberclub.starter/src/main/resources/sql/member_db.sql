@@ -136,6 +136,7 @@ CREATE TABLE IF NOT EXISTS aftersale_order (
     biz_type INT(11)  NOT NULL COMMENT '产品线',
     user_id BIGINT(20)  NOT NULL COMMENT 'userId',
     source INT(11)  NOT NULL COMMENT '售后来源',
+    preview_token VARCHAR(128)  NOT NULL COMMENT '售后预览token',
     trade_id VARCHAR(128)  NOT NULL COMMENT '订单主单 id',
     operator VARCHAR(128)  NOT NULL COMMENT '操作人',
     act_pay_price_fen INT(11)  NOT NULL COMMENT '实付金额分',
@@ -148,7 +149,8 @@ CREATE TABLE IF NOT EXISTS aftersale_order (
     utime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '更新时间',
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
-    KEY tradeid_key (user_id, trade_id)
+    KEY tradeid_key (user_id, trade_id),
+    unique key preview_token_key(user_id, preview_token)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 CREATE TABLE IF NOT EXISTS outer_submit_record (

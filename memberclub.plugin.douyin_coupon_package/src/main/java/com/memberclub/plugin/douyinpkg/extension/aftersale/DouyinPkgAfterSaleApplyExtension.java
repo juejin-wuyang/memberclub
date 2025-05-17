@@ -27,9 +27,8 @@ public class DouyinPkgAfterSaleApplyExtension extends BaseAfterSaleApplyExtensio
 
     FlowChain<AfterSaleApplyContext> applyFlowChain = null;
 
-    FlowChain<AfterSaleApplyContext> checkFlowChain = null;
 
-    FlowChain<AfterSaleApplyContext> doApplyFlowChain = null;
+    FlowChain<AfterSaleApplyContext> executeFlowChain = null;
 
     @Autowired
     private FlowChainService flowChainService;
@@ -42,12 +41,12 @@ public class DouyinPkgAfterSaleApplyExtension extends BaseAfterSaleApplyExtensio
                 .addNode(AftersaleApplyPreviewFlow.class)       //售后预览
                 .addNode(AfterSalePlanDigestCheckFlow.class)    //校验售后计划摘要
                 .addNode(AftersaleOrderGenerateFlow.class)      //生成售后单
-                .addNode(AftersaleDoApplyFlow.class)
+                .addNode(AftersaleOrderApplyFlow.class)
+                .addNode(AfterSaleAsyncExecuteFlow.class)
         ;
 
-        doApplyFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
-                .addNode(AftersaleOrderApplyFlow.class)
-                .addNode(AftersaleAsyncRollbackFlow.class)   // 失败异步回滚
+        executeFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
+                .addNode(AftersaleCompletedFlow.class)   // 失败异步回滚
                 .addNode(AfterSaleReversePerformFlow.class)  //逆向履约
                 .addNode(AfterSalePayOrderRefundFlow.class)     //退款
                 .addNode(AftersaleReversePurchaseFlow.class) //逆向取消订单
@@ -61,8 +60,8 @@ public class DouyinPkgAfterSaleApplyExtension extends BaseAfterSaleApplyExtensio
     }
 
     @Override
-    public void doApply(AfterSaleApplyContext context) {
-        flowChainService.execute(doApplyFlowChain, context);
+    public void execute(AfterSaleApplyContext context) {
+        flowChainService.execute(executeFlowChain, context);
     }
 
     @Override

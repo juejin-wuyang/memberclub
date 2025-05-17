@@ -84,6 +84,7 @@ public class PaymentService {
             CommonLog.error("支付单退款失败 退款金额不一致 request:{}, response:{}", request, response);
             throw ResultCode.PAY_REFUND_EXCEPTION.newException("支付单退款失败 退款金不一致");
         }
+        context.getAftersaleOrderDO().setActRefundPriceFen(response.getRefundAmountFen());
         CommonLog.warn("调用支付退款成功 result:{}", response);
     }
 
@@ -142,6 +143,7 @@ public class PaymentService {
         applyCmd.setSource(AftersaleSourceEnum.SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT);
         applyCmd.setBizType(memberOrderDO.getBizType());
         applyCmd.setTradeId(cmd.getTradeId());
+        applyCmd.setPreviewToken(cmd.getTradeId() + "_SYSTEM_REFUND");
         AftersaleApplyResponse response = aftersaleBizService.apply4RefundOnly(applyCmd);
         if (!response.isSuccess()) {
             ResultCode resultCode = ResultCode.findByCode(response.getUnableCode());

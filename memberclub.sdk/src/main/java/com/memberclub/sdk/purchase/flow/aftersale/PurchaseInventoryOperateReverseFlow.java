@@ -44,14 +44,14 @@ public class PurchaseInventoryOperateReverseFlow extends FlowNode<AfterSaleApply
     @Override
     public void success(AfterSaleApplyContext context) {
         InventoryOpCmd cmd = new InventoryOpCmd();
-        cmd.setUserId(context.getCmd().getUserId());
+        cmd.setUserId(context.getApplyCmd().getUserId());
         cmd.setTargetType(InventoryTargetTypeEnum.SKU);
-        cmd.setSource(context.getPreviewContext().getMemberOrder().getSource().getCode());
+        cmd.setSource(context.getMemberOrder().getSource().getCode());
         cmd.setOpType(InventoryOpTypeEnum.ROLLBACK);
-        cmd.setOperateKey(context.getPreviewContext().getMemberOrder().getTradeId());
-        cmd.setBizType(context.getPreviewContext().getMemberOrder().getBizType());
+        cmd.setOperateKey(context.getMemberOrder().getTradeId());
+        cmd.setBizType(context.getMemberOrder().getBizType());
         List<InventorySkuOpDO> skuOpDOList = Lists.newArrayList();
-        for (MemberSubOrderDO subOrder : context.getPreviewContext().getMemberOrder().getSubOrders()) {
+        for (MemberSubOrderDO subOrder : context.getMemberOrder().getSubOrders()) {
             InventorySkuOpDO skuOpDO = new InventorySkuOpDO();
             skuOpDO.setSkuId(subOrder.getSkuId());
             skuOpDO.setCount(subOrder.getBuyCount());

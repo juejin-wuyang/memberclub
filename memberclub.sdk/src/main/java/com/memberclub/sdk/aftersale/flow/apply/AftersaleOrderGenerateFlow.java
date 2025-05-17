@@ -42,7 +42,7 @@ public class AftersaleOrderGenerateFlow extends FlowNode<AfterSaleApplyContext> 
         Long aftersaleOrderId = idGeneratorDomainService.generateId(IdTypeEnum.AFTERSALE_ORDER_ID);
         orderDO.setId(aftersaleOrderId);
 
-        extensionManager.getExtension(BizScene.of(context.getCmd().getBizType(), context.getScene()),
+        extensionManager.getExtension(BizScene.of(context.getApplyCmd().getBizType(), context.getScene()),
                 AfterSaleApplyExtension.class).customBuildAftersaleOrder(context, orderDO);
     }
 }

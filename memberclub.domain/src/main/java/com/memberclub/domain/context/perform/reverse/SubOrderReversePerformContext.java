@@ -18,21 +18,15 @@ import java.util.List;
 @Data
 public class SubOrderReversePerformContext {
 
+    List<String> activeTaskTokens;
     private long skuId;
-
     private Long subTradeId;
-
     private MemberSubOrderDO memberSubOrder;
-
     private List<PerformItemReverseInfo> items;
-
+    private int totalItemsCount;
     private boolean allRefund;
-
     //如果有待取消的任务,也一并取消掉!
     private List<OnceTaskDO> activeTasks;
-
-    List<String> activeTaskTokens;
-
     /************************************/
     //临时数据
     private List<PerformItemReverseInfo> currentItems;
@@ -42,4 +36,7 @@ public class SubOrderReversePerformContext {
     /************************************/
 
 
+    public void incrementTotalItems() {
+        totalItemsCount++;
+    }
 }

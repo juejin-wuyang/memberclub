@@ -318,7 +318,7 @@ public class MemberOrderDomainService {
 
     @Retryable
     public void onJustFreezeSuccess(AfterSaleApplyContext context, MemberOrderDO order) {
-        for (MemberSubOrderDO subOrder : context.getPreviewContext().getSubOrders()) {
+        for (MemberSubOrderDO subOrder : context.getMemberOrder().getSubOrders()) {
             memberSubOrderDomainService.onJustFreezeSuccess(context, subOrder);
         }
     }
@@ -328,7 +328,7 @@ public class MemberOrderDomainService {
     public void onPurchaseReverseSuccess(AfterSaleApplyContext context) {
         CommonLog.info("成功支付退款, 开始修改 MemberOrder/MemberSubOrder 主状态");
 
-        MemberOrderDO memberOrder = context.getPreviewContext().getMemberOrder();
+        MemberOrderDO memberOrder = context.getMemberOrder();
         memberOrder.onPurchaseReverseSuccess(context);
         memberOrderDao.updateStatus2RefundSuccess(memberOrder.getUserId(),
                 memberOrder.getTradeId(),
@@ -337,7 +337,7 @@ public class MemberOrderDomainService {
         );
 
         CommonLog.info("修改主单的主状态为{}", memberOrder.getStatus());
-        for (MemberSubOrderDO subOrder : context.getPreviewContext().getSubOrders()) {
+        for (MemberSubOrderDO subOrder : context.getMemberOrder().getSubOrders()) {
             memberSubOrderDomainService.onPurchaseReverseSuccess(context, subOrder);
         }
         TransactionHelper.afterCommitExecute(() -> {
@@ -352,7 +352,7 @@ public class MemberOrderDomainService {
             CommonLog.info("没有调用支付退款,因此不修改支付状态");
             return;
         }
-        MemberOrderDO order = context.getPreviewContext().getMemberOrder();
+        MemberOrderDO order = context.getMemberOrder();
         order.onPayRefundSuccess(context);
 
         LambdaUpdateWrapper<MemberOrder> wrapper = new LambdaUpdateWrapper<>();
@@ -363,7 +363,7 @@ public class MemberOrderDomainService {
                 .set(MemberOrder::getUtime, order.getUtime())
         ;
 
-        extensionManager.getExtension(BizScene.of(context.getCmd().getBizType()),
+        extensionManager.getExtension(BizScene.of(context.getApplyCmd().getBizType()),
                 MemberOrderRepositoryExtension.class).onPayRefundSuccess(context, order, wrapper);
 
         TransactionHelper.afterCommitExecute(() -> {

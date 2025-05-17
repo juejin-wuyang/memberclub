@@ -6,6 +6,9 @@
  */
 package com.memberclub.domain.context.aftersale.contant;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * @author wuyang
  */
@@ -27,6 +30,7 @@ public enum AftersaleSourceEnum {
         this.name = name;
     }
 
+    @JsonCreator
     public static AftersaleSourceEnum findByCode(int value) throws IllegalArgumentException {
         for (AftersaleSourceEnum item : AftersaleSourceEnum.values()) {
             if (item.value == value) {
@@ -42,6 +46,7 @@ public enum AftersaleSourceEnum {
         return this.name;
     }
 
+    @JsonValue
     public int getCode() {
         return this.value;
     }

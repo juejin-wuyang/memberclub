@@ -20,6 +20,6 @@ public class AssetFetchRequestDO {
 
     private int rightType;
 
-    private List<String> assetBatchs;
+    private List<String> itemTokens;
 
 }

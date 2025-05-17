@@ -17,7 +17,7 @@ import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.perform.period.PeriodPerformContext;
 import com.memberclub.domain.context.purchase.PurchaseSubmitContext;
 import com.memberclub.domain.context.purchase.cancel.PurchaseCancelContext;
-import com.memberclub.domain.exception.AftersaleDoApplyException;
+import com.memberclub.domain.exception.AftersaleExecuteException;
 
 /**
  * @author wuyang
@@ -138,7 +138,7 @@ public interface LockExtension extends BaseExtension {
     default boolean buildOnAfterSaleFail(LockContext context,
                                          AfterSaleApplyContext performContext, Exception e) {
         // TODO: 2025/1/1 如果异常类型是受理异常,则不能释放锁.
-        if (e instanceof AftersaleDoApplyException) {
+        if (e instanceof AftersaleExecuteException) {
             //如果是受理异常 ,需要进行重试或回滚.因此不能释放锁!
             CommonLog.error("售后受理异常,不能释放锁");
             return LOCK_ON_USER_RELEASE_ON_FAIL;

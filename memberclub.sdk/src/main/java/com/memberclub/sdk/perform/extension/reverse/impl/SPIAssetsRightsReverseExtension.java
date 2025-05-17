@@ -55,7 +55,7 @@ public class SPIAssetsRightsReverseExtension implements RightsReverseExtension {
         AssetReverseRequestDO requestDO = new AssetReverseRequestDO();
         requestDO.setUserId(context.getUserId());
         requestDO.setRightType(reverseInfo.getCurrentRightType());
-        requestDO.setAssetBatchs(items.stream().map(PerformItemReverseInfo::getBatchCode).collect(Collectors.toList()));
+        requestDO.setItemTokens(items.stream().map(PerformItemReverseInfo::getItemToken).collect(Collectors.toList()));
         AssetReverseResponseDO responseDO = null;
         try {
             responseDO = assetsFacadeSPI.reverse(requestDO);
