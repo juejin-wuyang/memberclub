@@ -315,19 +315,20 @@ public class MemberOrderDomainService {
         });
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public void onRefundSuccess(AfterSaleApplyContext context) {
-        if (!Boolean.TRUE.equals(context.getPayOrderRefundInvokeSuccess())) {
-            CommonLog.info("没有调用订单退款,因此不修改主状态");
-            for (MemberSubOrderDO subOrder : context.getPreviewContext().getSubOrders()) {
-                memberSubOrderDomainService.onJustFreezeSuccess(context, subOrder);
-            }
-            return;
+    @Retryable
+    public void onJustFreezeSuccess(AfterSaleApplyContext context, MemberOrderDO order) {
+        for (MemberSubOrderDO subOrder : context.getPreviewContext().getSubOrders()) {
+            memberSubOrderDomainService.onJustFreezeSuccess(context, subOrder);
         }
+    }
+
+    @Retryable(throwException = false)
+    @Transactional(rollbackFor = Exception.class)
+    public void onPurchaseReverseSuccess(AfterSaleApplyContext context) {
         CommonLog.info("成功支付退款, 开始修改 MemberOrder/MemberSubOrder 主状态");
 
         MemberOrderDO memberOrder = context.getPreviewContext().getMemberOrder();
-        memberOrder.onRefundSuccess(context);
+        memberOrder.onPurchaseReverseSuccess(context);
         memberOrderDao.updateStatus2RefundSuccess(memberOrder.getUserId(),
                 memberOrder.getTradeId(),
                 memberOrder.getStatus().getCode(),
@@ -336,10 +337,35 @@ public class MemberOrderDomainService {
 
         CommonLog.info("修改主单的主状态为{}", memberOrder.getStatus());
         for (MemberSubOrderDO subOrder : context.getPreviewContext().getSubOrders()) {
-            memberSubOrderDomainService.onRefundSuccess(context, subOrder);
+            memberSubOrderDomainService.onPurchaseReverseSuccess(context, subOrder);
         }
         TransactionHelper.afterCommitExecute(() -> {
             OrderRemarkBuilder.builder(memberOrder).remark(memberOrder.getStatus(), "订单退款完成").save();
+        });
+    }
+
+    @Retryable
+    @Transactional(rollbackFor = Exception.class)
+    public void onPayRefundSuccess(AfterSaleApplyContext context) {
+        if (!Boolean.TRUE.equals(context.getPayOrderRefundInvokeSuccess())) {
+            CommonLog.info("没有调用支付退款,因此不修改支付状态");
+            return;
+        }
+        MemberOrderDO order = context.getPreviewContext().getMemberOrder();
+        order.onPayRefundSuccess(context);
+
+        LambdaUpdateWrapper<MemberOrder> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(MemberOrder::getUserId, order.getUserId())
+                .eq(MemberOrder::getTradeId, order.getTradeId())
+                .set(MemberOrder::getPayStatus, order.getPaymentInfo().getPayStatus().getCode())
+                .set(MemberOrder::getUtime, order.getUtime())
+        ;
+
+        extensionManager.getExtension(BizScene.of(context.getCmd().getBizType()),
+                MemberOrderRepositoryExtension.class).onPayRefundSuccess(context, order, wrapper);
+
+        TransactionHelper.afterCommitExecute(() -> {
+            OrderRemarkBuilder.builder(order).remark(order.getPaymentInfo().getPayStatus(), "支付退款成功").save();
         });
     }
 

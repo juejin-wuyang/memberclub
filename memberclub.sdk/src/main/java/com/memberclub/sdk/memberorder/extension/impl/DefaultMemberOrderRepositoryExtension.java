@@ -12,6 +12,7 @@ import com.memberclub.common.extension.ExtensionProvider;
 import com.memberclub.common.log.CommonLog;
 import com.memberclub.domain.common.BizTypeEnum;
 import com.memberclub.domain.common.SceneEnum;
+import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
@@ -74,6 +75,16 @@ public class DefaultMemberOrderRepositoryExtension implements MemberOrderReposit
             throw ResultCode.DATA_UPDATE_ERROR.newException("MemberOrder onReversePerformSuccess 更新异常");
         }
         CommonLog.info("更新主单的履约状态为逆向履约完成 status:{} cnt:{}", memberOrderDO.getPerformStatus(), cnt);
+    }
+
+    @Transactional
+    @Override
+    public void onPayRefundSuccess(AfterSaleApplyContext context, MemberOrderDO memberOrderDO, LambdaUpdateWrapper<MemberOrder> wrapper) {
+        int cnt = memberOrderDao.update(null, wrapper);
+        if (cnt < 1) {
+            throw ResultCode.DATA_UPDATE_ERROR.newException("MemberOrder onPayRefundSuccess 更新异常");
+        }
+        CommonLog.info("更新主单的支付状态为退款完成 status:{} cnt:{}", memberOrderDO.getPaymentInfo().getPayStatus(), cnt);
     }
 
     @Override

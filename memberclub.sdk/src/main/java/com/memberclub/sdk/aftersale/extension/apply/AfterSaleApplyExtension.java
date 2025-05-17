@@ -24,4 +24,6 @@ public interface AfterSaleApplyExtension extends BaseExtension {
     public void customBuildAftersaleOrder(AfterSaleApplyContext context, AftersaleOrderDO aftersaleOrderDO);
 
     public void apply4OnlyRefundMoney(AfterSaleApplyContext context);
+
+    boolean isPurchaseReversedEnable(AfterSaleApplyContext context);
 }

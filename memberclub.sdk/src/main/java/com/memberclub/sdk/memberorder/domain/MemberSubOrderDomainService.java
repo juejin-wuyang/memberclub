@@ -180,8 +180,8 @@ public class MemberSubOrderDomainService {
         });
     }
 
-    public void onRefundSuccess(AfterSaleApplyContext context,
-                                MemberSubOrderDO subOrder) {
+    public void onPurchaseReverseSuccess(AfterSaleApplyContext context,
+                                         MemberSubOrderDO subOrder) {
         LambdaUpdateWrapper<MemberSubOrder> subOrderWrapper = new LambdaUpdateWrapper<>();
         subOrderWrapper.eq(MemberSubOrder::getUserId, subOrder.getUserId())
                 .eq(MemberSubOrder::getSubTradeId, subOrder.getSubTradeId())
@@ -201,5 +201,4 @@ public class MemberSubOrderDomainService {
                                     MemberSubOrderDO subOrder) {
         tradeEventDomainService.publishOnFreezeSuccessForSubOrder(context, subOrder);
     }
-
 }

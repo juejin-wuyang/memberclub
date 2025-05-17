@@ -613,8 +613,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         waitH2();
 
         Assert.assertTrue(applyResponse.isSuccess());
-
-
         verifyOrderRefund(applyCmd, true);
     }
 

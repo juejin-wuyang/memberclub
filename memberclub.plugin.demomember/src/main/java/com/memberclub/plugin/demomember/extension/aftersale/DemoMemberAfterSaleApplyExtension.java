@@ -53,7 +53,6 @@ public class DemoMemberAfterSaleApplyExtension extends BaseAfterSaleApplyExtensi
 
         doApplyFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
                 .addNode(AftersaleOrderApplyFlow.class)
-                .addNode(MemberOrderOnRefundSuccessFlow.class) //售后成功后, 更新主单子单的状态为成功
                 .addNode(AftersaleAsyncRollbackFlow.class)
                 .addNode(AfterSaleReversePerformFlow.class)
                 .addNode(AftersaleReversePurchaseFlow.class)

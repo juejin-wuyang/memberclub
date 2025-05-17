@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.log.CommonLog;
+import com.memberclub.common.retry.Retryable;
 import com.memberclub.common.util.JsonUtils;
 import com.memberclub.common.util.TimeUtil;
 import com.memberclub.domain.common.BizScene;
@@ -92,6 +93,7 @@ public class AfterSaleDomainService {
         }
     }
 
+
     public static void generateDigest(AfterSalePreviewContext context) throws NoSuchAlgorithmException {
         List<Object> keys = Lists.newArrayList();
         keys.add(context.getCmd().getTradeId());
@@ -156,6 +158,7 @@ public class AfterSaleDomainService {
         return aftersaleDataObjectFactory.buildAftersaleOrderDO(order);
     }
 
+    @Retryable
     @Transactional
     public void onPerformReversed(AfterSaleApplyContext context) {
         AftersaleOrderDO order = context.getAftersaleOrderDO();
@@ -166,8 +169,9 @@ public class AfterSaleDomainService {
                 TimeUtil.now());
     }
 
+    @Retryable
     @Transactional
-    public void onPurchaseReversed(AfterSaleApplyContext context) {
+    public void onPurchaseReverseSuccess(AfterSaleApplyContext context) {
         AftersaleOrderDO order = context.getAftersaleOrderDO();
         order.onPurchaseReversed(context);
         int cnt = aftersaleOrderDao.updateStatus(order.getUserId(),
@@ -176,6 +180,7 @@ public class AfterSaleDomainService {
                 TimeUtil.now());
     }
 
+    @Retryable
     @Transactional(rollbackFor = Exception.class)
     public void onPayRefundSuccess(AfterSaleApplyContext context) {
         AftersaleOrderDO order = context.getAftersaleOrderDO();

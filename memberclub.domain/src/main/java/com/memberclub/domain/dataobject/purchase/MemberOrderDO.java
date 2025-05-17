@@ -150,7 +150,13 @@ public class MemberOrderDO {
         }
     }
 
-    public void onRefundSuccess(AfterSaleApplyContext context) {
+    public void onPayRefundSuccess(AfterSaleApplyContext context) {
+        if (context.getPayOrderRefundInvokeSuccess()) {
+            paymentInfo.setPayStatus(PayStatusEnum.PAY_REFUND);
+        }
+    }
+
+    public void onPurchaseReverseSuccess(AfterSaleApplyContext context) {
         if (performStatus == MemberOrderPerformStatusEnum.COMPLETED_REVERSED) {
             status = MemberOrderStatusEnum.COMPLETE_REFUNDED;
         } else if (performStatus == MemberOrderPerformStatusEnum.PORTION_REVERSED) {

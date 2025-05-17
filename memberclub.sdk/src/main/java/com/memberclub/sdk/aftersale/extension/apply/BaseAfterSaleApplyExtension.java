@@ -3,6 +3,7 @@ package com.memberclub.sdk.aftersale.extension.apply;
 import com.memberclub.common.flow.FlowChain;
 import com.memberclub.common.flow.FlowChainService;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
+import com.memberclub.domain.context.aftersale.contant.RefundWayEnum;
 import com.memberclub.domain.dataobject.aftersale.AftersaleOrderDO;
 import com.memberclub.sdk.aftersale.flow.apply.AfterSalePaymentRefundFlow;
 import com.memberclub.sdk.aftersale.flow.apply.AfterSaleResourceLockFlow;
@@ -26,7 +27,7 @@ public abstract class BaseAfterSaleApplyExtension implements AfterSaleApplyExten
                 .addNode(AfterSaleResourceLockFlow.class)       //加锁
                 .addNode(AftersaleApplyPreviewFlow.class)       //售后预览
                 .addNode(AftersaleOrderGenerateFlow.class)      //生成售后单
-                .addNode(AftersaleOrderApplyFlow.class)         //调用订单退款
+                .addNode(AftersaleOrderApplyFlow.class)         //创建售后单
                 .addNode(AfterSalePaymentRefundFlow.class)      //调用支付原路退款
         ;
     }
@@ -40,5 +41,13 @@ public abstract class BaseAfterSaleApplyExtension implements AfterSaleApplyExten
     @Override
     public void customBuildAftersaleOrder(AfterSaleApplyContext context, AftersaleOrderDO aftersaleOrderDO) {
 
+    }
+
+    @Override
+    public boolean isPurchaseReversedEnable(AfterSaleApplyContext context) {
+        if (context.getPreviewContext().getRefundWay() == RefundWayEnum.ORDER_BACKSTRACK) {
+            return true;
+        }
+        return false;
     }
 }
