@@ -1,7 +1,6 @@
 -- 用于单测使用的 H2 数据库初始化
 
--- SET MODE MYSQL;
-use member_sku;
+ SET MODE MYSQL;
 
 CREATE TABLE IF NOT EXISTS member_sku (
     id BIGINT(20)  NOT NULL COMMENT '表主键',
@@ -17,7 +16,7 @@ CREATE TABLE IF NOT EXISTS member_sku (
     utime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '更新时间',
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '虚拟商品表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 CREATE TABLE IF NOT EXISTS inventory (
@@ -36,7 +35,7 @@ CREATE TABLE IF NOT EXISTS inventory (
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     UNIQUE KEY uniq_inventory (target_id, sub_key, target_type)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '商品库存表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 
 
@@ -55,7 +54,7 @@ CREATE TABLE IF NOT EXISTS inventory_record (
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     UNIQUE KEY uniq_inventory_record (user_id, operate_key, inventory_key, op_type)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '库存操作记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 use member_sku;
 INSERT INTO member_sku (id,biz_type,status,sale_info,finance_info,view_info,performance_info,restrict_info,inventory_info,extra,utime,ctime) VALUES

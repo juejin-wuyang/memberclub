@@ -1,8 +1,6 @@
 -- 用于单测使用的 H2 数据库初始化
 
--- SET MODE MYSQL;
-
-use member_db;
+SET MODE MYSQL;
 
 CREATE TABLE IF NOT EXISTS member_order (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
@@ -35,7 +33,7 @@ CREATE TABLE IF NOT EXISTS member_order (
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     UNIQUE KEY uniq_member_order (user_id, trade_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '虚拟订单主单表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS member_sub_order (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
@@ -59,7 +57,7 @@ CREATE TABLE IF NOT EXISTS member_sub_order (
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     UNIQUE KEY uniq_sub_order (user_id, trade_id, sku_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '虚拟订单子单表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 CREATE TABLE IF NOT EXISTS once_task (
@@ -78,7 +76,7 @@ CREATE TABLE IF NOT EXISTS once_task (
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     UNIQUE KEY uniq_once_task (user_id, task_token, task_type)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '通用任务表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS member_ship (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
@@ -103,7 +101,7 @@ CREATE TABLE IF NOT EXISTS member_ship (
     KEY key_period_stime (user_id, stime),
     KEY key_period_etime (user_id, etime),
     UNIQUE KEY uniq_grant_item (user_id, grant_code, biz_type)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT '权益资格表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 
 CREATE TABLE IF NOT EXISTS member_perform_item (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
@@ -131,8 +129,7 @@ CREATE TABLE IF NOT EXISTS member_perform_item (
     PRIMARY KEY (id),
     KEY key_perform_item_batch (user_id, batch_code, trade_id),
     UNIQUE KEY uniq_perform_item (user_id, item_token, biz_type)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT '履约项';
-
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 
 CREATE TABLE IF NOT EXISTS aftersale_order (
     id BIGINT(20)  NOT NULL COMMENT '表主键',
@@ -152,7 +149,7 @@ CREATE TABLE IF NOT EXISTS aftersale_order (
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     KEY tradeid_key (user_id, trade_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '售后单';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 CREATE TABLE IF NOT EXISTS outer_submit_record (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
@@ -168,8 +165,7 @@ CREATE TABLE IF NOT EXISTS outer_submit_record (
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     UNIQUE KEY uniq_outer (user_id, outer_id, outer_type)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT  '外部系统提单记录';
-
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 
 CREATE TABLE IF NOT EXISTS redeem (
@@ -183,4 +179,4 @@ CREATE TABLE IF NOT EXISTS redeem (
     ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
     PRIMARY KEY (id),
     UNIQUE KEY uniq_redeem (code)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '兑换码表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
