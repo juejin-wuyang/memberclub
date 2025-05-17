@@ -49,8 +49,8 @@ public class DouyinPkgAfterSaleApplyExtension extends BaseAfterSaleApplyExtensio
                 .addNode(AftersaleOrderApplyFlow.class)
                 .addNode(AftersaleAsyncRollbackFlow.class)   // 失败异步回滚
                 .addNode(AfterSaleReversePerformFlow.class)  //逆向履约
-                .addNode(AftersaleReversePurchaseFlow.class) //逆向取消订单
                 .addNode(AfterSalePayOrderRefundFlow.class)     //退款
+                .addNode(AftersaleReversePurchaseFlow.class) //逆向取消订单
         //.addNode()
         ;
     }

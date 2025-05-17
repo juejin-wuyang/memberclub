@@ -63,7 +63,7 @@ public interface MemberOrderDao extends BaseMapper<MemberOrder> {
     @Update({
             "UPDATE ", TABLE_NAME,
             " SET status=#{status}, utime=#{utime} ",
-            " WHERE user_id=#{userId} AND trade_id=#{tradeId} "
+            " WHERE user_id=#{userId} AND trade_id=#{tradeId} and status<#{status}"
     })
     public int updateStatus2RefundSuccess(@Param("userId") long userId,
                                           @Param("tradeId") String tradeId,

@@ -18,8 +18,8 @@ public enum MemberOrderStatusEnum {
     PAYED(29, "已支付"),
     PERFORMING(30, "履约中"),
     PERFORMED(35, "已履约"),
-    PORTION_REFUNDED(40, "部分退"),
-    COMPLETE_REFUNDED(49, "已完全退款");
+    PORTION_REFUNDED(40, "部分逆向"),
+    COMPLETE_REFUNDED(49, "已完全逆向");
 
     private int value;
 

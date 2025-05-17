@@ -15,9 +15,9 @@ public enum AftersaleOrderStatusEnum {
     REVERSE_PERFORM_ING(10, "逆向履约中"),
     REVERSE_PERFORM_SUCCESS(15, "逆向履约成功"),
     REVERSE_BUY_ING(20, "逆向购买中"),
-    REVERSE_PURCHASE_SUCCESS(25, "逆向购买成功"),
     REVERSE_REFUND_ING(30, "逆向退款中"),
     REFUND_ORDER_SUCCESS(35, "逆向退款成功"),
+    REVERSE_PURCHASE_SUCCESS(40, "逆向购买成功"),
     AFTERSALE_SUCCESS(55, "售后成功"),
 
     ;

@@ -50,8 +50,8 @@ public class LessonAfterSaleApplyExtension extends BaseAfterSaleApplyExtension i
                 .addNode(AftersaleUserQuotaFlow.class)           // 记录售后次数
                 .addNode(AftersaleAsyncRollbackFlow.class)   // 失败异步回滚
                 .addNode(AfterSaleReversePerformFlow.class)  //逆向履约
-                .addNode(AftersaleReversePurchaseFlow.class) //逆向取消订单
                 .addNode(AfterSalePayOrderRefundFlow.class)     //退款
+                .addNode(AftersaleReversePurchaseFlow.class) //逆向取消订单
         //.addNode()
         ;
 

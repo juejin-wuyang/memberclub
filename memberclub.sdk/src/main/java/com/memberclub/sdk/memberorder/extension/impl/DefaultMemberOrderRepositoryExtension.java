@@ -72,20 +72,13 @@ public class DefaultMemberOrderRepositoryExtension implements MemberOrderReposit
                                         LambdaUpdateWrapper<MemberOrder> wrapper) {
         int cnt = memberOrderDao.update(null, wrapper);
         if (cnt < 1) {
-            throw ResultCode.DATA_UPDATE_ERROR.newException("MemberOrder onReversePerformSuccess 更新异常");
+            //throw ResultCode.DATA_UPDATE_ERROR.newException("MemberOrder onReversePerformSuccess 更新异常");
+            CommonLog.error("onReversePerformSuccess更新主单的履约状态为逆向履约完成 status:{}异常 cnt:{}", memberOrderDO.getPerformStatus(), cnt);
+            return;
         }
         CommonLog.info("更新主单的履约状态为逆向履约完成 status:{} cnt:{}", memberOrderDO.getPerformStatus(), cnt);
     }
 
-    @Transactional
-    @Override
-    public void onPayRefundSuccess(AfterSaleApplyContext context, MemberOrderDO memberOrderDO, LambdaUpdateWrapper<MemberOrder> wrapper) {
-        int cnt = memberOrderDao.update(null, wrapper);
-        if (cnt < 1) {
-            throw ResultCode.DATA_UPDATE_ERROR.newException("MemberOrder onPayRefundSuccess 更新异常");
-        }
-        CommonLog.info("更新主单的支付状态为退款完成 status:{} cnt:{}", memberOrderDO.getPaymentInfo().getPayStatus(), cnt);
-    }
 
     @Override
     @Transactional
@@ -115,6 +108,18 @@ public class DefaultMemberOrderRepositoryExtension implements MemberOrderReposit
             throw ResultCode.DATA_UPDATE_ERROR.newException("MemberOrder onPaySuccess4OrderTimeout 更新异常");
         }
         CommonLog.info("更新主单的支付状态为支付成功 status:{} cnt:{}", memberOrderDO.getPaymentInfo().getPayStatus().getCode(), cnt);
+    }
+
+    @Transactional
+    @Override
+    public void onPayRefundSuccess(AfterSaleApplyContext context, MemberOrderDO memberOrderDO, LambdaUpdateWrapper<MemberOrder> wrapper) {
+        int cnt = memberOrderDao.update(null, wrapper);
+        if (cnt < 1) {
+            //throw ResultCode.DATA_UPDATE_ERROR.newException("MemberOrder onPayRefundSuccess 更新异常");
+            CommonLog.error("onPayRefundSuccess 更新主单的支付状态为退款完成 status:{}异常 cnt:{}", memberOrderDO.getPaymentInfo().getPayStatus(), cnt);
+            return;
+        }
+        CommonLog.info("更新主单的支付状态为退款完成 status:{} cnt:{}", memberOrderDO.getPaymentInfo().getPayStatus(), cnt);
     }
 
     @Transactional

@@ -104,7 +104,9 @@ public class DefaultMemberSubOrderRepositoryExtension implements MemberSubOrderR
                                         LambdaUpdateWrapper<MemberSubOrder> wrapper) {
         int cnt = memberSubOrderDao.update(null, wrapper);
         if (cnt < 1) {
-            throw ResultCode.DATA_UPDATE_ERROR.newException("MemberSubOrder onReversePerformSuccess 更新异常");
+            //throw ResultCode.DATA_UPDATE_ERROR.newException("MemberSubOrder onReversePerformSuccess 更新异常");
+            CommonLog.error("onReversePerformSuccess 更新子单状态为逆向履约完成 status:{}异常, cnt:{}", subOrder.getPerformStatus(), cnt);
+            return;
         }
         CommonLog.info("更新子单状态为逆向履约完成 status:{}, cnt:{}", subOrder.getPerformStatus(), cnt);
     }
@@ -113,7 +115,9 @@ public class DefaultMemberSubOrderRepositoryExtension implements MemberSubOrderR
     public void onRefundSuccess(AfterSaleApplyContext context, MemberSubOrderDO subOrder, LambdaUpdateWrapper<MemberSubOrder> wrapper) {
         int cnt = memberSubOrderDao.update(null, wrapper);
         if (cnt < 1) {
-            throw ResultCode.DATA_UPDATE_ERROR.newException("MemberSubOrder onRefundSuccess 更新异常");
+            //throw ResultCode.DATA_UPDATE_ERROR.newException("MemberSubOrder onRefundSuccess 更新异常");
+            CommonLog.error("onRefundSuccess 更新子单状态为退款完成 status:{}异常, cnt:{}", subOrder.getStatus(), cnt);
+            return;
         }
         CommonLog.info("更新子单状态为退款完成 status:{}, cnt:{}", subOrder.getStatus(), cnt);
     }

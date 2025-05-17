@@ -27,6 +27,6 @@ public class LocalIdGenerator implements IdGenerator {
     @Override
     public Long generateId(IdTypeEnum idTypeEnum) {
         // TODO: 2024/12/19 修改为其他 ID 生成器
-        return RandomUtils.nextLong();
+        return Math.abs(RandomUtils.nextLong());
     }
 }

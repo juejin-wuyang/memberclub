@@ -302,6 +302,7 @@ public class MemberOrderDomainService {
         LambdaUpdateWrapper<MemberOrder> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(MemberOrder::getUserId, order.getUserId())
                 .eq(MemberOrder::getTradeId, order.getTradeId())
+                .lt(MemberOrder::getPerformStatus, order.getPerformStatus().getCode())
                 .set(MemberOrder::getPerformStatus, order.getPerformStatus().getCode())
                 .set(MemberOrder::getUtime, order.getUtime())
         ;
@@ -340,7 +341,7 @@ public class MemberOrderDomainService {
             memberSubOrderDomainService.onPurchaseReverseSuccess(context, subOrder);
         }
         TransactionHelper.afterCommitExecute(() -> {
-            OrderRemarkBuilder.builder(memberOrder).remark(memberOrder.getStatus(), "订单退款完成").save();
+            OrderRemarkBuilder.builder(memberOrder).remark(memberOrder.getStatus(), "订单逆向购买完成").save();
         });
     }
 
@@ -357,6 +358,7 @@ public class MemberOrderDomainService {
         LambdaUpdateWrapper<MemberOrder> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(MemberOrder::getUserId, order.getUserId())
                 .eq(MemberOrder::getTradeId, order.getTradeId())
+                .le(MemberOrder::getPayStatus, order.getPaymentInfo().getPayStatus().getCode())
                 .set(MemberOrder::getPayStatus, order.getPaymentInfo().getPayStatus().getCode())
                 .set(MemberOrder::getUtime, order.getUtime())
         ;

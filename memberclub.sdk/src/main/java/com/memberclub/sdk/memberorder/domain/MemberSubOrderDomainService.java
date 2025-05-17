@@ -185,6 +185,7 @@ public class MemberSubOrderDomainService {
         LambdaUpdateWrapper<MemberSubOrder> subOrderWrapper = new LambdaUpdateWrapper<>();
         subOrderWrapper.eq(MemberSubOrder::getUserId, subOrder.getUserId())
                 .eq(MemberSubOrder::getSubTradeId, subOrder.getSubTradeId())
+                .lt(MemberSubOrder::getStatus, subOrder.getStatus().getCode())
                 .set(MemberSubOrder::getStatus, subOrder.getStatus().getCode())
                 .set(MemberSubOrder::getExtra, JsonUtils.toJson(subOrder.getExtra()))
                 .set(MemberSubOrder::getUtime, TimeUtil.now());
