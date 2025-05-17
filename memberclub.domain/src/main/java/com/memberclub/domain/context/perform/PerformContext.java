@@ -81,4 +81,12 @@ public class PerformContext {
     public BizScene toDefaultScene() {
         return BizScene.of(bizType.getCode());
     }
+
+    public void initialize(MemberOrderDO memberOrder) {
+        setMemberOrder(memberOrder);
+        setMemberSubOrders(memberOrder.getSubOrders());
+        MemberOrderExtraInfo extraInfo = getMemberOrder().getExtra();
+        setMemberOrderExtraInfo(extraInfo);
+        setUserInfo(extraInfo.getUserInfo());
+    }
 }

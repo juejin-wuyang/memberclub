@@ -8,7 +8,7 @@ package com.memberclub.sdk.aftersale.flow.doapply;
 
 import com.memberclub.common.flow.FlowNode;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
-import com.memberclub.sdk.aftersale.service.domain.AfterSaleDomainService;
+import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class MemberOrderOnRefundSuccessFlow extends FlowNode<AfterSaleApplyContext> {
 
     @Autowired
-    private AfterSaleDomainService aftersaleDomainService;
+    private MemberOrderDomainService memberOrderDomainService;
 
     @Override
     public void process(AfterSaleApplyContext context) {
@@ -28,6 +28,6 @@ public class MemberOrderOnRefundSuccessFlow extends FlowNode<AfterSaleApplyConte
 
     @Override
     public void success(AfterSaleApplyContext context) {
-        aftersaleDomainService.onRefundSuccessForMemberOrder(context);
+        memberOrderDomainService.onRefundSuccess(context);
     }
 }

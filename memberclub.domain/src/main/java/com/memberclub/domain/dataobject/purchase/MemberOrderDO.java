@@ -131,6 +131,11 @@ public class MemberOrderDO {
         }
     }
 
+    public void onStartPerform(PerformContext context) {
+        performStatus = MemberOrderPerformStatusEnum.PERFORMING;
+        utime = System.currentTimeMillis();
+    }
+
     public void onReversePerformSuccess(ReversePerformContext context) {
         boolean hasPortionReverse = false;
         for (MemberSubOrderDO subOrder : subOrders) {

@@ -26,6 +26,7 @@ import com.memberclub.domain.exception.MemberException;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.payment.context.PaymentTimeoutMessage;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
+import com.memberclub.sdk.memberorder.domain.OrderRemarkBuilder;
 import com.memberclub.sdk.purchase.extension.PurchaseExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -129,6 +130,9 @@ public class PurchaseBizService {
         }
 
         CommonLog.warn("收到支付超时检查，开始取消订单 msg:{}", message);
+
+        OrderRemarkBuilder.builder(message.getBizType(), message.getUserId(), message.getTradeId())
+                .remark("订单支付超时，需要取消订单").save();
         cancelOrder(message);
     }
 

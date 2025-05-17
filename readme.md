@@ -531,6 +531,16 @@ memberclub.starter是项目的启动模块
 
 ![img.png](doc/idea_run.png)
 
+#### 独立模式如何连接H2内存数据库
+
+访问连接：http://localhost:9977/h2-console/login.do?jsessionid=009feae7bb8259645119f43447524627
+
+url:  jdbc:h2:mem:member_db
+username: sa
+password: dean
+
+![img.png](img.png)
+
 ### MAC 和 Linux 命令行启动
 
 memberclub项目根目录下

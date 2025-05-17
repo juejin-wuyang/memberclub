@@ -17,12 +17,14 @@ import com.memberclub.common.util.CollectionUtilEx;
 import com.memberclub.common.util.JsonUtils;
 import com.memberclub.common.util.TimeUtil;
 import com.memberclub.domain.common.BizScene;
+import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.perform.common.MemberOrderPerformStatusEnum;
 import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
 import com.memberclub.domain.context.purchase.PurchaseSubmitContext;
 import com.memberclub.domain.context.purchase.cancel.PurchaseCancelContext;
 import com.memberclub.domain.dataobject.payment.context.PaymentNotifyContext;
+import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.entity.trade.MemberOrder;
 import com.memberclub.domain.entity.trade.MemberSubOrder;
@@ -43,8 +45,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static com.memberclub.domain.common.MemberTradeEvent.MEMBER_ORDER_START_PERFORM;
 
 /**
  * author: 掘金五阳
@@ -82,14 +82,18 @@ public class MemberOrderDomainService {
 
         int cnt = memberOrderDao.insertIgnoreBatch(Lists.newArrayList(order));
         if (cnt < 1) {
+            OrderRemarkBuilder.builder(memberOrderDO).remark("创建订单失败").save();
             throw ResultCode.ORDER_CREATE_ERROR.newException("会员单生成失败");
         }
+        OrderRemarkBuilder.builder(memberOrderDO).remark(memberOrderDO.getStatus(), "创建订单成功").save();
 
         int subOrderCnt = memberSubOrderDao.insertIgnoreBatch(subOrders);
         if (subOrderCnt < subOrders.size()) {
+            OrderRemarkBuilder.builder(memberOrderDO).remark("创建订单子单失败").save();
             throw ResultCode.ORDER_CREATE_ERROR.newException("会员子单生成失败");
         }
-        CommonLog.info("生成会员单数据成功");
+        OrderRemarkBuilder.builder(memberOrderDO).remark("创建订单子单成功").save();
+        CommonLog.info("生成订单数据成功");
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -107,6 +111,10 @@ public class MemberOrderDomainService {
                 MemberOrderRepositoryExtension.class).onSubmitSuccess(order, wrapper);
 
         memberSubOrderDomainService.onSubmitSuccess(order);
+
+        TransactionHelper.afterCommitExecute(() -> {
+            OrderRemarkBuilder.builder(order).remark(order.getStatus(), "提交订单成功").save();
+        });
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -123,19 +131,28 @@ public class MemberOrderDomainService {
                 MemberOrderRepositoryExtension.class).onSubmitCancel(order, wrapper);
 
         memberSubOrderDomainService.onSubmitCancel(context, order);
+        TransactionHelper.afterCommitExecute(() -> {
+            OrderRemarkBuilder.builder(order).remark(order.getStatus(), "取消订单成功").save();
+        });
     }
 
     @Transactional(rollbackFor = Exception.class)
     public Integer onStartPerform(PerformContext context) {
+        context.getMemberOrder().onStartPerform(context);
         LambdaUpdateWrapper<MemberOrder> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(MemberOrder::getUserId, context.getUserId())
                 .eq(MemberOrder::getTradeId, context.getTradeId())
-                .lt(MemberOrder::getPerformStatus, MEMBER_ORDER_START_PERFORM.getToStatus())
-                .set(MemberOrder::getPerformStatus, MEMBER_ORDER_START_PERFORM.getToStatus())
+                .lt(MemberOrder::getPerformStatus, context.getMemberOrder().getPerformStatus().getCode())
+                .set(MemberOrder::getPerformStatus, context.getMemberOrder().getPerformStatus().getCode())
                 .set(MemberOrder::getUtime, TimeUtil.now());
 
         int cnt = extensionManager.getExtension(BizScene.of(context.getBizType()),
                 MemberOrderRepositoryExtension.class).onStartPerform(context, wrapper);
+
+        TransactionHelper.afterCommitExecute(() -> {
+            OrderRemarkBuilder.builder(context.getMemberOrder())
+                    .remark(context.getMemberOrder().getPerformStatus(), "开始履约").save();
+        });
         return cnt;
     }
 
@@ -155,6 +172,11 @@ public class MemberOrderDomainService {
 
         extensionManager.getExtension(BizScene.of(context.getBizType()),
                 MemberOrderRepositoryExtension.class).onPerformSuccess(context, order, wrapper);
+
+        TransactionHelper.afterCommitExecute(() -> {
+            OrderRemarkBuilder.builder(context.getMemberOrder())
+                    .remark(context.getMemberOrder().getPerformStatus(), "履约成功").save();
+        });
     }
 
 
@@ -181,9 +203,16 @@ public class MemberOrderDomainService {
 
         extensionManager.getExtension(BizScene.of(context.getBizType()),
                 MemberOrderRepositoryExtension.class).onPrePay(order, wrapper);
+        TransactionHelper.afterCommitExecute(() -> {
+            OrderRemarkBuilder.builder(context.getMemberOrder())
+                    .remark(context.getMemberOrder().getPaymentInfo().getPayStatus(), "预支付").save();
+        });
     }
 
 
+    /**
+     * 订单支付成功后，发现订单已取消那么原路退款
+     */
     @Retryable(throwException = false)
     public void onRefund4OrderTimeout(PaymentNotifyContext context, MemberOrderDO order) {
         order.onRefund4OrderTimeout(context);
@@ -199,6 +228,10 @@ public class MemberOrderDomainService {
 
         MemberOrderRepositoryExtension extension = extensionManager.getExtension(BizScene.of(context.getBizType()), MemberOrderRepositoryExtension.class);
         extension.onRefund4OrderTimeout(order, wrapper);
+        TransactionHelper.afterCommitExecute(() -> {
+            OrderRemarkBuilder.builder(order)
+                    .remark(order.getPaymentInfo().getPayStatus(), "支付后发现订单已取消，对订单原路退款").save();
+        });
     }
 
     @Retryable(throwException = false)
@@ -222,6 +255,11 @@ public class MemberOrderDomainService {
 
         MemberOrderRepositoryExtension extension = extensionManager.getExtension(BizScene.of(context.getBizType()), MemberOrderRepositoryExtension.class);
         extension.onPaySuccess4OrderTimeout(order, wrapper);
+
+        TransactionHelper.afterCommitExecute(() -> {
+            OrderRemarkBuilder.builder(order)
+                    .remark(order.getPaymentInfo().getPayStatus(), "支付后发现订单超时").save();
+        });
     }
 
     @Retryable(throwException = false)
@@ -250,12 +288,10 @@ public class MemberOrderDomainService {
 
         TransactionHelper.afterCommitExecute(() -> {
             //发布支付事件
+            OrderRemarkBuilder.builder(order)
+                    .remark(order.getStatus(), order.getPaymentInfo().getPayStatus(), "支付成功").save();
             tradeEventDomainService.publishEventOnPaySuccess(context);
         });
-    }
-
-    public void onPayTimeoutCheck(MemberOrderDO order) {
-
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -272,6 +308,39 @@ public class MemberOrderDomainService {
 
         extensionManager.getExtension(BizScene.of(context.getBizType()),
                 MemberOrderRepositoryExtension.class).onReversePerformSuccess(context, order, wrapper);
+
+        TransactionHelper.afterCommitExecute(() -> {
+            OrderRemarkBuilder.builder(order)
+                    .remark(order.getPerformStatus(), "订单逆向履约成功").save();
+        });
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void onRefundSuccess(AfterSaleApplyContext context) {
+        if (!Boolean.TRUE.equals(context.getPayOrderRefundInvokeSuccess())) {
+            CommonLog.info("没有调用订单退款,因此不修改主状态");
+            for (MemberSubOrderDO subOrder : context.getPreviewContext().getSubOrders()) {
+                memberSubOrderDomainService.onJustFreezeSuccess(context, subOrder);
+            }
+            return;
+        }
+        CommonLog.info("成功支付退款, 开始修改 MemberOrder/MemberSubOrder 主状态");
+
+        MemberOrderDO memberOrder = context.getPreviewContext().getMemberOrder();
+        memberOrder.onRefundSuccess(context);
+        memberOrderDao.updateStatus2RefundSuccess(memberOrder.getUserId(),
+                memberOrder.getTradeId(),
+                memberOrder.getStatus().getCode(),
+                TimeUtil.now()
+        );
+
+        CommonLog.info("修改主单的主状态为{}", memberOrder.getStatus());
+        for (MemberSubOrderDO subOrder : context.getPreviewContext().getSubOrders()) {
+            memberSubOrderDomainService.onRefundSuccess(context, subOrder);
+        }
+        TransactionHelper.afterCommitExecute(() -> {
+            OrderRemarkBuilder.builder(memberOrder).remark(memberOrder.getStatus(), "订单退款完成").save();
+        });
     }
 
     public MemberOrderDO getMemberOrderDO(long userId, String tradeId) {

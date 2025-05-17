@@ -168,6 +168,18 @@ CREATE TABLE IF NOT EXISTS outer_submit_record (
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 
+
+CREATE TABLE IF NOT EXISTS order_remark (
+    id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
+    biz_type INT(11)  NOT NULL COMMENT '产品线',
+    user_id BIGINT(20)  NOT NULL COMMENT 'userId',
+    trade_id VARCHAR(128)  NULL COMMENT '交易Id',
+    detail VARCHAR(512)  NOT NULL COMMENT '详情',
+    utime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '更新时间',
+    ctime BIGINT(20)  NOT NULL DEFAULT '0' COMMENT '创建时间',
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+
 CREATE TABLE IF NOT EXISTS redeem (
     id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '表自增主键',
     biz_type INT(11)  NOT NULL COMMENT '产品线',

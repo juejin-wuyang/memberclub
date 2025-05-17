@@ -11,7 +11,6 @@ import com.memberclub.common.log.CommonLog;
 import com.memberclub.domain.common.RetrySourceEunm;
 import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.purchase.common.MemberOrderStatusEnum;
-import com.memberclub.domain.dataobject.order.MemberOrderExtraInfo;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.sdk.common.Monitor;
@@ -32,13 +31,7 @@ public class MemberOrderPerformCheckFlow extends FlowNode<PerformContext> {
 
     @Override
     public void process(PerformContext context) {
-        MemberOrderDO memberOrder = memberOrderDomainService.getMemberOrderDO(context.getUserId(), context.getTradeId());
-        context.setMemberOrder(memberOrder);
-        context.setMemberSubOrders(memberOrder.getSubOrders());
-        MemberOrderExtraInfo extraInfo = context.getMemberOrder().getExtra();
-        context.setMemberOrderExtraInfo(extraInfo);
-        context.setUserInfo(extraInfo.getUserInfo());
-
+        MemberOrderDO memberOrder = context.getMemberOrder();
         if (context.getRetrySource() == RetrySourceEunm.UPSTREAM_RETRY) {
             context.setSkipPerform(true);
         }

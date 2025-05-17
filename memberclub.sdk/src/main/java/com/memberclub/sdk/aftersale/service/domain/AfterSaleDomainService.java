@@ -24,8 +24,6 @@ import com.memberclub.domain.context.purchase.common.MemberOrderStatusEnum;
 import com.memberclub.domain.dataobject.aftersale.AftersaleOrderDO;
 import com.memberclub.domain.dataobject.aftersale.AftersaleOrderExtraDO;
 import com.memberclub.domain.dataobject.aftersale.AftersaleOrderStatusEnum;
-import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
-import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.entity.trade.AftersaleOrder;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.mapstruct.AftersaleConvertor;
@@ -102,7 +100,7 @@ public class AfterSaleDomainService {
         keys.add(context.getRefundWay().getCode());
 
         String value = StringUtils.join(keys, ",");
-        
+
         MessageDigest messageDigest = MessageDigest.getInstance("MD5");
         String digest = Base64.getUrlEncoder().encodeToString(
                 messageDigest.digest(value.getBytes(Charsets.UTF_8)));
@@ -210,28 +208,4 @@ public class AfterSaleDomainService {
                 AfterSaleRepositoryExtension.class).onSuccess(context, order, wrapper);
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public void onRefundSuccessForMemberOrder(AfterSaleApplyContext context) {
-        if (!Boolean.TRUE.equals(context.getPayOrderRefundInvokeSuccess())) {
-            CommonLog.info("没有调用订单退款,因此不修改主状态");
-            for (MemberSubOrderDO subOrder : context.getPreviewContext().getSubOrders()) {
-                memberSubOrderDomainService.onJustFreezeSuccess(context, subOrder);
-            }
-            return;
-        }
-        CommonLog.info("调用成功订单退款, 开始修改 MemberOrder/MemberSubOrder 主状态");
-
-        MemberOrderDO memberOrder = context.getPreviewContext().getMemberOrder();
-        memberOrder.onRefundSuccess(context);
-        memberOrderDao.updateStatus2RefundSuccess(memberOrder.getUserId(),
-                memberOrder.getTradeId(),
-                memberOrder.getStatus().getCode(),
-                TimeUtil.now()
-        );
-
-        CommonLog.info("修改主单的主状态为{}", memberOrder.getStatus());
-        for (MemberSubOrderDO subOrder : context.getPreviewContext().getSubOrders()) {
-            memberSubOrderDomainService.onRefundSuccess(context, subOrder);
-        }
-    }
 }
