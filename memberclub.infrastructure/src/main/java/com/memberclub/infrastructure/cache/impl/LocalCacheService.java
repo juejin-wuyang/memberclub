@@ -6,6 +6,7 @@
  */
 package com.memberclub.infrastructure.cache.impl;
 
+import com.memberclub.common.util.TimeUtil;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewCoreResult;
 import com.memberclub.domain.dataobject.inventory.InventoryCacheDO;
 import com.memberclub.domain.dataobject.membership.MemberShipUnionDO;
@@ -63,7 +64,11 @@ public class LocalCacheService implements CacheService {
             return (V) memberShipMap.get((String) k);
         }
         if (cacheEnum == CacheEnum.after_sale_preview_token) {
-            return (V) afterSalePreviewMap.get((String) k);
+            V v = (V) afterSalePreviewMap.get((String) k);
+            if (TimeUtil.now() > ((AfterSalePreviewCoreResult) v).getExpireTime()) {
+                return null;
+            }
+            return v;
         }
         return null;
     }

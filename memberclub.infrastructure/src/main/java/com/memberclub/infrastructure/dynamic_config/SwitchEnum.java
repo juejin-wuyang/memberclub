@@ -147,9 +147,9 @@ public enum SwitchEnum {
     }
 
     private boolean getBoolean(String key, int bizType) {
-        key = getKey(bizType);
+        key = String.format("%s_%s", key, bizType);
 
-        return getDynamicConfig().getBoolean(key, (Boolean) defaultValue);
+        return getDynamicConfig().getBoolean(key, (Boolean) getBoolean());
     }
 
 
@@ -181,8 +181,7 @@ public enum SwitchEnum {
 
     public int getInt(int bizType) {
         String key = getKey(bizType);
-        return getDynamicConfig()
-                .getInt(key, defaultValue);
+        return getDynamicConfig().getInt(key, getInt());
     }
 
     public long getLong() {
@@ -192,7 +191,7 @@ public enum SwitchEnum {
 
     public long getLong(int bizType) {
         String key = getKey(bizType);
-        return getDynamicConfig().getLong(key, defaultValue);
+        return getDynamicConfig().getLong(key, getLong());
     }
 
     public String getString() {
@@ -201,7 +200,7 @@ public enum SwitchEnum {
 
     public String getString(int bizType) {
         String key = getKey(bizType);
-        return getDynamicConfig().getString(key, (String) defaultValue);
+        return getDynamicConfig().getString(key, (String) getString());
     }
 
     public DynamicConfig getDynamicConfig() {

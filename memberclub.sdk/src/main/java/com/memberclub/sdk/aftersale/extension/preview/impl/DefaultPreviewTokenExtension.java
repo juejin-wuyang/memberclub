@@ -16,9 +16,10 @@ import com.memberclub.domain.context.aftersale.apply.AfterSaleExecuteCmd;
 import com.memberclub.domain.context.aftersale.contant.AftersaleUnableCode;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewCoreResult;
-import com.memberclub.infrastructure.dynamic_config.SwitchEnum;
 import com.memberclub.sdk.aftersale.extension.preview.AfterSalePreviewCheckExtension;
 import lombok.SneakyThrows;
+
+import static com.memberclub.infrastructure.dynamic_config.SwitchEnum.AFTER_SALE_PREVIEW_TOKEN_EXPIRE_TIME_SECONDS;
 
 /**
  * author: 掘金五阳
@@ -32,7 +33,8 @@ public class DefaultPreviewTokenExtension implements AfterSalePreviewCheckExtens
     @SneakyThrows
     @Override
     public AfterSalePreviewCoreResult generatePreviewCoreResult(AfterSalePreviewContext context) {
-        long expireTime = TimeUtil.now() + SwitchEnum.AFTER_SALE_PREVIEW_TOKEN_EXPIRE_TIME_SECONDS.getInt(context.getCmd().getBizType().getCode());
+        long expireTime = TimeUtil.now() +
+                AFTER_SALE_PREVIEW_TOKEN_EXPIRE_TIME_SECONDS.getInt(context.getCmd().getBizType().getCode()) * 1000L;
         return context.toCoreResult(expireTime);
     }
 
