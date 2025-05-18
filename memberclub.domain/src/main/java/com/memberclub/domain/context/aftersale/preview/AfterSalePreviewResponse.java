@@ -27,8 +27,6 @@ public class AfterSalePreviewResponse {
     private String recommendRefundPriceYuan;
     private int unableCode;
     private String unableTip;
-    private String digests;
-    private int digestVersion;
 
     public boolean isAftersaleEnabled() {
         return success && unableCode == 0;

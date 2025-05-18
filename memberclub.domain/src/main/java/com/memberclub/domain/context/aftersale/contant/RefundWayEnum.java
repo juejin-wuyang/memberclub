@@ -6,6 +6,9 @@
  */
 package com.memberclub.domain.context.aftersale.contant;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * @author wuyang
  */
@@ -25,6 +28,7 @@ public enum RefundWayEnum {
         this.name = name;
     }
 
+    @JsonCreator
     public static RefundWayEnum findByCode(int value) throws IllegalArgumentException {
         for (RefundWayEnum item : RefundWayEnum.values()) {
             if (item.value == value) {
@@ -40,6 +44,7 @@ public enum RefundWayEnum {
         return this.name;
     }
 
+    @JsonValue
     public int getCode() {
         return this.value;
     }

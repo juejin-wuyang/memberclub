@@ -94,8 +94,6 @@ public class AftersaleController {
             cmd.setUserId(SecurityUtil.getUserId());
             cmd.setOperator(String.valueOf(SecurityUtil.getUserId()));
             cmd.setTradeId(vo.getTradeId());
-            cmd.setDigests(vo.getPreviewDigest());
-            cmd.setDigestVersion(vo.getDigestVersion());
             cmd.setPreviewToken(vo.getPreviewToken());
 
             AftersaleApplyResponse applyResponse = aftersaleBizService.apply(cmd);

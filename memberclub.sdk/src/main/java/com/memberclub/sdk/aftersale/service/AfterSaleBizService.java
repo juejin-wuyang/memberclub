@@ -59,8 +59,6 @@ public class AfterSaleBizService {
             respose.setRecommendRefundPriceYuan(PriceUtils.change2Yuan(context.getRecommendRefundPrice()));
             respose.setRefundType(context.getRefundType());
             respose.setRefundWay(context.getRefundWay());
-            respose.setDigests(context.getDigests());
-            respose.setDigestVersion(context.getDigestVersion());
             respose.setPreviewToken(context.getPreviewToken());
         } catch (Exception e) {
             if (extractException(e) != null) {
@@ -94,6 +92,7 @@ public class AfterSaleBizService {
         AftersaleCollectDataExtension aftersaleCollectDataExtension = extension(cmd.getBizType().toBizScene(), AftersaleCollectDataExtension.class);
         AfterSalePreviewContext context = aftersaleCollectDataExtension.collect(cmd);
         context.setCmd(cmd);
+        context.setPreviewBeforeApply(cmd.isPreviewBeforeApply());
 
         BizSceneBuildExtension bizSceneBuildExtension = em.getSceneExtension(cmd.getBizType().toBizScene());
         String scene = bizSceneBuildExtension.buildAftersalePreviewScene(context);

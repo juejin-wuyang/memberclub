@@ -39,15 +39,10 @@ public enum SwitchEnum {
      * 售后超过这个次数以后，不允许购买
      */
     AFTERSALE_QUOTA_MAX_VALUE("aftersale_quota_expire_days", 2),
-
     /**
-     * 售后计划摘要默认版本
+     * 售后预览token降级
      */
-    AFTERSALE_PLAN_GENERATE_DIGEST_VERSION("aftersale_plan_generate_digest_version", 1),
-    /**
-     * 售后计划摘要降级
-     */
-    AFTERSALE_PLAN_GENERATE_DIGEST_CHECK_DEGRADE("aftersale_plan_generate_digest_check_degrade", false),
+    AFTERSALE_PREVIEW_TOKEN_CHECK_DEGRADE("aftersale_preview_token_check_degrade", false),
     /***
      * 预结算消费的重试次数
      */
@@ -104,6 +99,8 @@ public enum SwitchEnum {
     PAY_AMOUNT_STRICT_VALIDATE("pay_amount_strict_validate", false),
 
     AMOUNT_COMPUTE_EXCEPTION_SKIP_ENABLE("amount_compute_exception_skip_enable", true),
+
+    AFTER_SALE_PREVIEW_TOKEN_EXPIRE_TIME_SECONDS("after_sale_preview_token_expire_time_seconds", 5 * 60),//售后预览token过期
     ;
 
 

@@ -15,6 +15,7 @@ public enum CacheEnum {
 
     inventory(1, "member_inventory_cache"),
     membership(2, "member_ship_cache"),
+    after_sale_preview_token(3, "after_sale_preview_token_cache"),
     //
     ;
 

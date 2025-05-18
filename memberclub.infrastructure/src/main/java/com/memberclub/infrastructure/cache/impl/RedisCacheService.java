@@ -10,6 +10,7 @@ import com.memberclub.common.log.CommonLog;
 import com.memberclub.common.retry.RetryUtil;
 import com.memberclub.common.util.FileUtils;
 import com.memberclub.common.util.TimeUtil;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewCoreResult;
 import com.memberclub.domain.dataobject.inventory.InventoryCacheDO;
 import com.memberclub.domain.dataobject.membership.MemberShipUnionDO;
 import com.memberclub.infrastructure.cache.CacheEnum;
@@ -41,16 +42,8 @@ public class RedisCacheService implements CacheService {
     public static final Logger LOG = LoggerFactory.getLogger(RedisCacheService.class);
     public static final String INVENTORY_CACHE_HKEY = "value";
 
-   /* @Autowired
-    private RedissonClient redissonClient;*/
-
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-
-    @Autowired
-    private HashOperations<String, String, Object> hashOperations;
-
-
+    /* @Autowired
+     private RedissonClient redissonClient;*/
     private static String inventoryUpdateLua = null;
 
     static {
@@ -66,10 +59,19 @@ public class RedisCacheService implements CacheService {
         }
     }
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private HashOperations<String, String, Object> hashOperations;
+
     @Override
     public <K, V> V del(CacheEnum cacheEnum, K k) {
         if (cacheEnum == CacheEnum.membership) {
             String key = buildMembershipKey(k);
+            return (V) redisTemplate.opsForValue().getAndDelete(key);
+        }
+        if (cacheEnum == CacheEnum.after_sale_preview_token) {
+            String key = buildAfterSalePreviewToken(k);
             return (V) redisTemplate.opsForValue().getAndDelete(key);
         }
         return null;
@@ -87,11 +89,21 @@ public class RedisCacheService implements CacheService {
             long timeout = etime - TimeUtil.now();
             redisTemplate.opsForValue().set(key, v, timeout, TimeUnit.MILLISECONDS);
         }
+        if (cacheEnum == CacheEnum.after_sale_preview_token) {
+            String key = buildAfterSalePreviewToken(k);
+            long etime = ((AfterSalePreviewCoreResult) v).getExpireTime();
+            long timeout = etime - TimeUtil.now();
+            redisTemplate.opsForValue().set(key, v, timeout, TimeUnit.MILLISECONDS);
+        }
         return null;
     }
 
     private <K> String buildMembershipKey(K k) {
         return "membership_" + k;
+    }
+
+    private <K> String buildAfterSalePreviewToken(K k) {
+        return "aspreviewtoken_" + k;
     }
 
 
@@ -152,6 +164,10 @@ public class RedisCacheService implements CacheService {
         }
         if (cacheEnum == CacheEnum.membership) {
             String key = buildMembershipKey(k);
+            return (V) redisTemplate.opsForValue().get(key);
+        }
+        if (cacheEnum == CacheEnum.after_sale_preview_token) {
+            String key = buildAfterSalePreviewToken(k);
             return (V) redisTemplate.opsForValue().get(key);
         }
         return null;

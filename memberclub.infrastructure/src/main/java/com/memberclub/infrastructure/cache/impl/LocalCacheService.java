@@ -6,6 +6,7 @@
  */
 package com.memberclub.infrastructure.cache.impl;
 
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewCoreResult;
 import com.memberclub.domain.dataobject.inventory.InventoryCacheDO;
 import com.memberclub.domain.dataobject.membership.MemberShipUnionDO;
 import com.memberclub.infrastructure.cache.CacheEnum;
@@ -28,6 +29,9 @@ public class LocalCacheService implements CacheService {
 
     private static ConcurrentMap<String, MemberShipUnionDO> memberShipMap = new ConcurrentHashMap();
 
+
+    private static ConcurrentMap<String, AfterSalePreviewCoreResult> afterSalePreviewMap = new ConcurrentHashMap();
+
     @Override
     public <K, V> V del(CacheEnum cacheEnum, K k) {
         if (cacheEnum == CacheEnum.membership) {
@@ -44,6 +48,9 @@ public class LocalCacheService implements CacheService {
         if (cacheEnum == CacheEnum.membership) {
             return (V) memberShipMap.put((String) k, (MemberShipUnionDO) v);
         }
+        if (cacheEnum == CacheEnum.after_sale_preview_token) {
+            return (V) afterSalePreviewMap.put((String) k, (AfterSalePreviewCoreResult) v);
+        }
         return null;
     }
 
@@ -54,6 +61,9 @@ public class LocalCacheService implements CacheService {
         }
         if (cacheEnum == CacheEnum.membership) {
             return (V) memberShipMap.get((String) k);
+        }
+        if (cacheEnum == CacheEnum.after_sale_preview_token) {
+            return (V) afterSalePreviewMap.get((String) k);
         }
         return null;
     }

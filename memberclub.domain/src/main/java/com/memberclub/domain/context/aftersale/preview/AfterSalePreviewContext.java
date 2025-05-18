@@ -98,7 +98,14 @@ public class AfterSalePreviewContext {
         cmd.setPeriodIndex(periodIndex);
         cmd.setItemToken2ItemUsage(itemToken2ItemUsage);
         cmd.setRefundType(refundType);
-
         return cmd;
+    }
+
+    public AfterSalePreviewCoreResult toCoreResult(long expireTime) {
+        AfterSalePreviewCoreResult coreResult = new AfterSalePreviewCoreResult();
+        coreResult.setRecommendRefundPrice(recommendRefundPrice);
+        coreResult.setRefundWay(refundWay);
+        coreResult.setExpireTime(expireTime);
+        return coreResult;
     }
 }

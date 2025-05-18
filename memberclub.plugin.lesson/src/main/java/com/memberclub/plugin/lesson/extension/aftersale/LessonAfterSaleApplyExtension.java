@@ -42,7 +42,7 @@ public class LessonAfterSaleApplyExtension extends BaseAfterSaleApplyExtension i
         applyFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
                 .addNode(AfterSaleResourceLockFlow.class)     //加锁
                 .addNode(AftersaleApplyPreviewFlow.class)       //售后预览
-                .addNode(AfterSalePlanDigestCheckFlow.class)    //校验售后计划摘要
+                .addNode(AfterSalePreviewTokenCheckFlow.class)    //校验售后计划摘要
                 .addNode(AftersaleOrderGenerateFlow.class)      //生成售后单
                 .addNode(AftersaleOrderApplyFlow.class)
                 .addNode(AfterSaleAsyncExecuteFlow.class)

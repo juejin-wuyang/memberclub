@@ -28,6 +28,7 @@ public class AftersaleApplyPreviewFlow extends FlowNode<AfterSaleApplyContext> {
     @Override
     public void process(AfterSaleApplyContext context) {
         AfterSalePreviewCmd previewCmd = AftersaleConvertor.INSTANCE.toPreviewCmd(context.getApplyCmd());
+        previewCmd.setPreviewBeforeApply(true);
         AfterSalePreviewContext previewContext = aftersaleBizService.doPreview(previewCmd);
 
         AfterSaleExecuteCmd executeCmd = previewContext.toExecuteCmd();

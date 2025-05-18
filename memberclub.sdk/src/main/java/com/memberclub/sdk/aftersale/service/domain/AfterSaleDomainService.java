@@ -8,9 +8,7 @@ package com.memberclub.sdk.aftersale.service.domain;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.log.CommonLog;
 import com.memberclub.common.retry.Retryable;
@@ -23,6 +21,7 @@ import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
 import com.memberclub.domain.context.aftersale.contant.AftersaleUnableCode;
 import com.memberclub.domain.context.aftersale.contant.UsageTypeEnum;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewCoreResult;
 import com.memberclub.domain.context.aftersale.preview.ItemUsage;
 import com.memberclub.domain.context.perform.common.MemberOrderPerformStatusEnum;
 import com.memberclub.domain.context.purchase.common.MemberOrderStatusEnum;
@@ -34,23 +33,22 @@ import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.entity.trade.AftersaleOrder;
 import com.memberclub.domain.exception.AftersaleExecuteException;
 import com.memberclub.domain.exception.ResultCode;
+import com.memberclub.infrastructure.cache.CacheEnum;
+import com.memberclub.infrastructure.cache.CacheService;
 import com.memberclub.infrastructure.id.IdTypeEnum;
 import com.memberclub.infrastructure.mapstruct.AftersaleConvertor;
 import com.memberclub.infrastructure.mybatis.mappers.trade.AftersaleOrderDao;
 import com.memberclub.sdk.aftersale.extension.apply.AfterSaleApplyExtension;
 import com.memberclub.sdk.aftersale.extension.domain.AfterSaleRepositoryExtension;
+import com.memberclub.sdk.aftersale.extension.preview.AfterSalePreviewCheckExtension;
 import com.memberclub.sdk.common.IdGeneratorDomainService;
 import com.memberclub.sdk.common.Monitor;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.perform.service.domain.PerformDomainService;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,6 +75,8 @@ public class AfterSaleDomainService {
     private PerformDomainService performDomainService;
     @Autowired
     private IdGeneratorDomainService idGeneratorDomainService;
+    @Autowired
+    private CacheService cacheService;
 
     public static void validatePeriod4ExpireRefundUnable(AfterSalePreviewContext context) {
         context.setStime(context.getMemberOrder().getStime());
@@ -106,30 +106,26 @@ public class AfterSaleDomainService {
         }
     }
 
-    public static void generateDigest(AfterSalePreviewContext context) throws NoSuchAlgorithmException {
-        List<Object> keys = Lists.newArrayList();
-        keys.add(context.getCmd().getTradeId());
-        keys.add(context.getRecommendRefundPrice());
-        keys.add(context.getRefundType().getCode());
-        keys.add(context.getRefundWay().getCode());
-
-        String value = StringUtils.join(keys, ",");
-
-        MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-        String digest = Base64.getUrlEncoder().encodeToString(
-                messageDigest.digest(value.getBytes(Charsets.UTF_8)));
-        context.setDigests(digest);
-        context.setPreviewToken(digest);
-        context.setDigestVersion(1);
-        CommonLog.info("生成售后计划摘要 版本:{},{}", context.getDigestVersion(), context.getDigests());
-    }
-
     public String generatePreviewToken(AftersaleSourceEnum source, String tradeId) {
         if (source == AftersaleSourceEnum.System_Expire || source == AftersaleSourceEnum.SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT
                 || source == AftersaleSourceEnum.SYSTEM_REFUND_4_PERFORM_FAIL) {
             return tradeId + "_SYSTEM_REFUND";
         }
         return idGeneratorDomainService.generateId(IdTypeEnum.PREVIEW_TOKEN) + "";
+    }
+
+    @Retryable
+    public void savePreviewToken(AfterSalePreviewContext context, String previewToken, AfterSalePreviewCoreResult result) {
+        cacheService.put(CacheEnum.after_sale_preview_token, previewToken, result);
+    }
+
+    public void checkPreviewResult(AfterSaleApplyContext context) {
+        AfterSalePreviewCoreResult coreResult =
+                cacheService.get(CacheEnum.after_sale_preview_token, context.getExecuteCmd().getApplyCmd().getPreviewToken());
+        if (coreResult == null) {
+            throw AftersaleUnableCode.PREVIEW_TOKEN_TIMEOUT_ERROR.newException();
+        }
+        extensionManager.getExtension(context.toBizScene(), AfterSalePreviewCheckExtension.class).check(coreResult, context.getExecuteCmd());
     }
 
     @Retryable(maxTimes = 5, initialDelaySeconds = 1, maxDelaySeconds = 5, throwException = true)

@@ -11,9 +11,5 @@ public class AftersaleSubmitVO {
 
     private int source;
 
-    private String previewDigest;
-
     private String previewToken;
-
-    private Integer digestVersion;
 }

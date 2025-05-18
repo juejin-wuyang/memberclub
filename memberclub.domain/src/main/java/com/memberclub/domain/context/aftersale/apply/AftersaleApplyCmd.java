@@ -43,10 +43,7 @@ public class AftersaleApplyCmd {
     private String reason;
 
     private String previewToken;
-
-    private String digests;
-
-    private Integer digestVersion;
+    
 
     public void isValid() {
         if (StringUtils.isBlank(previewToken)) {

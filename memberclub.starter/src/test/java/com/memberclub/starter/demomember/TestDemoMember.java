@@ -432,9 +432,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
 
         AftersaleApplyCmd applyCmd = new AftersaleApplyCmd();
         applyCmd = AftersaleConvertor.INSTANCE.toApplyCmd(previewCmd);
-        applyCmd.setDigests(respose.getDigests());
         applyCmd.setReason("不想要了!");
-        applyCmd.setDigestVersion(respose.getDigestVersion());
         applyCmd.setPreviewToken(respose.getPreviewToken());
         //applyCmd.setDigestVersion(0);
         AftersaleApplyResponse aftersaleApplyResponse = aftersaleBizService.apply(applyCmd);
@@ -607,8 +605,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         Assert.assertEquals(RefundTypeEnum.ALL_REFUND, response.getRefundType());
 
         AftersaleApplyCmd applyCmd = AftersaleConvertor.INSTANCE.toAftersaleApplyCmd(previewCmd);
-        applyCmd.setDigests(response.getDigests());
-        applyCmd.setDigestVersion(response.getDigestVersion());
         applyCmd.setPreviewToken(response.getPreviewToken());
         AftersaleApplyResponse applyResponse = aftersaleBizService.apply(applyCmd);
         waitH2();
@@ -645,9 +641,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         Assert.assertEquals(RefundTypeEnum.ALL_REFUND, response.getRefundType());
 
         AftersaleApplyCmd applyCmd = AftersaleConvertor.INSTANCE.toAftersaleApplyCmd(previewCmd);
-        applyCmd.setDigests(response.getDigests());
         applyCmd.setPreviewToken(response.getPreviewToken());
-        applyCmd.setDigestVersion(response.getDigestVersion());
 
         AftersaleApplyResponse applyResponse = aftersaleBizService.apply(applyCmd);
         waitH2();
@@ -734,8 +728,6 @@ public class TestDemoMember extends TestDemoMemberPurchase {
         Assert.assertEquals(RefundTypeEnum.ALL_REFUND, response.getRefundType());
 
         AftersaleApplyCmd applyCmd = AftersaleConvertor.INSTANCE.toAftersaleApplyCmd(previewCmd);
-        applyCmd.setDigests(response.getDigests());
-        applyCmd.setDigestVersion(response.getDigestVersion());
         applyCmd.setPreviewToken(response.getPreviewToken());
         AftersaleApplyResponse applyResponse = aftersaleBizService.apply(applyCmd);
         waitH2();
@@ -783,9 +775,7 @@ public class TestDemoMember extends TestDemoMemberPurchase {
 
         AftersaleApplyCmd applyCmd = new AftersaleApplyCmd();
         applyCmd = AftersaleConvertor.INSTANCE.toApplyCmd(previewCmd);
-        applyCmd.setDigests(respose.getDigests());
         applyCmd.setReason("不想要了!");
-        applyCmd.setDigestVersion(respose.getDigestVersion());
         applyCmd.setPreviewToken(respose.getPreviewToken());
         //applyCmd.setDigestVersion(0);
         AftersaleApplyResponse aftersaleApplyResponse = aftersaleBizService.apply(applyCmd);

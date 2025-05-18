@@ -26,5 +26,5 @@ public class AfterSalePreviewCmd {
 
     private String operator;
 
-    private Integer digestVersion;
+    private boolean previewBeforeApply;
 }

@@ -25,6 +25,7 @@ public enum AftersaleUnableCode {
     NON_PERFORMED(1007, "还未履约成功,不能退"),
     CONDITION_OCCUR(1008, "券包使用情况变化,请刷新重试"),
     REFUND_NONLAST_ORDER_ERROR(1009, "请优先退最后一笔订单"),
+    PREVIEW_TOKEN_TIMEOUT_ERROR(1010, "预览token失效"),
 
     ;
 

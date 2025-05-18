@@ -47,7 +47,7 @@ public class DemoMemberAftersalePreviewExtension implements AftersalePreviewExte
                 .addNode(AfterSaleUsageAmountCompute4RealtimeFlow.class)    //实时计算使用类型
                 .addNode(AfterSaleUsageTypeComputeFlow.class)               //完全检查使用类型
                 .addNode(AftersaleRefundWayComputeFlow.class)               //计算赔付类型
-                .addNode(AftersalePlanDigestGenerateFlow.class)             //生成售后计划摘要
+                .addNode(AftersaleGeneratePreviewTokenFlow.class)             //生成售后计划摘要
         ;
     }
 

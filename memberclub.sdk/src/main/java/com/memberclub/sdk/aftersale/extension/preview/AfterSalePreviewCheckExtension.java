@@ -9,14 +9,17 @@ package com.memberclub.sdk.aftersale.extension.preview;
 import com.memberclub.common.extension.BaseExtension;
 import com.memberclub.common.extension.ExtensionConfig;
 import com.memberclub.common.extension.ExtensionType;
+import com.memberclub.domain.context.aftersale.apply.AfterSaleExecuteCmd;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
+import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewCoreResult;
 
 /**
  * author: 掘金五阳
  */
 @ExtensionConfig(desc = "构建售后计算摘要扩展点", type = ExtensionType.AFTERSALE, must = true)
-public interface GenerateAfterSalePlanDigestExtension extends BaseExtension {
+public interface AfterSalePreviewCheckExtension extends BaseExtension {
 
-    public void generateDigest(AfterSalePreviewContext context);
+    public AfterSalePreviewCoreResult generatePreviewCoreResult(AfterSalePreviewContext context);
 
+    void check(AfterSalePreviewCoreResult cachedResult, AfterSaleExecuteCmd afterSaleExecuteCmd);
 }
