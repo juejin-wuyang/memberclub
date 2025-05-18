@@ -6,7 +6,6 @@
  */
 package com.memberclub.domain.context.aftersale.preview;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleExecuteCmd;
@@ -57,8 +56,6 @@ public class AfterSalePreviewContext {
     private int usedPriceFen;
 
     private Map<String, ItemUsage> itemToken2ItemUsage = Maps.newHashMap();
-
-    private List<String> reversablePerformItems = Lists.newArrayList();
 
     /******************赔付金额相关数据****************************/
 

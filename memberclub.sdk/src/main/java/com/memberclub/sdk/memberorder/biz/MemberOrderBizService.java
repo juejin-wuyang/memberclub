@@ -1,7 +1,6 @@
 package com.memberclub.sdk.memberorder.biz;
 
 import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
-import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewCmd;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.sdk.aftersale.service.AfterSaleBizService;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
@@ -28,12 +27,12 @@ public class MemberOrderBizService {
             MemberOrderAftersalePreviewDO previewDO = new MemberOrderAftersalePreviewDO();
             previewDOList.add(previewDO);
             previewDO.setMemberOrderDO(order);
-            AfterSalePreviewCmd cmd = new AfterSalePreviewCmd();
+            /*AfterSalePreviewCmd cmd = new AfterSalePreviewCmd();
             cmd.setUserId(userId);
             cmd.setSource(source);
             cmd.setOperator(String.valueOf(userId));
             cmd.setBizType(order.getBizType());
-            cmd.setTradeId(order.getTradeId());
+            cmd.setTradeId(order.getTradeId());*/
             //AfterSalePreviewResponse response = aftersaleBizService.preview(cmd);
             //previewDO.setPreviewResponse(response);
         }

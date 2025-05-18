@@ -26,6 +26,6 @@ public class LocalIdGenerator implements IdGenerator {
 
     @Override
     public Long generateId(IdTypeEnum idTypeEnum) {
-        return Math.abs(RandomUtils.nextLong());
+        return Math.abs(RandomUtils.nextLong() / 100);
     }
 }

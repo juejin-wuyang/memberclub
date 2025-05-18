@@ -13,6 +13,7 @@ import com.memberclub.domain.context.perform.common.SubOrderPerformStatusEnum;
 import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
 import com.memberclub.domain.context.perform.reverse.SubOrderReversePerformContext;
 import com.memberclub.domain.context.purchase.common.SubOrderStatusEnum;
+import com.memberclub.domain.dataobject.payment.context.PaymentNotifyContext;
 import com.memberclub.domain.dataobject.perform.his.SubOrderExtraInfo;
 import com.memberclub.domain.dataobject.sku.SkuPerformConfigDO;
 import lombok.Data;
@@ -64,6 +65,11 @@ public class MemberSubOrderDO {
 
     public void onStartPerform(SubOrderPerformContext subOrderPerformContext) {
         performStatus = SubOrderPerformStatusEnum.PERFORMING;
+        setUtime(System.currentTimeMillis());
+    }
+
+    public void onPaymentSuccess(PaymentNotifyContext context, MemberSubOrderDO subOrder) {
+        setStatus(SubOrderStatusEnum.PAYED);
         setUtime(System.currentTimeMillis());
     }
 

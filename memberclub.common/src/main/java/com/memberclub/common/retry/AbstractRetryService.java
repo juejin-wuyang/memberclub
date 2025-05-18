@@ -6,6 +6,7 @@
  */
 package com.memberclub.common.retry;
 
+import com.memberclub.common.log.CommonLog;
 import com.memberclub.common.util.ApplicationContextUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
@@ -27,6 +28,11 @@ public abstract class AbstractRetryService implements RetryService {
         try {
             LOG.info("开始消费重试消息 currentTimes:{}, msg:{}", msg.getRetryTimes(), msg);
             RetryLocalContext.setRetryTimes(msg.getBeanName(), msg.getMethodName(), msg.getRetryTimes());
+            boolean fallback = false;
+            if (msg.getRetryTimes() > msg.getMaxRetryTimes() && msg.isFallbackEnabled()) {
+                fallback = true;
+            }
+
             Object bean = ApplicationContextUtils.getContext().getBean(msg.getBeanName());
             Class<?> clazz = Class.forName(msg.getBeanClassName());
 
@@ -36,7 +42,13 @@ public abstract class AbstractRetryService implements RetryService {
                 argsClassArray[i] = ClassUtils.getClass(msg.getArgsClassList().get(i));
             }
 
-            Method m = ReflectionUtils.findMethod(clazz, msg.getMethodName(), argsClassArray);
+            String methodName = msg.getMethodName();
+            if (fallback) {
+                methodName = msg.getMethodName() + "Fallback";
+                CommonLog.warn("到达最大重试次数需要执行Fallback方法:{}_{}", msg.getBeanName(), methodName);
+            }
+
+            Method m = ReflectionUtils.findMethod(clazz, methodName, argsClassArray);
 
             Object[] argsArray = new Object[msg.getArgsClassList().size()];
             for (int i = 0; i < msg.getArgsList().size(); i++) {
@@ -47,7 +59,7 @@ public abstract class AbstractRetryService implements RetryService {
                 ReflectionUtils.invokeMethod(m, bean, argsArray);
             } catch (Exception e) {
                 if (!msg.isThrowException()) {
-                    LOG.error("调用重试方法异常:{}", argsArray, e);
+                    LOG.error("调用方法:{}_{}异常:{}", msg.getBeanName(), methodName, argsArray, e);
                 }
             }
         } catch (Exception e) {

@@ -8,8 +8,10 @@ package com.memberclub.infrastructure.assets.facade;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.memberclub.common.util.ApplicationContextUtils;
 import com.memberclub.common.util.TimeUtil;
 import com.memberclub.domain.facade.*;
+import com.memberclub.infrastructure.dynamic_config.DynamicConfig;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -53,6 +55,11 @@ public class MockAssetsFacadeSPI implements AssetsFacadeSPI {
             itemToken2Assets.put(grantItem.getItemToken(), coupons);
             map.put(grantItem.getItemToken(), coupons);
         }
+        DynamicConfig config = ApplicationContextUtils.getContext().getBean(DynamicConfig.class);
+        if (config.getBoolean("mock_grant_assets_error", false)) {
+            throw new RuntimeException("mock_grant_assets_error");
+        }
+
         responseDO.setItemToken2AssetsMap(map);
         return responseDO;
     }

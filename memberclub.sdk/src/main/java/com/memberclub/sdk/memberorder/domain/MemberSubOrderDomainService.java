@@ -10,6 +10,7 @@ import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.memberclub.common.extension.ExtensionManager;
 import com.memberclub.common.log.CommonLog;
+import com.memberclub.common.retry.Retryable;
 import com.memberclub.common.util.JsonUtils;
 import com.memberclub.common.util.TimeUtil;
 import com.memberclub.domain.common.BizScene;
@@ -20,6 +21,7 @@ import com.memberclub.domain.context.perform.common.SubOrderPerformStatusEnum;
 import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
 import com.memberclub.domain.context.perform.reverse.SubOrderReversePerformContext;
 import com.memberclub.domain.context.purchase.cancel.PurchaseCancelContext;
+import com.memberclub.domain.dataobject.payment.context.PaymentNotifyContext;
 import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
 import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.entity.trade.MemberSubOrder;
@@ -97,6 +99,21 @@ public class MemberSubOrderDomainService {
 
         extensionManager.getExtension(BizScene.of(subOrder.getBizType()), MemberSubOrderRepositoryExtension.class)
                 .onStartPerform(performContext, subOrderPerformContext, subOrder, subOrderWrapper);
+    }
+
+    @Retryable
+    @Transactional(rollbackFor = Exception.class)
+    public void onPaymentSuccess(PaymentNotifyContext context, MemberOrderDO order, MemberSubOrderDO subOrder) {
+        subOrder.onPaymentSuccess(context, subOrder);
+
+        LambdaUpdateWrapper<MemberSubOrder> subOrderWrapper = new LambdaUpdateWrapper<>();
+        subOrderWrapper.eq(MemberSubOrder::getUserId, subOrder.getUserId())
+                .eq(MemberSubOrder::getSubTradeId, subOrder.getSubTradeId())
+                .set(MemberSubOrder::getStatus, subOrder.getStatus().getCode())
+                .set(MemberSubOrder::getUtime, TimeUtil.now());
+
+        extensionManager.getExtension(BizScene.of(subOrder.getBizType()), MemberSubOrderRepositoryExtension.class)
+                .onPaymentSuccess(context, order, subOrder, subOrderWrapper);
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -67,7 +67,6 @@ public class TradeEventDomainService {
         CommonLog.info("发送 TradeEvent:{}", value);
     }
 
-
     public void publishEventOnPerformSuccessForSubOrder(PerformContext performContext,
                                                         SubOrderPerformContext subOrderPerformContext,
                                                         MemberSubOrderDO subOrder) {

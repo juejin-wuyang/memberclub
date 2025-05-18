@@ -70,11 +70,12 @@ public class RetryableAspect {
                 int retryTimes = RetryLocalContext.getRetryTimes(beanName, methoName);
                 retryTimes++;
 
-                if (retryTimes > annotation.maxTimes()) {
-                    // TODO: 2024/12/31 fallback逻辑
-                    CommonLog.error("超过最大重试次数 maxTimes:{}, methodName:{} ,params:{}",
-                            annotation.maxTimes(), method.getName(), args);
-                    throw e;
+                if (retryTimes - 1 > annotation.maxTimes()) {
+                    if (annotation.throwException()) {
+                        throw e;
+                    } else {
+
+                    }
                 }
 
                 if (param instanceof RetryableContext) {
@@ -102,6 +103,8 @@ public class RetryableAspect {
                 message.setArgsList(argsList);
                 message.setArgsClassList(argsClassList);
                 message.setRetryTimes(retryTimes);
+                message.setMaxRetryTimes(annotation.maxTimes());
+                message.setFallbackEnabled(annotation.hasFallback());
                 message.setExpectedTime(TimeUtil.now() + TimeUnit.SECONDS.toMillis(delayTime));
 
                 retryService.addRetryMessage(message);

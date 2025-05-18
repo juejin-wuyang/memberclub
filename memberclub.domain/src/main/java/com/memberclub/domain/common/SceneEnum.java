@@ -44,6 +44,8 @@ public enum SceneEnum {
 
     SCENE_SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT(AftersaleSourceEnum.SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT.getCode() + ""),
 
+    SCENE_SYSTEM_REFUND_4_PERFORM_FAIL(AftersaleSourceEnum.SYSTEM_REFUND_4_PERFORM_FAIL.getCode() + ""),
+
     /*****************************************/
     //提单部分
     HOMEPAGE_SUBMIT_SCENE(StringContants.HOMEPAGE_VALUE + ""),

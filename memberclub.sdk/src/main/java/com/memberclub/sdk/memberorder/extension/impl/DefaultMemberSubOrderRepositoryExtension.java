@@ -18,7 +18,9 @@ import com.memberclub.domain.context.perform.SubOrderPerformContext;
 import com.memberclub.domain.context.perform.common.SubOrderPerformStatusEnum;
 import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
 import com.memberclub.domain.context.perform.reverse.SubOrderReversePerformContext;
+import com.memberclub.domain.dataobject.payment.context.PaymentNotifyContext;
 import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
+import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.entity.trade.MemberSubOrder;
 import com.memberclub.domain.exception.ResultCode;
 import com.memberclub.infrastructure.mybatis.mappers.trade.MemberSubOrderDao;
@@ -49,6 +51,15 @@ public class DefaultMemberSubOrderRepositoryExtension implements MemberSubOrderR
         }
         CommonLog.info("更新子单状态为取消 status:{}, cnt:{}", memberSubOrderDO.getStatus(), cnt);
 
+    }
+
+    @Override
+    public void onPaymentSuccess(PaymentNotifyContext context, MemberOrderDO order, MemberSubOrderDO subOrder, LambdaUpdateWrapper<MemberSubOrder> wrapper) {
+        int cnt = memberSubOrderDao.update(null, wrapper);
+        if (cnt < 1) {
+            throw ResultCode.DATA_UPDATE_ERROR.newException("MemberSubOrder onPaymentSuccess 更新异常");
+        }
+        CommonLog.info("更新子单状态为支付成功 status:{}, cnt:{}", subOrder.getStatus(), cnt);
     }
 
     @Override

@@ -24,6 +24,7 @@ import com.memberclub.infrastructure.mq.MessageQuenePublishFacade;
 import com.memberclub.infrastructure.payment.PaymentFacadeSPI;
 import com.memberclub.infrastructure.payment.context.*;
 import com.memberclub.sdk.aftersale.service.AfterSaleBizService;
+import com.memberclub.sdk.aftersale.service.domain.AfterSaleDomainService;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.payment.PaymentDataObjectFactory;
 import com.memberclub.sdk.payment.extension.PaymentExtension;
@@ -50,6 +51,8 @@ public class PaymentService {
 
     @Autowired
     private AfterSaleBizService aftersaleBizService;
+    @Autowired
+    private AfterSaleDomainService afterSaleDomainService;
 
     private static PaymentNotifyContext buildNotifyContext(PaymentNotifyCmd cmd, MemberOrderDO memberOrderDO) {
         PaymentNotifyContext context = new PaymentNotifyContext();
@@ -143,7 +146,7 @@ public class PaymentService {
         applyCmd.setSource(AftersaleSourceEnum.SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT);
         applyCmd.setBizType(memberOrderDO.getBizType());
         applyCmd.setTradeId(cmd.getTradeId());
-        applyCmd.setPreviewToken(cmd.getTradeId() + "_SYSTEM_REFUND");
+        applyCmd.setPreviewToken(afterSaleDomainService.generatePreviewToken(applyCmd.getSource(), applyCmd.getTradeId()));
         AftersaleApplyResponse response = aftersaleBizService.apply4RefundOnly(applyCmd);
         if (!response.isSuccess()) {
             ResultCode resultCode = ResultCode.findByCode(response.getUnableCode());

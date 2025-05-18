@@ -60,6 +60,16 @@ public interface MemberOrderDao extends BaseMapper<MemberOrder> {
                                         @Param("utime") long utime);
 
 
+    // 更新履约失败
+    @Update({"<script> UPDATE ", TABLE_NAME,
+            " SET perform_status=#{toPerformStatus},utime=#{utime} ",
+            "WHERE user_id=#{userId} AND trade_id=#{tradeId} ",
+            "</script>"})
+    public int updateStatus2PerformFail(@Param("userId") long userId,
+                                        @Param("tradeId") String tradeId,
+                                        @Param("toPerformStatus") int toPerformStatus,
+                                        @Param("utime") long utime);
+
     @Update({
             "UPDATE ", TABLE_NAME,
             " SET status=#{status}, utime=#{utime} ",

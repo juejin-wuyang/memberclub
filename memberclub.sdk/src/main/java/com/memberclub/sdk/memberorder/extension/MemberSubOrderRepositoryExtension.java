@@ -15,7 +15,9 @@ import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.perform.SubOrderPerformContext;
 import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
 import com.memberclub.domain.context.perform.reverse.SubOrderReversePerformContext;
+import com.memberclub.domain.dataobject.payment.context.PaymentNotifyContext;
 import com.memberclub.domain.dataobject.perform.MemberSubOrderDO;
+import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.entity.trade.MemberSubOrder;
 
 /**
@@ -47,6 +49,8 @@ public interface MemberSubOrderRepositoryExtension extends BaseExtension {
                                  SubOrderPerformContext subOrderPerformContext,
                                  MemberSubOrderDO memberSubOrderDO,
                                  LambdaUpdateWrapper<MemberSubOrder> wrapper);
+
+    public void onPaymentSuccess(PaymentNotifyContext context, MemberOrderDO order, MemberSubOrderDO subOrder, LambdaUpdateWrapper<MemberSubOrder> wrapper);
 
     public void onStartReversePerform(ReversePerformContext context,
                                       SubOrderReversePerformContext subOrderReversePerformContext,

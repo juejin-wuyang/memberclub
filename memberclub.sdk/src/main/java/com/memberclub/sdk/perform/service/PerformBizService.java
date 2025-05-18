@@ -13,6 +13,8 @@ import com.memberclub.common.log.UserLog;
 import com.memberclub.common.retry.Retryable;
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
+import com.memberclub.domain.context.aftersale.apply.AftersaleApplyCmd;
+import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
 import com.memberclub.domain.context.perform.PerformCmd;
 import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.perform.PerformResp;
@@ -21,7 +23,11 @@ import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
 import com.memberclub.domain.context.purchase.common.MemberOrderStatusEnum;
 import com.memberclub.domain.dataobject.task.OnceTaskDO;
 import com.memberclub.domain.exception.MemberException;
+import com.memberclub.sdk.aftersale.service.AfterSaleBizService;
+import com.memberclub.sdk.aftersale.service.domain.AfterSaleDomainService;
 import com.memberclub.sdk.common.Monitor;
+import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
+import com.memberclub.sdk.memberorder.domain.OrderRemarkBuilder;
 import com.memberclub.sdk.perform.extension.build.PerformAcceptOrderExtension;
 import com.memberclub.sdk.perform.extension.build.PerformSeparateOrderExtension;
 import com.memberclub.sdk.perform.extension.execute.PerformExecuteExtension;
@@ -46,6 +52,12 @@ public class PerformBizService {
 
     @Autowired
     private PerformDataObjectBuildFactory performDataObjectBuildFactory;
+    @Autowired
+    private AfterSaleBizService afterSaleBizService;
+    @Autowired
+    private AfterSaleDomainService afterSaleDomainService;
+    @Autowired
+    private MemberOrderDomainService memberOrderDomainService;
 
     @UserLog(domain = LogDomainEnum.PERFORM)
     public PerformResp periodPerform(OnceTaskDO task) {
@@ -77,7 +89,7 @@ public class PerformBizService {
 
 
     @UserLog(domain = LogDomainEnum.PERFORM)
-    @Retryable(initialDelaySeconds = 1, multiplier = 2.0, maxDelaySeconds = 10, throwException = true)
+    @Retryable(initialDelaySeconds = 1, multiplier = 2.0, maxDelaySeconds = 10, throwException = true, hasFallback = true)
     public PerformResp perform(PerformCmd cmd) {
         PerformResp resp = new PerformResp();
         try {
@@ -95,9 +107,7 @@ public class PerformBizService {
                     resp.setSuccess(true);
                     resp.setNeedRetry(true);
                 }
-                Monitor.PERFORM.counter(cmd.getBizType(),
-                        "retryTimes", cmd.getRetryTimes(), "skip", true, "result", resp.isSuccess());
-
+                Monitor.PERFORM.counter(cmd.getBizType(), "retryTimes", cmd.getRetryTimes(), "skip", true, "result", resp.isSuccess());
                 return resp;
             }
 
@@ -120,16 +130,31 @@ public class PerformBizService {
             CommonLog.info("履约流程成功:{}", cmd);
         } catch (Throwable e) {
             CommonLog.error("内部履约流程异常,需要重试:{}", cmd, e);
-
-            Monitor.PERFORM.counter(cmd.getBizType(),
-                    "retryTimes", cmd.getRetryTimes(), "skip", false, "result", "exception");
-
-            throw e;/*
-            resp.setSuccess(false);
-            resp.setNeedRetry(true);*/
+            Monitor.PERFORM.counter(cmd.getBizType(), "retryTimes", cmd.getRetryTimes(), "skip", false, "result", "exception");
+            throw e;
         }
 
         //todo 处理 失败 重试,需要由外层注解处理!
         return resp;
+    }
+
+    public PerformResp performFallback(PerformCmd cmd) {
+        memberOrderDomainService.onPerformFail(cmd.getBizType().getCode(), cmd.getUserId(), cmd.getTradeId());
+        //逆向退款
+        AftersaleApplyCmd applyCmd = new AftersaleApplyCmd();
+        applyCmd.setBizType(cmd.getBizType());
+        applyCmd.setReason("履约失败需要自动发起售后退款");
+        applyCmd.setOperator("system");
+        applyCmd.setSource(AftersaleSourceEnum.SYSTEM_REFUND_4_PERFORM_FAIL);
+        applyCmd.setPreviewToken(afterSaleDomainService.generatePreviewToken(applyCmd.getSource(), cmd.getTradeId()));
+        applyCmd.setTradeId(cmd.getTradeId());
+        applyCmd.setUserId(cmd.getUserId());
+
+        OrderRemarkBuilder.builder(cmd.getBizType().getCode(), cmd.getUserId(), cmd.getTradeId())
+                .remark("履约失败需要系统自动退款").save();
+
+        afterSaleBizService.apply(applyCmd);
+
+        return null;
     }
 }

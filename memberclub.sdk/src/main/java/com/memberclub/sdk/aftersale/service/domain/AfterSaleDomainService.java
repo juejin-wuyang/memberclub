@@ -19,6 +19,7 @@ import com.memberclub.common.util.TimeUtil;
 import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleExecuteCmd;
+import com.memberclub.domain.context.aftersale.contant.AftersaleSourceEnum;
 import com.memberclub.domain.context.aftersale.contant.AftersaleUnableCode;
 import com.memberclub.domain.context.aftersale.contant.UsageTypeEnum;
 import com.memberclub.domain.context.aftersale.preview.AfterSalePreviewContext;
@@ -33,10 +34,12 @@ import com.memberclub.domain.dataobject.purchase.MemberOrderDO;
 import com.memberclub.domain.entity.trade.AftersaleOrder;
 import com.memberclub.domain.exception.AftersaleExecuteException;
 import com.memberclub.domain.exception.ResultCode;
+import com.memberclub.infrastructure.id.IdTypeEnum;
 import com.memberclub.infrastructure.mapstruct.AftersaleConvertor;
 import com.memberclub.infrastructure.mybatis.mappers.trade.AftersaleOrderDao;
 import com.memberclub.sdk.aftersale.extension.apply.AfterSaleApplyExtension;
 import com.memberclub.sdk.aftersale.extension.domain.AfterSaleRepositoryExtension;
+import com.memberclub.sdk.common.IdGeneratorDomainService;
 import com.memberclub.sdk.common.Monitor;
 import com.memberclub.sdk.memberorder.domain.MemberOrderDomainService;
 import com.memberclub.sdk.perform.service.domain.PerformDomainService;
@@ -72,6 +75,8 @@ public class AfterSaleDomainService {
     private MemberOrderDomainService memberOrderDomainService;
     @Autowired
     private PerformDomainService performDomainService;
+    @Autowired
+    private IdGeneratorDomainService idGeneratorDomainService;
 
     public static void validatePeriod4ExpireRefundUnable(AfterSalePreviewContext context) {
         context.setStime(context.getMemberOrder().getStime());
@@ -117,6 +122,14 @@ public class AfterSaleDomainService {
         context.setPreviewToken(digest);
         context.setDigestVersion(1);
         CommonLog.info("生成售后计划摘要 版本:{},{}", context.getDigestVersion(), context.getDigests());
+    }
+
+    public String generatePreviewToken(AftersaleSourceEnum source, String tradeId) {
+        if (source == AftersaleSourceEnum.System_Expire || source == AftersaleSourceEnum.SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT
+                || source == AftersaleSourceEnum.SYSTEM_REFUND_4_PERFORM_FAIL) {
+            return tradeId + "_SYSTEM_REFUND";
+        }
+        return idGeneratorDomainService.generateId(IdTypeEnum.PREVIEW_TOKEN) + "";
     }
 
     @Retryable(maxTimes = 5, initialDelaySeconds = 1, maxDelaySeconds = 5, throwException = true)

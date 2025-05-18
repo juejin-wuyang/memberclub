@@ -16,7 +16,9 @@ public enum SubOrderStatusEnum {
     SUBMITED(9, "已提单"),
     CANCELED(19, "已取消"),
     PAYED(29, "已支付"),
-    PERFORMING(30, "履约中"),
+    /*
+        PERFORMING(30, "履约中"),
+    */
     PERFORMED(35, "已履约"),
     PORTION_REFUNDED(44, "部分退"),
     REFUNDED(49, "已退款");

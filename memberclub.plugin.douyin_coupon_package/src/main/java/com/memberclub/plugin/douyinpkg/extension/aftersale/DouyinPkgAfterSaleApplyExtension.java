@@ -37,7 +37,7 @@ public class DouyinPkgAfterSaleApplyExtension extends BaseAfterSaleApplyExtensio
     public void init() {
         super.init();
         applyFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
-                .addNode(AfterSaleResourceLockFlow.class)     //加锁
+                .addNode(AfterSaleResourceLockFlow.class)       //加锁
                 .addNode(AftersaleApplyPreviewFlow.class)       //售后预览
                 .addNode(AfterSalePlanDigestCheckFlow.class)    //校验售后计划摘要
                 .addNode(AftersaleOrderGenerateFlow.class)      //生成售后单
@@ -46,10 +46,10 @@ public class DouyinPkgAfterSaleApplyExtension extends BaseAfterSaleApplyExtensio
         ;
 
         executeFlowChain = FlowChain.newChain(flowChainService, AfterSaleApplyContext.class)
-                .addNode(AftersaleCompletedFlow.class)   // 失败异步回滚
-                .addNode(AfterSaleReversePerformFlow.class)  //逆向履约
+                .addNode(AftersaleCompletedFlow.class)          // 失败异步回滚
+                .addNode(AfterSaleReversePerformFlow.class)     //逆向履约
                 .addNode(AfterSalePayOrderRefundFlow.class)     //退款
-                .addNode(AftersaleReversePurchaseFlow.class) //逆向取消订单
+                .addNode(AftersaleReversePurchaseFlow.class)    //逆向取消订单
         //.addNode()
         ;
     }

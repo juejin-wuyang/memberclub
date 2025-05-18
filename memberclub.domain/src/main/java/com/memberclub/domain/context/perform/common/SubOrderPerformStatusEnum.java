@@ -18,7 +18,7 @@ public enum SubOrderPerformStatusEnum {
     IMMEDIATE_PERFORED(17, "immediate_performed"),
     DELAY_PERFORMING(20, "delay_performing"),
     DELAY_PERFORMED(25, "delay_performed"),
-    PERFORM_FAIL(36, "perform_fail"),
+    PERFORM_FAIL(30, "perform_fail"),
     PERFORM_SUCCESS(35, "perform_success"),
     REVEREING(40, "reversing"),
     PORTION_REVERSED(44, "portion_reversed"),

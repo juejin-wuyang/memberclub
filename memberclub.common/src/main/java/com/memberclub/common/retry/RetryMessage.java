@@ -30,6 +30,10 @@ public class RetryMessage implements Delayed {
 
     private int retryTimes;
 
+    private boolean fallbackEnabled;
+
+    private int maxRetryTimes;
+
     private long expectedTime;
 
     private boolean throwException;

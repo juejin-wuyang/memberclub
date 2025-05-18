@@ -40,6 +40,9 @@ public interface BizSceneBuildExtension extends BaseExtension {
         if (context.getCmd().getSource() == AftersaleSourceEnum.SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT) {
             return SceneEnum.SCENE_SYSTEM_REFUND_4_ORDER_PAY_TIMEOUT.getValue();
         }
+        if (context.getCmd().getSource() == AftersaleSourceEnum.SYSTEM_REFUND_4_PERFORM_FAIL) {
+            return SceneEnum.SCENE_SYSTEM_REFUND_4_PERFORM_FAIL.getValue();
+        }
 
         return SceneEnum.SCENE_AFTERSALE_MONTH_CARD.getValue();
     }

@@ -20,6 +20,7 @@ import com.memberclub.domain.common.BizScene;
 import com.memberclub.domain.context.aftersale.apply.AfterSaleApplyContext;
 import com.memberclub.domain.context.perform.PerformContext;
 import com.memberclub.domain.context.perform.common.MemberOrderPerformStatusEnum;
+import com.memberclub.domain.context.perform.common.SubOrderPerformStatusEnum;
 import com.memberclub.domain.context.perform.reverse.ReversePerformContext;
 import com.memberclub.domain.context.purchase.PurchaseSubmitContext;
 import com.memberclub.domain.context.purchase.cancel.PurchaseCancelContext;
@@ -286,11 +287,27 @@ public class MemberOrderDomainService {
         MemberOrderRepositoryExtension extension = extensionManager.getExtension(BizScene.of(context.getBizType()), MemberOrderRepositoryExtension.class);
         extension.onPaySuccess(order, wrapper);
 
+
+        for (MemberSubOrderDO subOrder : order.getSubOrders()) {
+            memberSubOrderDomainService.onPaymentSuccess(context, order, subOrder);
+        }
+
         TransactionHelper.afterCommitExecute(() -> {
             //发布支付事件
             OrderRemarkBuilder.builder(order)
                     .remark(order.getStatus(), order.getPaymentInfo().getPayStatus(), "支付成功").save();
             tradeEventDomainService.publishEventOnPaySuccess(context);
+        });
+    }
+
+    @Retryable
+    @Transactional(rollbackFor = Exception.class)
+    public void onPerformFail(int bizType, long userId, String tradeId) {
+        memberOrderDao.updateStatus2PerformFail(userId, tradeId, MemberOrderPerformStatusEnum.PERFORM_FAIL.getCode(), TimeUtil.now());
+        memberSubOrderDao.updatePerformStatus(userId, tradeId, SubOrderPerformStatusEnum.PERFORM_FAIL.getCode(), TimeUtil.now());
+
+        TransactionHelper.afterCommitExecute(() -> {
+            OrderRemarkBuilder.builder(bizType, userId, tradeId).remark(MemberOrderPerformStatusEnum.PERFORM_FAIL, "履约失败").save();
         });
     }
 
