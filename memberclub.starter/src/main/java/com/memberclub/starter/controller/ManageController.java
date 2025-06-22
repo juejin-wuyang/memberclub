@@ -146,7 +146,7 @@ public class ManageController {
             previewVO.setFirmName("在线教育");
             previewVO.setAttr_val("课程");
             previewVO.setSingleBuy(false);
-            previewVO.setStock(1L);
+            previewVO.setStock(1000L);
         }
         return previewVOs;
     }

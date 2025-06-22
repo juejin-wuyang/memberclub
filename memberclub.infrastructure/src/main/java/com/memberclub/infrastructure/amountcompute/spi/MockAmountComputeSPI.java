@@ -20,7 +20,7 @@ public class MockAmountComputeSPI implements AmountComputeSPI {
         for (AmountComputeProductDetailDTO detail : amountComputeRequestDTO.getProductDetails()) {
             AmountComputeProductDetailResult result = new AmountComputeProductDetailResult();
             result.setSkuId(detail.getSkuId());
-            result.setAmountFen(detail.getSalePriceFen() - 50);
+            result.setAmountFen(detail.getSalePriceFen() * detail.getCount() - 50);
             salePriceFenSum += result.getAmountFen();
             results.add(result);
         }
